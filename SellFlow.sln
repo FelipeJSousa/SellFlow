@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31129.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SellFlow", "SellFlow\SellFlow.csproj", "{91B7AE47-8FD1-4FAC-99AC-170D8661F59D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity", "Entity\Entity.csproj", "{8A4B3B58-4229-4B8F-97A8-3DCC86B6F003}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{80A31266-7C41-4D57-88D9-D1199E9733FD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91B7AE47-8FD1-4FAC-99AC-170D8661F59D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91B7AE47-8FD1-4FAC-99AC-170D8661F59D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91B7AE47-8FD1-4FAC-99AC-170D8661F59D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91B7AE47-8FD1-4FAC-99AC-170D8661F59D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A4B3B58-4229-4B8F-97A8-3DCC86B6F003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A4B3B58-4229-4B8F-97A8-3DCC86B6F003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A4B3B58-4229-4B8F-97A8-3DCC86B6F003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A4B3B58-4229-4B8F-97A8-3DCC86B6F003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80A31266-7C41-4D57-88D9-D1199E9733FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80A31266-7C41-4D57-88D9-D1199E9733FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80A31266-7C41-4D57-88D9-D1199E9733FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80A31266-7C41-4D57-88D9-D1199E9733FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4F36BEBF-DCC2-41AB-9405-1B0F0EECC513}
+	EndGlobalSection
+EndGlobal
