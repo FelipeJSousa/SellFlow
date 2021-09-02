@@ -9,7 +9,6 @@ namespace Repository
         T Get(int id);
         List<T> GetAll();
         T Add(T item);
-        bool Delete(int id);
         bool Delete(T item);
         T Edit(T item);
         T Get(Func<T, bool> lambda);

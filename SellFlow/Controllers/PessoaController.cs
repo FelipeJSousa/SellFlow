@@ -86,7 +86,25 @@ namespace SellFlow.Controllers
             {
                 PessoaRepository rep = new PessoaRepository();
 
-                ret.mensagem = rep.Delete(id) == true ? $"PessoaModel {id} excluído com sucesso!" : $"Não foi possível excluir o PessoaModel {id}";
+                Pessoa pes = rep.Get(id);
+                if(pes != null)
+                {
+                    if (rep.Delete(pes))
+                    {
+                        ret.status = true;
+                        ret.mensagem = $"PessoaModel {id} excluído com sucesso!";
+                    }
+                    else
+                    {
+                        ret.status = false;
+                        ret.mensagem = $"Não foi possível excluir o PessoaModel {id}";
+                    }
+                }
+                else
+                {
+                    ret.status = false;
+                    ret.erro = "Pessoa não encontrada";
+                }
 
             }
             catch (Exception ex)
@@ -122,5 +140,6 @@ namespace SellFlow.Controllers
             }
             return ret;
         }
+
     }
 }

@@ -77,17 +77,6 @@ namespace Repository
             Dispose();
             return true;
         }
-        public bool Delete(int id)
-        {
-            using (_context = new AppDbContext())
-            {
-                T item = Get(id);
-                _context.Entry(item).State = EntityState.Deleted;
-                _context.SaveChanges();
-            }
-            Dispose();
-            return true;
-        }
 
         public T Edit(T item)
         {
