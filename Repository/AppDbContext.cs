@@ -11,7 +11,7 @@ namespace Repository
 {
     public class AppDbContext : DbContext
     {
-        protected readonly String _conn = @"Server=DESKTOP-4QBF915;Database=WebAd;Trusted_Connection=True;MultipleActiveResultSets=true";
+        protected readonly String _conn = @"Server=DESKTOP-4QBF915;Database=SellFlow;Trusted_Connection=True;MultipleActiveResultSets=true";
         public DbSet<Pessoa> Pessoa { get; set; }
 
         public AppDbContext() { }
