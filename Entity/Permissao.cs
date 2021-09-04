@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace Entity
 {
-    public class Usuario
+    public class Permissao
     {
         [Key]
         public int id { get; set; }
-        private string _senha { get; set; }
-        public string senha { get => _senha; set => _senha = value; }
-        public string email { get; set; }
+        public string nome { get; set; }
         public bool ativo { get; set; }
-        public Permissao permissao { get; set; }
+
+        public ICollection<PermissaoPagina> PermissaoPagina { get; set; }
     }
 }
