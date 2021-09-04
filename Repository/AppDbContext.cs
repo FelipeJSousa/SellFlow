@@ -14,6 +14,9 @@ namespace Repository
         protected readonly String _conn = @"Server=DESKTOP-4QBF915;Database=SellFlow;Trusted_Connection=True;MultipleActiveResultSets=true";
         public DbSet<Pessoa> Pessoa { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
+        public DbSet<Permissao> Permissao { get; set; }
+        public DbSet<Pagina> Pagina{ get; set; }
+        public DbSet<PermissaoPagina> PermissaoPagina { get; set; }
 
         public AppDbContext() { }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -37,6 +40,26 @@ namespace Repository
             modelBuilder.Entity<Usuario>().Property(x => x.ativo).IsRequired();
             modelBuilder.Entity<Usuario>().Property(x => x.senha).IsRequired();
             modelBuilder.Entity<Usuario>().Property(x => x.id).IsRequired();
+
+            modelBuilder.Entity<Permissao>().Property(x => x.id).IsRequired();
+            modelBuilder.Entity<Permissao>().Property(x => x.ativo).IsRequired();
+            modelBuilder.Entity<Permissao>().Property(x => x.nome).IsRequired();
+
+
+            modelBuilder.Entity<Pagina>().Property(x => x.ativo).IsRequired();
+            modelBuilder.Entity<Pagina>().Property(x => x.caminho).IsRequired();
+            modelBuilder.Entity<Pagina>().Property(x => x.id).IsRequired();
+            modelBuilder.Entity<Pagina>().Property(x => x.nome).IsRequired();
+
+            modelBuilder.Entity<PermissaoPagina>().HasKey(pp => new { pp.permissaoId, pp.paginaId });
+            modelBuilder.Entity<PermissaoPagina>()
+                        .HasOne(pc => pc.permissao)
+                        .WithMany(p => p.PermissaoPagina)
+                        .HasForeignKey(pc => pc.permissaoId);
+            modelBuilder.Entity<PermissaoPagina>()
+                        .HasOne(pc => pc.pagina)
+                        .WithMany(p => p.PermissaoPagina)
+                        .HasForeignKey(pc => pc.paginaId);
         }
     }
 }
