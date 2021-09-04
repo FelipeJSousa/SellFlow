@@ -19,8 +19,12 @@ namespace SellFlow
                 cfg.CreateMap<UsuarioModel, Usuario>();
                 cfg.CreateMap<Usuario, UsuarioModel>();
 
-            });
+                cfg.CreateMap<Permissao, PermissaoModel>();
+                cfg.CreateMap<PermissaoModel, Permissao>();
 
+                cfg.CreateMap<Pagina, PaginaModel>();
+                cfg.CreateMap<PaginaModel, Pagina>();
+            });
 
             return config;
         }
