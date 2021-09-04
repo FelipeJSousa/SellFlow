@@ -17,6 +17,7 @@ namespace Repository
         public DbSet<Permissao> Permissao { get; set; }
         public DbSet<Pagina> Pagina{ get; set; }
         public DbSet<PermissaoPagina> PermissaoPagina { get; set; }
+        public DbSet<Produto> Produto { get; set; }
 
         public AppDbContext() { }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
