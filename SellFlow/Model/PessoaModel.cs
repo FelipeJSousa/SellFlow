@@ -12,5 +12,6 @@ namespace SellFlow.Model
         public string cpf { get; set; }
         public DateTime dataNascimento { get; set; }
         public bool ativo { get; set; }
+        public UsuarioModel usuario { get; set; }
     }
 }

@@ -17,5 +17,6 @@ namespace Entity
         public string cpnj { get; set; }
         public DateTime dataNascimento { get; set; }
         public bool ativo { get; set; }
+        public Usuario usuario { get; set; }
     }
 }
