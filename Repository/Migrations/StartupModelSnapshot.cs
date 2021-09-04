@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SellFlow;
+using Repository;
 
 namespace SellFlow.Migrations
 {
-    [DbContext(typeof(Startup))]
+    [DbContext(typeof(AppDbContext))]
     partial class StartupModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -33,6 +33,9 @@ namespace SellFlow.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("cpnj")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("dataNascimento")
                         .HasColumnType("datetime2");
 
@@ -46,9 +49,45 @@ namespace SellFlow.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("usuarioid")
+                        .HasColumnType("int");
+
                     b.HasKey("id");
 
+                    b.HasIndex("usuarioid");
+
                     b.ToTable("Pessoa");
+                });
+
+            modelBuilder.Entity("Entity.Usuario", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("senha")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Usuario");
+                });
+
+            modelBuilder.Entity("Entity.Pessoa", b =>
+                {
+                    b.HasOne("Entity.Usuario", "usuario")
+                        .WithMany()
+                        .HasForeignKey("usuarioid");
+
+                    b.Navigation("usuario");
                 });
 #pragma warning restore 612, 618
         }

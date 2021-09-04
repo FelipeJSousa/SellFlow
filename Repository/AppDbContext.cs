@@ -13,6 +13,7 @@ namespace Repository
     {
         protected readonly String _conn = @"Server=DESKTOP-4QBF915;Database=SellFlow;Trusted_Connection=True;MultipleActiveResultSets=true";
         public DbSet<Pessoa> Pessoa { get; set; }
+        public DbSet<Usuario> Usuario { get; set; }
 
         public AppDbContext() { }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -31,6 +32,11 @@ namespace Repository
             modelBuilder.Entity<Pessoa>().Property(x => x.dataNascimento).IsRequired();
             modelBuilder.Entity<Pessoa>().Property(x => x.nome).IsRequired();
             modelBuilder.Entity<Pessoa>().Property(x => x.sobrenome).IsRequired();
+            modelBuilder.Entity<Pessoa>().Property(x => x.ativo).IsRequired();
+
+            modelBuilder.Entity<Usuario>().Property(x => x.ativo).IsRequired();
+            modelBuilder.Entity<Usuario>().Property(x => x.senha).IsRequired();
+            modelBuilder.Entity<Usuario>().Property(x => x.id).IsRequired();
         }
     }
 }

@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace SellFlow
 {
-    public class Startup : AppDbContext
+    public class Startup
     {
         public Startup(IConfiguration configuration)
         {

@@ -15,6 +15,10 @@ namespace SellFlow
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Pessoa, PessoaModel>();
                 cfg.CreateMap<PessoaModel, Pessoa>();
+
+                cfg.CreateMap<UsuarioModel, Usuario>();
+                cfg.CreateMap<Usuario, UsuarioModel>();
+
             });
 
 
