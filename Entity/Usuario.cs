@@ -16,5 +16,6 @@ namespace Entity
         public string email { get; set; }
         public bool ativo { get; set; }
         public Permissao permissao { get; set; }
+        public ICollection<Produto> produtos { get; set; }
     }
 }

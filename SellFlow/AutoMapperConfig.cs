@@ -24,6 +24,9 @@ namespace SellFlow
 
                 cfg.CreateMap<Pagina, PaginaModel>();
                 cfg.CreateMap<PaginaModel, Pagina>();
+
+                cfg.CreateMap<ProdutoModel, Produto>();
+                cfg.CreateMap<Produto, ProdutoModel>();
             });
 
             return config;
