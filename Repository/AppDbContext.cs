@@ -21,6 +21,7 @@ namespace Repository
         public DbSet<Endereco> Endereco { get; set; }
         public DbSet<PessoaEndereco> PessoaEndereco { get; set; }
         public DbSet<Categoria> Categoria { get; set; }
+        public DbSet<Anuncio> Anuncio { get; set; }
 
         public AppDbContext() { }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
