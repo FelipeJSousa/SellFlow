@@ -17,6 +17,9 @@ namespace Entity
         private int _curtidas { get; set; } = 0;
         public int curtidas { get => _curtidas; }
 
+        public Categoria categoria { get; set; }
+        public ICollection<Anuncio> anuncios { get; set; }
+
         public void Curtir() => _curtidas++;
     }
 }

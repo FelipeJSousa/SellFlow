@@ -18,5 +18,6 @@ namespace Entity
         public DateTime dataNascimento { get; set; }
         public bool ativo { get; set; }
         public Usuario usuario { get; set; }
+        public ICollection<PessoaEndereco> pessoaEnderecos { get; set; }
     }
 }
