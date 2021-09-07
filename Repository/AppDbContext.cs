@@ -20,6 +20,7 @@ namespace Repository
         public DbSet<Produto> Produto { get; set; }
         public DbSet<Endereco> Endereco { get; set; }
         public DbSet<PessoaEndereco> PessoaEndereco { get; set; }
+        public DbSet<Categoria> Categoria { get; set; }
 
         public AppDbContext() { }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -79,6 +80,21 @@ namespace Repository
                         .HasOne(pe => pe.endereco)
                         .WithMany(e => e.pessoaEnderecos)
                         .HasForeignKey(pe => pe.enderecoId);
+
+            modelBuilder.Entity<Categoria>().Property(x => x.id).IsRequired();
+            modelBuilder.Entity<Categoria>().Property(x => x.ativo).IsRequired();
+            modelBuilder.Entity<Categoria>().Property(x => x.nome).IsRequired();
+            modelBuilder.Entity<Categoria>().Property(x => x.nome).HasMaxLength(80);
+            modelBuilder.Entity<Categoria>().Property(x => x.descricao).HasMaxLength(250);
+
+            modelBuilder.Entity<Anuncio>().Property(x => x.descricao).HasMaxLength(250);
+            modelBuilder.Entity<Anuncio>().Property(x => x.nome).HasMaxLength(80);
+            modelBuilder.Entity<Anuncio>().Property(x => x.ativo).IsRequired();
+            modelBuilder.Entity<Anuncio>().Property(x => x.id).IsRequired();
+            modelBuilder.Entity<Anuncio>().Property(x => x.nome).IsRequired();
+            modelBuilder.Entity<Anuncio>().Property(x => x.qtdeDisponivel).IsRequired();
+            modelBuilder.Entity<Anuncio>().Property(x => x.dataCriacao).IsRequired();
+
         }
     }
 }
