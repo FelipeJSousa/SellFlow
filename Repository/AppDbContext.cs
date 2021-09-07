@@ -18,6 +18,8 @@ namespace Repository
         public DbSet<Pagina> Pagina{ get; set; }
         public DbSet<PermissaoPagina> PermissaoPagina { get; set; }
         public DbSet<Produto> Produto { get; set; }
+        public DbSet<Endereco> Endereco { get; set; }
+        public DbSet<PessoaEndereco> PessoaEndereco { get; set; }
 
         public AppDbContext() { }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -61,6 +63,22 @@ namespace Repository
                         .HasOne(pc => pc.pagina)
                         .WithMany(p => p.PermissaoPagina)
                         .HasForeignKey(pc => pc.paginaId);
+
+            modelBuilder.Entity<Endereco>().Property(x => x.ativo).IsRequired();
+            modelBuilder.Entity<Endereco>().Property(x => x.bairro).IsRequired();
+            modelBuilder.Entity<Endereco>().Property(x => x.cidade).IsRequired();
+            modelBuilder.Entity<Endereco>().Property(x => x.logradouro).IsRequired();
+            modelBuilder.Entity<Endereco>().Property(x => x.id).IsRequired();
+
+            modelBuilder.Entity<PessoaEndereco>().HasKey(pe => new { pe.pessoaId, pe.enderecoId}); ;
+            modelBuilder.Entity<PessoaEndereco>()
+                        .HasOne(pe => pe.pessoa)
+                        .WithMany(p => p.pessoaEnderecos)
+                        .HasForeignKey(pc => pc.pessoaId);
+            modelBuilder.Entity<PessoaEndereco>()
+                        .HasOne(pe => pe.endereco)
+                        .WithMany(e => e.pessoaEnderecos)
+                        .HasForeignKey(pe => pe.enderecoId);
         }
     }
 }
