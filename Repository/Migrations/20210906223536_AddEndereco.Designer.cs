@@ -3,86 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
 namespace SellFlow.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class StartupModelSnapshot : ModelSnapshot
+    [Migration("20210906223536_AddEndereco")]
+    partial class AddEndereco
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Entity.Anuncio", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("Produtoid")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("ativo")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("dataCriacao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("dataEncerramento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("descricao")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("nome")
-                        .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
-
-                    b.Property<int>("qtdeDisponivel")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("Produtoid");
-
-                    b.ToTable("Anuncio");
-                });
-
-            modelBuilder.Entity("Entity.Categoria", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("ativo")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("descricao")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("imagemDiretorio")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("nome")
-                        .IsRequired()
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Categoria");
-                });
 
             modelBuilder.Entity("Entity.Endereco", b =>
                 {
@@ -233,9 +170,6 @@ namespace SellFlow.Migrations
                     b.Property<bool>("ativo")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("categoriaid")
-                        .HasColumnType("int");
-
                     b.Property<string>("descricao")
                         .HasColumnType("nvarchar(max)");
 
@@ -249,8 +183,6 @@ namespace SellFlow.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("id");
-
-                    b.HasIndex("categoriaid");
 
                     b.HasIndex("vendedorid");
 
@@ -282,13 +214,6 @@ namespace SellFlow.Migrations
                     b.HasIndex("permissaoid");
 
                     b.ToTable("Usuario");
-                });
-
-            modelBuilder.Entity("Entity.Anuncio", b =>
-                {
-                    b.HasOne("Entity.Produto", null)
-                        .WithMany("anuncios")
-                        .HasForeignKey("Produtoid");
                 });
 
             modelBuilder.Entity("Entity.PermissaoPagina", b =>
@@ -340,15 +265,9 @@ namespace SellFlow.Migrations
 
             modelBuilder.Entity("Entity.Produto", b =>
                 {
-                    b.HasOne("Entity.Categoria", "categoria")
-                        .WithMany()
-                        .HasForeignKey("categoriaid");
-
                     b.HasOne("Entity.Usuario", "vendedor")
                         .WithMany("produtos")
                         .HasForeignKey("vendedorid");
-
-                    b.Navigation("categoria");
 
                     b.Navigation("vendedor");
                 });
@@ -375,6 +294,11 @@ namespace SellFlow.Migrations
             modelBuilder.Entity("Entity.Permissao", b =>
                 {
                     b.Navigation("PermissaoPagina");
+                });
+
+            modelBuilder.Entity("Entity.Pessoa", b =>
+                {
+                    b.Navigation("pessoaEnderecos");
                 });
 
             modelBuilder.Entity("Entity.Usuario", b =>
