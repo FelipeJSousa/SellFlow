@@ -14,8 +14,5 @@ namespace SellFlow.Model
         public string bairro { get; set; }
         public string cidade { get; set; }
         public bool ativo { get; set; }
-
-        public ICollection<PessoaEndereco> pessoaEnderecos {get; set;}
-
     }
 }
