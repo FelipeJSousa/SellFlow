@@ -19,6 +19,8 @@ namespace SellFlow.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+<<<<<<< HEAD
+=======
             modelBuilder.Entity("Entity.Anuncio", b =>
                 {
                     b.Property<int>("id")
@@ -84,6 +86,7 @@ namespace SellFlow.Migrations
                     b.ToTable("Categoria");
                 });
 
+>>>>>>> master
             modelBuilder.Entity("Entity.Endereco", b =>
                 {
                     b.Property<int>("id")
@@ -377,6 +380,19 @@ namespace SellFlow.Migrations
                     b.Navigation("PermissaoPagina");
                 });
 
+            modelBuilder.Entity("Entity.Pessoa", b =>
+                {
+                    b.Navigation("pessoaEnderecos");
+                });
+
+<<<<<<< HEAD
+=======
+            modelBuilder.Entity("Entity.Produto", b =>
+                {
+                    b.Navigation("anuncios");
+                });
+
+>>>>>>> master
             modelBuilder.Entity("Entity.Usuario", b =>
                 {
                     b.Navigation("produtos");

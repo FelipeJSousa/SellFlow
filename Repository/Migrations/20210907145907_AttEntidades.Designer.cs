@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
 namespace SellFlow.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class StartupModelSnapshot : ModelSnapshot
+    [Migration("20210907145907_AttEntidades")]
+    partial class AttEntidades
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -375,6 +377,16 @@ namespace SellFlow.Migrations
             modelBuilder.Entity("Entity.Permissao", b =>
                 {
                     b.Navigation("PermissaoPagina");
+                });
+
+            modelBuilder.Entity("Entity.Pessoa", b =>
+                {
+                    b.Navigation("pessoaEnderecos");
+                });
+
+            modelBuilder.Entity("Entity.Produto", b =>
+                {
+                    b.Navigation("anuncios");
                 });
 
             modelBuilder.Entity("Entity.Usuario", b =>
