@@ -65,6 +65,36 @@ namespace Repository
                         .HasOne(pc => pc.pagina)
                         .WithMany(p => p.PermissaoPagina)
                         .HasForeignKey(pc => pc.paginaId);
+
+            modelBuilder.Entity<Endereco>().Property(x => x.ativo).IsRequired();
+            modelBuilder.Entity<Endereco>().Property(x => x.bairro).IsRequired();
+            modelBuilder.Entity<Endereco>().Property(x => x.cidade).IsRequired();
+            modelBuilder.Entity<Endereco>().Property(x => x.logradouro).IsRequired();
+            modelBuilder.Entity<Endereco>().Property(x => x.id).IsRequired();
+
+            modelBuilder.Entity<PessoaEndereco>().HasKey(pe => new { pe.pessoaId, pe.enderecoId }); ;
+            modelBuilder.Entity<PessoaEndereco>()
+                        .HasOne(pe => pe.pessoa)
+                        .WithMany(p => p.pessoaEnderecos)
+                        .HasForeignKey(pc => pc.pessoaId);
+            modelBuilder.Entity<PessoaEndereco>()
+                        .HasOne(pe => pe.endereco)
+                        .WithMany(e => e.pessoaEnderecos)
+                        .HasForeignKey(pe => pe.enderecoId);
+
+            modelBuilder.Entity<Categoria>().Property(x => x.id).IsRequired();
+            modelBuilder.Entity<Categoria>().Property(x => x.ativo).IsRequired();
+            modelBuilder.Entity<Categoria>().Property(x => x.nome).IsRequired();
+            modelBuilder.Entity<Categoria>().Property(x => x.nome).HasMaxLength(80);
+            modelBuilder.Entity<Categoria>().Property(x => x.descricao).HasMaxLength(250);
+
+            modelBuilder.Entity<Anuncio>().Property(x => x.descricao).HasMaxLength(250);
+            modelBuilder.Entity<Anuncio>().Property(x => x.nome).HasMaxLength(80);
+            modelBuilder.Entity<Anuncio>().Property(x => x.ativo).IsRequired();
+            modelBuilder.Entity<Anuncio>().Property(x => x.id).IsRequired();
+            modelBuilder.Entity<Anuncio>().Property(x => x.nome).IsRequired();
+            modelBuilder.Entity<Anuncio>().Property(x => x.qtdeDisponivel).IsRequired();
+            modelBuilder.Entity<Anuncio>().Property(x => x.dataCriacao).IsRequired();
         }
     }
 }
