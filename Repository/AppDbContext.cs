@@ -22,11 +22,13 @@ namespace Repository
         public DbSet<PessoaEndereco> PessoaEndereco { get; set; }
         public DbSet<Categoria> Categoria { get; set; }
         public DbSet<Anuncio> Anuncio { get; set; }
+        public DbSet<Imagens> Imagens { get; set; }
 
         public AppDbContext() { }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(_conn);
@@ -95,6 +97,11 @@ namespace Repository
             modelBuilder.Entity<Anuncio>().Property(x => x.nome).IsRequired();
             modelBuilder.Entity<Anuncio>().Property(x => x.qtdeDisponivel).IsRequired();
             modelBuilder.Entity<Anuncio>().Property(x => x.dataCriacao).IsRequired();
+
+            modelBuilder.Entity<Imagens>().Property(x => x.id).IsRequired();
+            modelBuilder.Entity<Imagens>().Property(x => x.diretorio).IsRequired();
+            modelBuilder.Entity<Imagens>().Property(x => x.ativo).IsRequired();
+
         }
     }
 }

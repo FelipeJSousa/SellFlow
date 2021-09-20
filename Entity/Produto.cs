@@ -19,6 +19,7 @@ namespace Entity
 
         public Categoria categoria { get; set; }
         public ICollection<Anuncio> anuncios { get; set; }
+        public ICollection<Imagens> imagens { get; set; }
 
         public void Curtir() => _curtidas++;
     }
