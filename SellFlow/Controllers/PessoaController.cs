@@ -60,6 +60,10 @@ namespace SellFlow.Controllers
             {
                 PessoaRepository rep = new PessoaRepository();
                 var mapper = new Mapper(AutoMapperConfig.RegisterMappings());
+                if(pessoa.usuario != null)
+                {
+                    pessoa.usuario.ativo = true;
+                }
                 ret.dados = mapper.Map<PessoaModel>(rep.Add(mapper.Map<Pessoa>(pessoa)));
                 if (ret.dados != null)
                 {
