@@ -13,23 +13,20 @@ namespace SellFlow
         public static MapperConfiguration RegisterMappings()
         {
             var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<Pessoa, PessoaModel>();
-                cfg.CreateMap<PessoaModel, Pessoa>();
 
-                cfg.CreateMap<UsuarioModel, Usuario>();
-                cfg.CreateMap<Usuario, UsuarioModel>();
+                cfg.CreateMap<Pessoa, PessoaModel>().ReverseMap();
 
-                cfg.CreateMap<Permissao, PermissaoModel>();
-                cfg.CreateMap<PermissaoModel, Permissao>();
+                cfg.CreateMap<Usuario, UsuarioModel>().ReverseMap();
 
-                cfg.CreateMap<Pagina, PaginaModel>();
-                cfg.CreateMap<PaginaModel, Pagina>();
+                cfg.CreateMap<Permissao, PermissaoModel>().ReverseMap();
 
-                cfg.CreateMap<ProdutoModel, Produto>();
-                cfg.CreateMap<Produto, ProdutoModel>();
+                cfg.CreateMap<Pagina, PaginaModel>().ReverseMap();
 
-                cfg.CreateMap<Anuncio, AnuncioModel>();
-                cfg.CreateMap<AnuncioModel, Anuncio>();
+                cfg.CreateMap<Produto, ProdutoModel>().ReverseMap();
+
+                cfg.CreateMap<Anuncio, AnuncioModel>().ReverseMap();
+
+                cfg.CreateMap<Imagens, ImagensModel>().ReverseMap();
             });
 
             return config;
