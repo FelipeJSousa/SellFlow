@@ -14,7 +14,7 @@ namespace Entity
         public string descricao { get; set; }
         public DateTime dataCriacao { get; set; } = DateTime.Now;
         public DateTime dataEncerramento { get; set; }
-        public SituacaoAnuncio situacao { get; set; }
+        public AnuncioSitucao situacao { get; set; }
         public bool ativo { get; set; }
     }
 }

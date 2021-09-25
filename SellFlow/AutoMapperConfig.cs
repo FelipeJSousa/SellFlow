@@ -27,9 +27,12 @@ namespace SellFlow
                 cfg.CreateMap<Anuncio, AnuncioModel>().ReverseMap();
 
                 cfg.CreateMap<Imagens, ImagensModel>().ReverseMap();
+
+                cfg.CreateMap<AnuncioSitucao, AnuncioSituacaoModel>().ReverseMap();
             });
 
             return config;
         }
+
     }
 }

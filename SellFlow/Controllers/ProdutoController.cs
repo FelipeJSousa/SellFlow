@@ -16,9 +16,9 @@ namespace SellFlow.Controllers
     public class ProdutoController : ControllerBase
     {
         [HttpGet]
-        public Retorno<List<ProdutoModel>> GetProduto(int? id = null)
+        public RetornoModel<List<ProdutoModel>> GetProduto(int? id = null)
         {
-            Retorno<List<ProdutoModel>> ret = new Retorno<List<ProdutoModel>>();
+            RetornoModel<List<ProdutoModel>> ret = new RetornoModel<List<ProdutoModel>>();
             try
             {
                 ProdutoRepository rep = new ProdutoRepository();
@@ -53,9 +53,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
-        public Retorno<ProdutoModel> PostProduto(ProdutoModel Produto)
+        public RetornoModel<ProdutoModel> PostProduto(ProdutoModel Produto)
         {
-            Retorno<ProdutoModel> ret = new Retorno<ProdutoModel>();
+            RetornoModel<ProdutoModel> ret = new RetornoModel<ProdutoModel>();
             try
             {
                 ProdutoRepository rep = new ProdutoRepository();
@@ -79,9 +79,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public Retorno<ProdutoModel> DeleteProduto(int id)
+        public RetornoModel<ProdutoModel> DeleteProduto(int id)
         {
-            Retorno<ProdutoModel> ret = new Retorno<ProdutoModel>();
+            RetornoModel<ProdutoModel> ret = new RetornoModel<ProdutoModel>();
             try
             {
                 ProdutoRepository rep = new ProdutoRepository();
@@ -116,9 +116,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
-        public Retorno<ProdutoModel> PutProduto(ProdutoModel ProdutoModel)
+        public RetornoModel<ProdutoModel> PutProduto(ProdutoModel ProdutoModel)
         {
-            Retorno<ProdutoModel> ret = new Retorno<ProdutoModel>();
+            RetornoModel<ProdutoModel> ret = new RetornoModel<ProdutoModel>();
             try
             {
                 ProdutoRepository rep = new ProdutoRepository();
@@ -142,9 +142,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost("curtir/{id}")]
-        public Retorno<ProdutoModel> PostCurtirProduto(int id)
+        public RetornoModel<ProdutoModel> PostCurtirProduto(int id)
         {
-            Retorno<ProdutoModel> ret = new Retorno<ProdutoModel>();
+            RetornoModel<ProdutoModel> ret = new RetornoModel<ProdutoModel>();
             try
             {
                 ProdutoRepository rep = new ProdutoRepository();

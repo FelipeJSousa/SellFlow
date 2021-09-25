@@ -6,8 +6,7 @@ using Repository;
 using SellFlow.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace SellFlow.Controllers
 {
@@ -16,15 +15,16 @@ namespace SellFlow.Controllers
     public class AnuncioController : ControllerBase
     {
         [HttpGet]
-        public Retorno<List<AnuncioModel>> GetAnuncio(int? id = null)
+        public RetornoModel<List<AnuncioModel>> GetAnuncio(int? id = null)
         {
-            Retorno<List<AnuncioModel>> ret = new Retorno<List<AnuncioModel>>();
+            RetornoModel<List<AnuncioModel>> ret = new RetornoModel<List<AnuncioModel>>();
             try
             {
                 AnuncioRepository rep = new AnuncioRepository();
                 if (id.HasValue)
                 {
-                    Anuncio anun = rep.Get(id.Value);
+                    Expression<Func<Anuncio, AnuncioSitucao>> filter = (x => x.situacao);
+                    Anuncio anun = rep.Get(x => x.id.Equals(id.Value), filter);
                     List<Anuncio> lanun = new List<Anuncio>();
                     lanun.Add(anun);
                     ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<AnuncioModel>>(lanun);
@@ -53,9 +53,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
-        public Retorno<AnuncioModel> PostAnuncio(AnuncioModel anun)
+        public RetornoModel<AnuncioModel> PostAnuncio(AnuncioModel anun)
         {
-            Retorno<AnuncioModel> ret = new Retorno<AnuncioModel>();
+            RetornoModel<AnuncioModel> ret = new RetornoModel<AnuncioModel>();
             try
             {
                 AnuncioRepository rep = new AnuncioRepository();
@@ -79,9 +79,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public Retorno<AnuncioModel> DeleteAnuncio(int id)
+        public RetornoModel<AnuncioModel> DeleteAnuncio(int id)
         {
-            Retorno<AnuncioModel> ret = new Retorno<AnuncioModel>();
+            RetornoModel<AnuncioModel> ret = new RetornoModel<AnuncioModel>();
             try
             {
                 AnuncioRepository rep = new AnuncioRepository();
@@ -116,9 +116,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
-        public Retorno<AnuncioModel> PutAnuncio(AnuncioModel AnuncioModel)
+        public RetornoModel<AnuncioModel> PutAnuncio(AnuncioModel AnuncioModel)
         {
-            Retorno<AnuncioModel> ret = new Retorno<AnuncioModel>();
+            RetornoModel<AnuncioModel> ret = new RetornoModel<AnuncioModel>();
             try
             {
                 AnuncioRepository rep = new AnuncioRepository();

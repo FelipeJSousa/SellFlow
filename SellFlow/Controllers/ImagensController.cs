@@ -16,9 +16,9 @@ namespace SellFlow.Controllers
     public class ImagensController : ControllerBase
     {
         [HttpGet]
-        public Retorno<List<ImagensModel>> GetImagens(int? id = null)
+        public RetornoModel<List<ImagensModel>> GetImagens(int? id = null)
         {
-            Retorno<List<ImagensModel>> ret = new Retorno<List<ImagensModel>>();
+            RetornoModel<List<ImagensModel>> ret = new RetornoModel<List<ImagensModel>>();
             try
             {
                 ImagensRepository rep = new ImagensRepository();
@@ -53,9 +53,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
-        public Retorno<ImagensModel> PostImagens(ImagensModel img)
+        public RetornoModel<ImagensModel> PostImagens(ImagensModel img)
         {
-            Retorno<ImagensModel> ret = new Retorno<ImagensModel>();
+            RetornoModel<ImagensModel> ret = new RetornoModel<ImagensModel>();
             try
             {
                 ImagensRepository rep = new ImagensRepository();
@@ -79,9 +79,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public Retorno<ImagensModel> DeleteImagens(int id)
+        public RetornoModel<ImagensModel> DeleteImagens(int id)
         {
-            Retorno<ImagensModel> ret = new Retorno<ImagensModel>();
+            RetornoModel<ImagensModel> ret = new RetornoModel<ImagensModel>();
             try
             {
                 ImagensRepository rep = new ImagensRepository();
@@ -116,9 +116,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
-        public Retorno<ImagensModel> PutImagens(ImagensModel ImagensModel)
+        public RetornoModel<ImagensModel> PutImagens(ImagensModel ImagensModel)
         {
-            Retorno<ImagensModel> ret = new Retorno<ImagensModel>();
+            RetornoModel<ImagensModel> ret = new RetornoModel<ImagensModel>();
             try
             {
                 ImagensRepository rep = new ImagensRepository();

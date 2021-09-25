@@ -22,8 +22,8 @@ namespace Repository
         public DbSet<PessoaEndereco> PessoaEndereco { get; set; }
         public DbSet<Categoria> Categoria { get; set; }
         public DbSet<Anuncio> Anuncio { get; set; }
+        public DbSet<AnuncioSitucao> AnuncioSitucao { get; set; }
         public DbSet<Imagens> Imagens { get; set; }
-        public DbSet<SituacaoAnuncio> SituacaoAnuncio { get; set; }
 
         public AppDbContext() { }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -103,11 +103,11 @@ namespace Repository
             modelBuilder.Entity<Imagens>().Property(x => x.diretorio).IsRequired();
             modelBuilder.Entity<Imagens>().Property(x => x.ativo).IsRequired();
 
-            modelBuilder.Entity<SituacaoAnuncio>().Property(x => x.id).IsRequired();
-            modelBuilder.Entity<SituacaoAnuncio>().Property(x => x.nome).IsRequired();
-            modelBuilder.Entity<SituacaoAnuncio>().Property(x => x.nome).HasMaxLength(50);
-            modelBuilder.Entity<SituacaoAnuncio>().Property(x => x.descricao).HasMaxLength(250);
-            modelBuilder.Entity<SituacaoAnuncio>().Property(x => x.ativo).IsRequired();
+            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.id).IsRequired();
+            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.nome).IsRequired();
+            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.nome).HasMaxLength(50);
+            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.descricao).HasMaxLength(250);
+            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.ativo).IsRequired();
 
         }
     }

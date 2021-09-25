@@ -16,9 +16,9 @@ namespace SellFlow.Controllers
     public class PermissaoController : ControllerBase
     {
         [HttpGet]
-        public Retorno<List<PermissaoModel>> GetPermissao(int? id = null)
+        public RetornoModel<List<PermissaoModel>> GetPermissao(int? id = null)
         {
-            Retorno<List<PermissaoModel>> ret = new Retorno<List<PermissaoModel>>();
+            RetornoModel<List<PermissaoModel>> ret = new RetornoModel<List<PermissaoModel>>();
             try
             {
                 PermissaoRepository rep = new PermissaoRepository();
@@ -53,9 +53,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
-        public Retorno<PermissaoModel> PostPermissaoModel(PermissaoModel Permissao)
+        public RetornoModel<PermissaoModel> PostPermissaoModel(PermissaoModel Permissao)
         {
-            Retorno<PermissaoModel> ret = new Retorno<PermissaoModel>();
+            RetornoModel<PermissaoModel> ret = new RetornoModel<PermissaoModel>();
             try
             {
                 PermissaoRepository rep = new PermissaoRepository();
@@ -79,9 +79,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public Retorno<PermissaoModel> DeletePermissaoModel(int id)
+        public RetornoModel<PermissaoModel> DeletePermissaoModel(int id)
         {
-            Retorno<PermissaoModel> ret = new Retorno<PermissaoModel>();
+            RetornoModel<PermissaoModel> ret = new RetornoModel<PermissaoModel>();
             try
             {
                 PermissaoRepository rep = new PermissaoRepository();
@@ -116,9 +116,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
-        public Retorno<PermissaoModel> PutPermissaoModel(PermissaoModel PermissaoModel)
+        public RetornoModel<PermissaoModel> PutPermissaoModel(PermissaoModel PermissaoModel)
         {
-            Retorno<PermissaoModel> ret = new Retorno<PermissaoModel>();
+            RetornoModel<PermissaoModel> ret = new RetornoModel<PermissaoModel>();
             try
             {
                 PermissaoRepository rep = new PermissaoRepository();
