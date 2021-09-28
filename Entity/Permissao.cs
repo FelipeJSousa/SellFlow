@@ -13,11 +13,6 @@ namespace Entity
         public string nome { get; set; }
         public bool ativo { get; set; }
 
-        #region ForeignKey
-
-        public long? PermissaoPagina { get; set; }
-
-        #endregion
         #region Navigation
 
         public ICollection<PermissaoPagina> PermissaoPaginaObj { get; set; }

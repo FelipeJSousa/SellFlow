@@ -61,7 +61,10 @@ namespace SellFlow.Controllers
                 var mapper = new Mapper(AutoMapperConfig.RegisterMappings());
                 var _anuncio = mapper.Map<Anuncio>(anun);
                 _anuncio.NovoAnuncio();
-                ret.dados = mapper.Map<AnuncioModel>(rep.Add(_anuncio));
+                _anuncio = rep.Add(_anuncio);
+                _anuncio = rep.Get(x => x.id.Equals(_anuncio.id));
+                
+                ret.dados = mapper.Map<AnuncioModel>(_anuncio);
                 if (ret.dados != null)
                 {
                     ret.status = true;

@@ -118,15 +118,14 @@ namespace Repository.Migrations
                     senha = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ativo = table.Column<bool>(type: "bit", nullable: false),
-                    permissao = table.Column<long>(type: "bigint", nullable: false),
-                    permissaoObjid = table.Column<long>(type: "bigint", nullable: true)
+                    permissao = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Usuario", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Usuario_Permissao_permissaoObjid",
-                        column: x => x.permissaoObjid,
+                        name: "FK_Usuario_Permissao_permissao",
+                        column: x => x.permissao,
                         principalTable: "Permissao",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
@@ -224,8 +223,8 @@ namespace Repository.Migrations
                     dataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     dataEncerramento = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ativo = table.Column<bool>(type: "bit", nullable: false),
-                    produto = table.Column<long>(type: "bigint", nullable: true),
-                    anuncioSituacao = table.Column<long>(type: "bigint", nullable: false)
+                    produto = table.Column<long>(type: "bigint", nullable: false),
+                    anuncioSituacao = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -235,13 +234,13 @@ namespace Repository.Migrations
                         column: x => x.anuncioSituacao,
                         principalTable: "AnuncioSitucao",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Anuncio_Produto_produto",
                         column: x => x.produto,
                         principalTable: "Produto",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -269,7 +268,8 @@ namespace Repository.Migrations
                 name: "IX_Anuncio_anuncioSituacao",
                 table: "Anuncio",
                 column: "anuncioSituacao",
-                unique: true);
+                unique: true,
+                filter: "[anuncioSituacao] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Anuncio_produto",
@@ -308,9 +308,10 @@ namespace Repository.Migrations
                 column: "usuario");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuario_permissaoObjid",
+                name: "IX_Usuario_permissao",
                 table: "Usuario",
-                column: "permissaoObjid");
+                column: "permissao",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
