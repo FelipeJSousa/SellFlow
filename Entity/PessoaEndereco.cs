@@ -8,9 +8,9 @@ namespace Entity
 {
     public class PessoaEndereco
     {
-        public int pessoaId { get; set; }
-        public Pessoa pessoa { get; set; }
-        public int enderecoId { get; set; }
-        public Endereco endereco { get; set; }
+        public long pessoa { get; set; }
+        public Pessoa pessoaObj { get; set; }
+        public long endereco { get; set; }
+        public Endereco enderecoObj { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace SellFlow.Model
 {
     public class AnuncioModel
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public string nome { get; set; }
         public int qtdeDisponivel { get; set; } = 0;
         public string descricao { get; set; }
@@ -16,5 +16,6 @@ namespace SellFlow.Model
         public DateTime dataEncerramento { get; set; }
         public bool ativo { get; set; }
         public AnuncioSituacaoModel AnuncioSituacao { get; set; }
+
     }
 }

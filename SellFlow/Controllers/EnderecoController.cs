@@ -79,7 +79,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public RetornoModel<EnderecoModel> DeleteEndereco(int id)
+        public RetornoModel<EnderecoModel> DeleteEndereco(long id)
         {
             RetornoModel<EnderecoModel> ret = new RetornoModel<EnderecoModel>();
             try

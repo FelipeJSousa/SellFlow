@@ -10,14 +10,26 @@ namespace Entity
     public class Pessoa
     {
         [Key]
-        public int id { get; set; }
+        public long id { get; set; }
         public string nome { get; set; }
         public string sobrenome { get; set; }
         public string cpf { get; set; }
         public string cpnj { get; set; }
         public DateTime dataNascimento { get; set; }
         public bool ativo { get; set; }
-        public Usuario usuario { get; set; }
-        public ICollection<PessoaEndereco> pessoaEnderecos { get; set; }
+
+        #region ForeignKey
+
+        public long? PessoaEndereco { get; set; }
+        public long? Usuario { get; set; }
+
+        #endregion
+        #region Navigation
+
+        public ICollection<PessoaEndereco> pessoaEnderecoObj { get; set; }
+
+        public Usuario usuarioObj { get; set; }
+
+        #endregion
     }
 }

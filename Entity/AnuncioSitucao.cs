@@ -9,10 +9,12 @@ namespace Entity
 
     public class AnuncioSitucao
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public string nome { get; set; }
         public string descricao { get; set; }
-        public ICollection<Anuncio> anuncios { get; set; }
         public bool ativo { get; set; }
+
+        //public ICollection<Anuncio> anuncios { get; set; }
+
     }
 }

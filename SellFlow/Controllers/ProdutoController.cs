@@ -79,7 +79,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public RetornoModel<ProdutoModel> DeleteProduto(int id)
+        public RetornoModel<ProdutoModel> DeleteProduto(long id)
         {
             RetornoModel<ProdutoModel> ret = new RetornoModel<ProdutoModel>();
             try
@@ -142,7 +142,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost("curtir/{id}")]
-        public RetornoModel<ProdutoModel> PostCurtirProduto(int id)
+        public RetornoModel<ProdutoModel> PostCurtirProduto(long id)
         {
             RetornoModel<ProdutoModel> ret = new RetornoModel<ProdutoModel>();
             try

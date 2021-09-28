@@ -23,8 +23,7 @@ namespace SellFlow.Controllers
                 AnuncioRepository rep = new AnuncioRepository();
                 if (id.HasValue)
                 {
-                    Expression<Func<Anuncio, AnuncioSitucao>> filter = (x => x.situacao);
-                    Anuncio anun = rep.Get(x => x.id.Equals(id.Value), filter);
+                    Anuncio anun = rep.Get(x => x.id.Equals(id.Value));
                     List<Anuncio> lanun = new List<Anuncio>();
                     lanun.Add(anun);
                     ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<AnuncioModel>>(lanun);
@@ -60,7 +59,9 @@ namespace SellFlow.Controllers
             {
                 AnuncioRepository rep = new AnuncioRepository();
                 var mapper = new Mapper(AutoMapperConfig.RegisterMappings());
-                ret.dados = mapper.Map<AnuncioModel>(rep.Add(mapper.Map<Anuncio>(anun)));
+                var _anuncio = mapper.Map<Anuncio>(anun);
+                _anuncio.NovoAnuncio();
+                ret.dados = mapper.Map<AnuncioModel>(rep.Add(_anuncio));
                 if (ret.dados != null)
                 {
                     ret.status = true;
@@ -79,7 +80,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public RetornoModel<AnuncioModel> DeleteAnuncio(int id)
+        public RetornoModel<AnuncioModel> DeleteAnuncio(long id)
         {
             RetornoModel<AnuncioModel> ret = new RetornoModel<AnuncioModel>();
             try

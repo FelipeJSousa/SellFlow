@@ -79,7 +79,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public RetornoModel<CategoriaModel> DeleteCategoria(int id)
+        public RetornoModel<CategoriaModel> DeleteCategoria(long id)
         {
             RetornoModel<CategoriaModel> ret = new RetornoModel<CategoriaModel>();
             try

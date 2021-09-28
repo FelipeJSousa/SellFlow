@@ -9,7 +9,7 @@ namespace SellFlow.Model
 {
     public class PaginaModel
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public string nome { get; set; }
         public string caminho { get; set; }
         public bool ativo { get; set; }
