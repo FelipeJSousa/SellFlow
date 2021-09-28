@@ -16,9 +16,9 @@ namespace SellFlow.Controllers
     public class EnderecoController : ControllerBase
     {
         [HttpGet]
-        public Retorno<List<EnderecoModel>> GetEndereco(int? id = null)
+        public RetornoModel<List<EnderecoModel>> GetEndereco(int? id = null)
         {
-            Retorno<List<EnderecoModel>> ret = new Retorno<List<EnderecoModel>>();
+            RetornoModel<List<EnderecoModel>> ret = new RetornoModel<List<EnderecoModel>>();
             try
             {
                 EnderecoRepository rep = new EnderecoRepository();
@@ -53,9 +53,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
-        public Retorno<EnderecoModel> PostEndereco(EnderecoModel end)
+        public RetornoModel<EnderecoModel> PostEndereco(EnderecoModel end)
         {
-            Retorno<EnderecoModel> ret = new Retorno<EnderecoModel>();
+            RetornoModel<EnderecoModel> ret = new RetornoModel<EnderecoModel>();
             try
             {
                 EnderecoRepository rep = new EnderecoRepository();
@@ -79,9 +79,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public Retorno<EnderecoModel> DeleteEndereco(int id)
+        public RetornoModel<EnderecoModel> DeleteEndereco(long id)
         {
-            Retorno<EnderecoModel> ret = new Retorno<EnderecoModel>();
+            RetornoModel<EnderecoModel> ret = new RetornoModel<EnderecoModel>();
             try
             {
                 EnderecoRepository rep = new EnderecoRepository();
@@ -116,9 +116,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
-        public Retorno<EnderecoModel> PutEndereco(EnderecoModel EnderecoModel)
+        public RetornoModel<EnderecoModel> PutEndereco(EnderecoModel EnderecoModel)
         {
-            Retorno<EnderecoModel> ret = new Retorno<EnderecoModel>();
+            RetornoModel<EnderecoModel> ret = new RetornoModel<EnderecoModel>();
             try
             {
                 EnderecoRepository rep = new EnderecoRepository();

@@ -9,11 +9,19 @@ namespace Entity
 {
     public class Permissao
     {
-        [Key]
-        public int id { get; set; }
+        public long id { get; set; }
         public string nome { get; set; }
         public bool ativo { get; set; }
 
-        public ICollection<PermissaoPagina> PermissaoPagina { get; set; }
+        #region ForeignKey
+
+        public long? PermissaoPagina { get; set; }
+
+        #endregion
+        #region Navigation
+
+        public ICollection<PermissaoPagina> PermissaoPaginaObj { get; set; }
+
+        #endregion
     }
 }

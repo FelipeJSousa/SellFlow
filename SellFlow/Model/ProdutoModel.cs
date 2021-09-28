@@ -7,7 +7,7 @@ namespace SellFlow.Model
 {
     public class ProdutoModel
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public string nome { get; set; }
         public string descricao { get; set; }
         public string imagemDestaque { get; set; }

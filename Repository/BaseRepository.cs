@@ -34,7 +34,7 @@ namespace Repository
             return list;
         }
 
-        public T Get(int id)
+        public T Get(long id)
         {
             T item = null;
             using (_context = new AppDbContext())

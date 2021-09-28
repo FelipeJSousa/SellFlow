@@ -16,9 +16,9 @@ namespace SellFlow.Controllers
     public class UsuarioController : ControllerBase
     {
         [HttpGet]
-        public Retorno<List<UsuarioModel>> GetUsuario(int? id = null)
+        public RetornoModel<List<UsuarioModel>> GetUsuario(int? id = null)
         {
-            Retorno<List<UsuarioModel>> ret = new Retorno<List<UsuarioModel>>();
+            RetornoModel<List<UsuarioModel>> ret = new RetornoModel<List<UsuarioModel>>();
             try
             {
                 UsuarioRepository rep = new UsuarioRepository();
@@ -53,9 +53,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
-        public Retorno<UsuarioModel> PostUsuario(UsuarioModel usuario)
+        public RetornoModel<UsuarioModel> PostUsuario(UsuarioModel usuario)
         {
-            Retorno<UsuarioModel> ret = new Retorno<UsuarioModel>();
+            RetornoModel<UsuarioModel> ret = new RetornoModel<UsuarioModel>();
             try
             {
                 UsuarioRepository rep = new UsuarioRepository();
@@ -102,9 +102,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public Retorno<UsuarioModel> DeleteUsuario(int id)
+        public RetornoModel<UsuarioModel> DeleteUsuario(long id)
         {
-            Retorno<UsuarioModel> ret = new Retorno<UsuarioModel>();
+            RetornoModel<UsuarioModel> ret = new RetornoModel<UsuarioModel>();
             try
             {
                 UsuarioRepository rep = new UsuarioRepository();
@@ -139,9 +139,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
-        public Retorno<UsuarioModel> PutUsuario(UsuarioModel UsuarioModel)
+        public RetornoModel<UsuarioModel> PutUsuario(UsuarioModel UsuarioModel)
         {
-            Retorno<UsuarioModel> ret = new Retorno<UsuarioModel>();
+            RetornoModel<UsuarioModel> ret = new RetornoModel<UsuarioModel>();
             try
             {
                 UsuarioRepository rep = new UsuarioRepository();

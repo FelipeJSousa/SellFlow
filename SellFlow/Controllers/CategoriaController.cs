@@ -16,9 +16,9 @@ namespace SellFlow.Controllers
     public class CategoriaController : ControllerBase
     {
         [HttpGet]
-        public Retorno<List<CategoriaModel>> GetCategoria(int? id = null)
+        public RetornoModel<List<CategoriaModel>> GetCategoria(int? id = null)
         {
-            Retorno<List<CategoriaModel>> ret = new Retorno<List<CategoriaModel>>();
+            RetornoModel<List<CategoriaModel>> ret = new RetornoModel<List<CategoriaModel>>();
             try
             {
                 CategoriaRepository rep = new CategoriaRepository();
@@ -53,9 +53,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
-        public Retorno<CategoriaModel> PostCategoria(CategoriaModel cat)
+        public RetornoModel<CategoriaModel> PostCategoria(CategoriaModel cat)
         {
-            Retorno<CategoriaModel> ret = new Retorno<CategoriaModel>();
+            RetornoModel<CategoriaModel> ret = new RetornoModel<CategoriaModel>();
             try
             {
                 CategoriaRepository rep = new CategoriaRepository();
@@ -79,9 +79,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public Retorno<CategoriaModel> DeleteCategoria(int id)
+        public RetornoModel<CategoriaModel> DeleteCategoria(long id)
         {
-            Retorno<CategoriaModel> ret = new Retorno<CategoriaModel>();
+            RetornoModel<CategoriaModel> ret = new RetornoModel<CategoriaModel>();
             try
             {
                 CategoriaRepository rep = new CategoriaRepository();
@@ -116,9 +116,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
-        public Retorno<CategoriaModel> PutCategoria(CategoriaModel CategoriaModel)
+        public RetornoModel<CategoriaModel> PutCategoria(CategoriaModel CategoriaModel)
         {
-            Retorno<CategoriaModel> ret = new Retorno<CategoriaModel>();
+            RetornoModel<CategoriaModel> ret = new RetornoModel<CategoriaModel>();
             try
             {
                 CategoriaRepository rep = new CategoriaRepository();

@@ -7,7 +7,7 @@ namespace SellFlow.Model
 {
     public class UsuarioModel
     {
-        public int id { get; set; }
+        public long id { get; set; }
         private string _senha { get; set; }
         public string senha { get => _senha; set => _senha = value; }
         public string email { get; set; }

@@ -16,9 +16,9 @@ namespace SellFlow.Controllers
     public class PaginaController : ControllerBase
     {
         [HttpGet]
-        public Retorno<List<PaginaModel>> GetPagina(int? id = null)
+        public RetornoModel<List<PaginaModel>> GetPagina(int? id = null)
         {
-            Retorno<List<PaginaModel>> ret = new Retorno<List<PaginaModel>>();
+            RetornoModel<List<PaginaModel>> ret = new RetornoModel<List<PaginaModel>>();
             try
             {
                 PaginaRepository rep = new PaginaRepository();
@@ -53,9 +53,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
-        public Retorno<PaginaModel> PostPaginaModel(PaginaModel Pagina)
+        public RetornoModel<PaginaModel> PostPaginaModel(PaginaModel Pagina)
         {
-            Retorno<PaginaModel> ret = new Retorno<PaginaModel>();
+            RetornoModel<PaginaModel> ret = new RetornoModel<PaginaModel>();
             try
             {
                 PaginaRepository rep = new PaginaRepository();
@@ -79,9 +79,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public Retorno<PaginaModel> DeletePaginaModel(int id)
+        public RetornoModel<PaginaModel> DeletePaginaModel(long id)
         {
-            Retorno<PaginaModel> ret = new Retorno<PaginaModel>();
+            RetornoModel<PaginaModel> ret = new RetornoModel<PaginaModel>();
             try
             {
                 PaginaRepository rep = new PaginaRepository();
@@ -116,9 +116,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
-        public Retorno<PaginaModel> PutPaginaModel(PaginaModel PaginaModel)
+        public RetornoModel<PaginaModel> PutPaginaModel(PaginaModel PaginaModel)
         {
-            Retorno<PaginaModel> ret = new Retorno<PaginaModel>();
+            RetornoModel<PaginaModel> ret = new RetornoModel<PaginaModel>();
             try
             {
                 PaginaRepository rep = new PaginaRepository();

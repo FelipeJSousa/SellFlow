@@ -8,18 +8,29 @@ namespace Entity
 {
     public class Produto
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public string nome { get; set; }
         public string descricao { get; set; }
         public string imagemDestaque { get; set; }
-        public Usuario vendedor { get; set; }
         public bool ativo { get; set; }
         private int _curtidas { get; set; } = 0;
         public int curtidas { get => _curtidas; }
 
-        public Categoria categoria { get; set; }
-        public ICollection<Anuncio> anuncios { get; set; }
-        public ICollection<Imagens> imagens { get; set; }
+        #region ForeignKeys
+
+        public long? usuario { get; set; }
+        public long? categoria { get; set; }
+
+        #endregion
+
+        #region Navigation
+
+        public Usuario usuarioObj { get; set; }
+        public Categoria categoriaObj { get; set; }
+        public ICollection<Anuncio> anuncioList { get; set; }
+        public ICollection<Imagens> imagemList { get; set; }
+
+        #endregion
 
         public void Curtir() => _curtidas++;
     }

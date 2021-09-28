@@ -8,13 +8,17 @@ namespace Entity
 {
     public class Endereco
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public string logradouro { get; set; }
         public string bairro { get; set; }
         public string cidade { get; set; }
         public bool ativo { get; set; }
 
-        public ICollection<PessoaEndereco> pessoaEnderecos {get; set;}
+        #region Navigation
+
+        public ICollection<PessoaEndereco> pessoaEnderecoObj { get; set; } 
+
+        #endregion
 
     }
 }
