@@ -6,7 +6,7 @@ namespace Repository
 {
     interface IBaseRepository<T> where T : class
     {
-        T Get(int id);
+        T Get(long id);
         List<T> GetAll();
         T Add(T item);
         bool Delete(T item);

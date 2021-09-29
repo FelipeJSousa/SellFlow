@@ -7,11 +7,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
-namespace SellFlow.Migrations
+namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210907145907_AttEntidades")]
-    partial class AttEntidades
+<<<<<<< Updated upstream:Repository/Migrations/20210928013259_Initial.Designer.cs
+    [Migration("20210928013259_Initial")]
+    partial class Initial
+=======
+    [Migration("20210929011600_initial")]
+    partial class initial
+>>>>>>> Stashed changes:Repository/Migrations/20210929011600_initial.Designer.cs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,13 +28,14 @@ namespace SellFlow.Migrations
 
             modelBuilder.Entity("Entity.Anuncio", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<long>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("Produtoid")
-                        .HasColumnType("int");
+                    b.Property<long?>("anuncioSituacao")
+                        .IsRequired()
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("ativo")
                         .HasColumnType("bit");
@@ -49,21 +55,51 @@ namespace SellFlow.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
 
+                    b.Property<long?>("produto")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("qtdeDisponivel")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
-                    b.HasIndex("Produtoid");
+                    b.HasIndex("anuncioSituacao")
+                        .IsUnique();
+
+                    b.HasIndex("produto");
 
                     b.ToTable("Anuncio");
                 });
 
+            modelBuilder.Entity("Entity.AnuncioSitucao", b =>
+                {
+                    b.Property<long>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("descricao")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("AnuncioSitucao");
+                });
+
             modelBuilder.Entity("Entity.Categoria", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<long>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("ativo")
@@ -88,9 +124,9 @@ namespace SellFlow.Migrations
 
             modelBuilder.Entity("Entity.Endereco", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<long>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("ativo")
@@ -108,16 +144,47 @@ namespace SellFlow.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("pessoa")
+                        .HasColumnType("bigint");
+
                     b.HasKey("id");
+
+                    b.HasIndex("pessoa")
+                        .IsUnique()
+                        .HasFilter("[pessoa] IS NOT NULL");
 
                     b.ToTable("Endereco");
                 });
 
+            modelBuilder.Entity("Entity.Imagens", b =>
+                {
+                    b.Property<long>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("diretorio")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("produto")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("produto");
+
+                    b.ToTable("Imagens");
+                });
+
             modelBuilder.Entity("Entity.Pagina", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<long>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("ativo")
@@ -138,9 +205,9 @@ namespace SellFlow.Migrations
 
             modelBuilder.Entity("Entity.Permissao", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<long>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("ativo")
@@ -148,7 +215,8 @@ namespace SellFlow.Migrations
 
                     b.Property<string>("nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("id");
 
@@ -157,25 +225,29 @@ namespace SellFlow.Migrations
 
             modelBuilder.Entity("Entity.PermissaoPagina", b =>
                 {
-                    b.Property<int>("permissaoId")
-                        .HasColumnType("int");
+                    b.Property<long>("permissao")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("paginaId")
-                        .HasColumnType("int");
+                    b.Property<long>("pagina")
+                        .HasColumnType("bigint");
 
-                    b.HasKey("permissaoId", "paginaId");
+                    b.HasKey("permissao", "pagina");
 
-                    b.HasIndex("paginaId");
+                    b.HasIndex("pagina");
 
                     b.ToTable("PermissaoPagina");
                 });
 
             modelBuilder.Entity("Entity.Pessoa", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<long>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long?>("Usuario")
+                        .IsRequired()
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("ativo")
                         .HasColumnType("bit");
@@ -200,70 +272,59 @@ namespace SellFlow.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("usuarioid")
-                        .HasColumnType("int");
-
                     b.HasKey("id");
 
-                    b.HasIndex("usuarioid");
+                    b.HasIndex("Usuario")
+                        .IsUnique();
 
                     b.ToTable("Pessoa");
                 });
 
-            modelBuilder.Entity("Entity.PessoaEndereco", b =>
-                {
-                    b.Property<int>("pessoaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("enderecoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("pessoaId", "enderecoId");
-
-                    b.HasIndex("enderecoId");
-
-                    b.ToTable("PessoaEndereco");
-                });
-
             modelBuilder.Entity("Entity.Produto", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<long>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("ativo")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("categoriaid")
-                        .HasColumnType("int");
+                    b.Property<long?>("categoria")
+                        .IsRequired()
+                        .HasColumnType("bigint");
 
                     b.Property<string>("descricao")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("imagemDestaque")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("nome")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("vendedorid")
-                        .HasColumnType("int");
+                    b.Property<long?>("usuario")
+                        .IsRequired()
+                        .HasColumnType("bigint");
 
                     b.HasKey("id");
 
-                    b.HasIndex("categoriaid");
+                    b.HasIndex("categoria");
 
-                    b.HasIndex("vendedorid");
+                    b.HasIndex("usuario");
 
                     b.ToTable("Produto");
                 });
 
             modelBuilder.Entity("Entity.Usuario", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<long>("id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("ativo")
@@ -272,8 +333,11 @@ namespace SellFlow.Migrations
                     b.Property<string>("email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("permissaoid")
-                        .HasColumnType("int");
+                    b.Property<long>("permissao")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("permissaoObjid")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("senha")
                         .IsRequired()
@@ -281,117 +345,111 @@ namespace SellFlow.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("permissaoid");
+                    b.HasIndex("permissaoObjid");
 
                     b.ToTable("Usuario");
                 });
 
             modelBuilder.Entity("Entity.Anuncio", b =>
                 {
+                    b.HasOne("Entity.AnuncioSitucao", "anuncioSituacaoObj")
+                        .WithOne()
+                        .HasForeignKey("Entity.Anuncio", "anuncioSituacao")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Entity.Produto", null)
-                        .WithMany("anuncios")
-                        .HasForeignKey("Produtoid");
-                });
+                        .WithMany("anuncioList")
+                        .HasForeignKey("produto");
 
-            modelBuilder.Entity("Entity.PermissaoPagina", b =>
-                {
-                    b.HasOne("Entity.Pagina", "pagina")
-                        .WithMany("PermissaoPagina")
-                        .HasForeignKey("paginaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entity.Permissao", "permissao")
-                        .WithMany("PermissaoPagina")
-                        .HasForeignKey("permissaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("pagina");
-
-                    b.Navigation("permissao");
-                });
-
-            modelBuilder.Entity("Entity.Pessoa", b =>
-                {
-                    b.HasOne("Entity.Usuario", "usuario")
-                        .WithMany()
-                        .HasForeignKey("usuarioid");
-
-                    b.Navigation("usuario");
-                });
-
-            modelBuilder.Entity("Entity.PessoaEndereco", b =>
-                {
-                    b.HasOne("Entity.Endereco", "endereco")
-                        .WithMany("pessoaEnderecos")
-                        .HasForeignKey("enderecoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entity.Pessoa", "pessoa")
-                        .WithMany("pessoaEnderecos")
-                        .HasForeignKey("pessoaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("endereco");
-
-                    b.Navigation("pessoa");
-                });
-
-            modelBuilder.Entity("Entity.Produto", b =>
-                {
-                    b.HasOne("Entity.Categoria", "categoria")
-                        .WithMany()
-                        .HasForeignKey("categoriaid");
-
-                    b.HasOne("Entity.Usuario", "vendedor")
-                        .WithMany("produtos")
-                        .HasForeignKey("vendedorid");
-
-                    b.Navigation("categoria");
-
-                    b.Navigation("vendedor");
-                });
-
-            modelBuilder.Entity("Entity.Usuario", b =>
-                {
-                    b.HasOne("Entity.Permissao", "permissao")
-                        .WithMany()
-                        .HasForeignKey("permissaoid");
-
-                    b.Navigation("permissao");
+                    b.Navigation("anuncioSituacaoObj");
                 });
 
             modelBuilder.Entity("Entity.Endereco", b =>
                 {
-                    b.Navigation("pessoaEnderecos");
+                    b.HasOne("Entity.Pessoa", "pessoaObj")
+                        .WithOne()
+                        .HasForeignKey("Entity.Endereco", "pessoa");
+
+                    b.Navigation("pessoaObj");
                 });
 
-            modelBuilder.Entity("Entity.Pagina", b =>
+            modelBuilder.Entity("Entity.Imagens", b =>
                 {
-                    b.Navigation("PermissaoPagina");
+                    b.HasOne("Entity.Produto", "produtoObj")
+                        .WithMany("imagemList")
+                        .HasForeignKey("produto");
+
+                    b.Navigation("produtoObj");
                 });
 
-            modelBuilder.Entity("Entity.Permissao", b =>
+            modelBuilder.Entity("Entity.PermissaoPagina", b =>
                 {
-                    b.Navigation("PermissaoPagina");
+                    b.HasOne("Entity.Pagina", "paginaObj")
+                        .WithMany("PermissaoPaginaObj")
+                        .HasForeignKey("pagina");
+
+                    b.HasOne("Entity.Permissao", "permissaoObj")
+                        .WithMany("PermissaoPaginaObj")
+                        .HasForeignKey("permissao");
+
+                    b.Navigation("paginaObj");
+
+                    b.Navigation("permissaoObj");
                 });
 
             modelBuilder.Entity("Entity.Pessoa", b =>
                 {
-                    b.Navigation("pessoaEnderecos");
+                    b.HasOne("Entity.Usuario", "usuarioObj")
+                        .WithOne()
+                        .HasForeignKey("Entity.Pessoa", "Usuario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("usuarioObj");
                 });
 
             modelBuilder.Entity("Entity.Produto", b =>
                 {
-                    b.Navigation("anuncios");
+                    b.HasOne("Entity.Categoria", "categoriaObj")
+                        .WithMany()
+                        .HasForeignKey("categoria")
+                        .IsRequired();
+
+                    b.HasOne("Entity.Usuario", "usuarioObj")
+                        .WithMany()
+                        .HasForeignKey("usuario")
+                        .IsRequired();
+
+                    b.Navigation("categoriaObj");
+
+                    b.Navigation("usuarioObj");
                 });
 
             modelBuilder.Entity("Entity.Usuario", b =>
                 {
-                    b.Navigation("produtos");
+                    b.HasOne("Entity.Permissao", "permissaoObj")
+                        .WithMany()
+                        .HasForeignKey("permissaoObjid");
+
+                    b.Navigation("permissaoObj");
+                });
+
+            modelBuilder.Entity("Entity.Pagina", b =>
+                {
+                    b.Navigation("PermissaoPaginaObj");
+                });
+
+            modelBuilder.Entity("Entity.Permissao", b =>
+                {
+                    b.Navigation("PermissaoPaginaObj");
+                });
+
+            modelBuilder.Entity("Entity.Produto", b =>
+                {
+                    b.Navigation("anuncioList");
+
+                    b.Navigation("imagemList");
                 });
 #pragma warning restore 612, 618
         }

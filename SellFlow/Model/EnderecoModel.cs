@@ -9,7 +9,7 @@ namespace SellFlow.Model
 {
     public class EnderecoModel
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public string logradouro { get; set; }
         public string bairro { get; set; }
         public string cidade { get; set; }

@@ -9,10 +9,19 @@ namespace Entity
 {
     public class Imagens
     {
-        [Key]
-        public int id { get; set; }
+        public long id { get; set; }
         public string diretorio { get; set; }
-        public Produto produto { get; set; }
         public bool ativo { get; set; }
+
+        #region ForeignKey
+
+        public long produto { get; set; }
+
+        #endregion
+        #region Navigation
+
+        public Produto produtoObj { get; set; } 
+
+        #endregion
     }
 }

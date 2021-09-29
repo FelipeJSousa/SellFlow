@@ -6,7 +6,7 @@ using Entity;
 
 namespace SellFlow.Model
 {
-    public class Retorno<T> where T : class
+    public class RetornoModel<T> where T : class
     {
         public bool status { get; set; }
         public T dados { get; set; }

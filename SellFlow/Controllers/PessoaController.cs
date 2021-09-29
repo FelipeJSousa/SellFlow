@@ -17,8 +17,8 @@ namespace SellFlow.Controllers
     public class PessoaController : ControllerBase
     {
         [HttpGet]
-        public Retorno<List<PessoaModel>> GetPessoa(int? id = null) {
-            Retorno<List<PessoaModel>> ret = new Retorno<List<PessoaModel>>();
+        public RetornoModel<List<PessoaModel>> GetPessoa(int? id = null) {
+            RetornoModel<List<PessoaModel>> ret = new RetornoModel<List<PessoaModel>>();
             try
             {
                 PessoaRepository rep = new PessoaRepository();
@@ -53,9 +53,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
-        public Retorno<PessoaModel> PostPessoaModel(PessoaModel pessoa)
+        public RetornoModel<PessoaModel> PostPessoaModel(PessoaModel pessoa)
         {
-            Retorno<PessoaModel> ret = new Retorno<PessoaModel>();
+            RetornoModel<PessoaModel> ret = new RetornoModel<PessoaModel>();
             try
             {
                 PessoaRepository rep = new PessoaRepository();
@@ -83,9 +83,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public Retorno<PessoaModel> DeletePessoaModel(int id)
+        public RetornoModel<PessoaModel> DeletePessoaModel(long id)
         {
-            Retorno<PessoaModel> ret = new Retorno<PessoaModel>();
+            RetornoModel<PessoaModel> ret = new RetornoModel<PessoaModel>();
             try
             {
                 PessoaRepository rep = new PessoaRepository();
@@ -120,9 +120,9 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
-        public Retorno<PessoaModel> PutPessoaModel(PessoaModel PessoaModel)
+        public RetornoModel<PessoaModel> PutPessoaModel(PessoaModel PessoaModel)
         {
-            Retorno<PessoaModel> ret = new Retorno<PessoaModel>();
+            RetornoModel<PessoaModel> ret = new RetornoModel<PessoaModel>();
             try
             {
                 PessoaRepository rep = new PessoaRepository();
