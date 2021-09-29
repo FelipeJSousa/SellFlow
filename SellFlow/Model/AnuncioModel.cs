@@ -15,6 +15,7 @@ namespace SellFlow.Model
         public DateTime dataCriacao { get; set; } = DateTime.Now;
         public DateTime dataEncerramento { get; set; }
         public bool ativo { get; set; }
+        public ProdutoModel Produto{ get; set; }
         public AnuncioSituacaoModel AnuncioSituacao { get; set; }
 
     }

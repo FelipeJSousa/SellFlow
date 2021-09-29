@@ -27,7 +27,6 @@ namespace Repository.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long?>("anuncioSituacao")
-                        .IsRequired()
                         .HasColumnType("bigint");
 
                     b.Property<bool>("ativo")
@@ -49,6 +48,7 @@ namespace Repository.Migrations
                         .HasColumnType("nvarchar(80)");
 
                     b.Property<long?>("produto")
+                        .IsRequired()
                         .HasColumnType("bigint");
 
                     b.Property<int>("qtdeDisponivel")
@@ -57,7 +57,8 @@ namespace Repository.Migrations
                     b.HasKey("id");
 
                     b.HasIndex("anuncioSituacao")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[anuncioSituacao] IS NOT NULL");
 
                     b.HasIndex("produto");
 
@@ -218,15 +219,22 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Entity.PermissaoPagina", b =>
                 {
-                    b.Property<long>("permissao")
-                        .HasColumnType("bigint");
+                    b.Property<long>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long>("pagina")
                         .HasColumnType("bigint");
 
-                    b.HasKey("permissao", "pagina");
+                    b.Property<long>("permissao")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("id");
 
                     b.HasIndex("pagina");
+
+                    b.HasIndex("permissao");
 
                     b.ToTable("PermissaoPagina");
                 });
@@ -329,16 +337,14 @@ namespace Repository.Migrations
                     b.Property<long>("permissao")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("permissaoObjid")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("senha")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
 
-                    b.HasIndex("permissaoObjid");
+                    b.HasIndex("permissao")
+                        .IsUnique();
 
                     b.ToTable("Usuario");
                 });
@@ -347,15 +353,17 @@ namespace Repository.Migrations
                 {
                     b.HasOne("Entity.AnuncioSitucao", "anuncioSituacaoObj")
                         .WithOne()
-                        .HasForeignKey("Entity.Anuncio", "anuncioSituacao")
+                        .HasForeignKey("Entity.Anuncio", "anuncioSituacao");
+
+                    b.HasOne("Entity.Produto", "produtoObj")
+                        .WithMany("anuncioList")
+                        .HasForeignKey("produto")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entity.Produto", null)
-                        .WithMany("anuncioList")
-                        .HasForeignKey("produto");
-
                     b.Navigation("anuncioSituacaoObj");
+
+                    b.Navigation("produtoObj");
                 });
 
             modelBuilder.Entity("Entity.Endereco", b =>
@@ -422,8 +430,9 @@ namespace Repository.Migrations
             modelBuilder.Entity("Entity.Usuario", b =>
                 {
                     b.HasOne("Entity.Permissao", "permissaoObj")
-                        .WithMany()
-                        .HasForeignKey("permissaoObjid");
+                        .WithOne()
+                        .HasForeignKey("Entity.Usuario", "permissao")
+                        .IsRequired();
 
                     b.Navigation("permissaoObj");
                 });
