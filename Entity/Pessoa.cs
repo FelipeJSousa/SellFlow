@@ -20,13 +20,10 @@ namespace Entity
 
         #region ForeignKey
 
-        public long? PessoaEndereco { get; set; }
         public long? Usuario { get; set; }
 
         #endregion
         #region Navigation
-
-        public ICollection<PessoaEndereco> pessoaEnderecoObj { get; set; }
 
         public Usuario usuarioObj { get; set; }
 

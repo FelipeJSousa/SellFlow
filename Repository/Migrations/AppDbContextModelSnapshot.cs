@@ -138,7 +138,14 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("pessoa")
+                        .HasColumnType("bigint");
+
                     b.HasKey("id");
+
+                    b.HasIndex("pessoa")
+                        .IsUnique()
+                        .HasFilter("[pessoa] IS NOT NULL");
 
                     b.ToTable("Endereco");
                 });
@@ -174,9 +181,6 @@ namespace Repository.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long?>("PermissaoPagina")
-                        .HasColumnType("bigint");
-
                     b.Property<bool>("ativo")
                         .HasColumnType("bit");
 
@@ -200,15 +204,13 @@ namespace Repository.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long?>("PermissaoPagina")
-                        .HasColumnType("bigint");
-
                     b.Property<bool>("ativo")
                         .HasColumnType("bit");
 
                     b.Property<string>("nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("id");
 
@@ -236,9 +238,6 @@ namespace Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long?>("PessoaEndereco")
-                        .HasColumnType("bigint");
 
                     b.Property<long?>("Usuario")
                         .IsRequired()
@@ -273,21 +272,6 @@ namespace Repository.Migrations
                         .IsUnique();
 
                     b.ToTable("Pessoa");
-                });
-
-            modelBuilder.Entity("Entity.PessoaEndereco", b =>
-                {
-                    b.Property<long>("pessoa")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("endereco")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("pessoa", "endereco");
-
-                    b.HasIndex("endereco");
-
-                    b.ToTable("PessoaEndereco");
                 });
 
             modelBuilder.Entity("Entity.Produto", b =>
@@ -375,6 +359,15 @@ namespace Repository.Migrations
                     b.Navigation("produtoObj");
                 });
 
+            modelBuilder.Entity("Entity.Endereco", b =>
+                {
+                    b.HasOne("Entity.Pessoa", "pessoaObj")
+                        .WithOne()
+                        .HasForeignKey("Entity.Endereco", "pessoa");
+
+                    b.Navigation("pessoaObj");
+                });
+
             modelBuilder.Entity("Entity.Imagens", b =>
                 {
                     b.HasOne("Entity.Produto", "produtoObj")
@@ -388,15 +381,11 @@ namespace Repository.Migrations
                 {
                     b.HasOne("Entity.Pagina", "paginaObj")
                         .WithMany("PermissaoPaginaObj")
-                        .HasForeignKey("pagina")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("pagina");
 
                     b.HasOne("Entity.Permissao", "permissaoObj")
                         .WithMany("PermissaoPaginaObj")
-                        .HasForeignKey("permissao")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("permissao");
 
                     b.Navigation("paginaObj");
 
@@ -412,25 +401,6 @@ namespace Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("usuarioObj");
-                });
-
-            modelBuilder.Entity("Entity.PessoaEndereco", b =>
-                {
-                    b.HasOne("Entity.Endereco", "enderecoObj")
-                        .WithMany("pessoaEnderecoObj")
-                        .HasForeignKey("endereco")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entity.Pessoa", "pessoaObj")
-                        .WithMany("pessoaEnderecoObj")
-                        .HasForeignKey("pessoa")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("enderecoObj");
-
-                    b.Navigation("pessoaObj");
                 });
 
             modelBuilder.Entity("Entity.Produto", b =>
@@ -460,11 +430,6 @@ namespace Repository.Migrations
                     b.Navigation("permissaoObj");
                 });
 
-            modelBuilder.Entity("Entity.Endereco", b =>
-                {
-                    b.Navigation("pessoaEnderecoObj");
-                });
-
             modelBuilder.Entity("Entity.Pagina", b =>
                 {
                     b.Navigation("PermissaoPaginaObj");
@@ -473,11 +438,6 @@ namespace Repository.Migrations
             modelBuilder.Entity("Entity.Permissao", b =>
                 {
                     b.Navigation("PermissaoPaginaObj");
-                });
-
-            modelBuilder.Entity("Entity.Pessoa", b =>
-                {
-                    b.Navigation("pessoaEnderecoObj");
                 });
 
             modelBuilder.Entity("Entity.Produto", b =>

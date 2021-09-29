@@ -1,4 +1,5 @@
 ﻿using Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,21 @@ namespace Repository
             }
             Dispose();
             return pes;
+        }
+        
+        public new Pessoa Get(int id)
+        {
+            using (_context = new AppDbContext())
+            {
+                return _context.Pessoa.Include("usuario").FirstOrDefault(x=> x.id.Equals(id));
+            }
+        }
+        public new List<Pessoa> GetAll()
+        {
+            using (_context = new AppDbContext())
+            {
+                return _context.Pessoa.Include("usuario").ToList();
+            }
         }
     }
 }
