@@ -14,7 +14,5 @@ namespace Entity
         public string descricao { get; set; }
         public bool ativo { get; set; }
 
-        //public ICollection<Anuncio> anuncios { get; set; }
-
     }
 }

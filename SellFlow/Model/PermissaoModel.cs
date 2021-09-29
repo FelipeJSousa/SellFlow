@@ -12,6 +12,5 @@ namespace SellFlow.Model
         public long id { get; set; }
         public string nome { get; set; }
         public bool ativo { get; set; }
-        public long paginaId { get; set; }
     }
 }

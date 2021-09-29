@@ -129,7 +129,7 @@ namespace Repository
             #endregion
 
             #region PermissaoPagina
-            modelBuilder.Entity<PermissaoPagina>().HasKey(pp => new { pp.permissao, pp.pagina });
+            //modelBuilder.Entity<PermissaoPagina>().HasKey(pp => new { pp.permissao, pp.pagina });
             modelBuilder.Entity<PermissaoPagina>()
                         .HasOne(pc => pc.permissaoObj)
                         .WithMany(p => p.PermissaoPaginaObj)

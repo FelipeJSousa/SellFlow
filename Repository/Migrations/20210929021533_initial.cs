@@ -71,12 +71,14 @@ namespace Repository.Migrations
                 name: "PermissaoPagina",
                 columns: table => new
                 {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     permissao = table.Column<long>(type: "bigint", nullable: false),
                     pagina = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PermissaoPagina", x => new { x.permissao, x.pagina });
+                    table.PrimaryKey("PK_PermissaoPagina", x => x.id);
                     table.ForeignKey(
                         name: "FK_PermissaoPagina_Pagina_pagina",
                         column: x => x.pagina,
@@ -272,6 +274,11 @@ namespace Repository.Migrations
                 name: "IX_PermissaoPagina_pagina",
                 table: "PermissaoPagina",
                 column: "pagina");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PermissaoPagina_permissao",
+                table: "PermissaoPagina",
+                column: "permissao");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pessoa_Usuario",

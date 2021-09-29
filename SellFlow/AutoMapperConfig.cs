@@ -20,6 +20,8 @@ namespace SellFlow
 
                 cfg.CreateMap<Permissao, PermissaoModel>().ReverseMap();
 
+                cfg.CreateMap<PermissaoPagina, PermissaoPaginaModel>().ReverseMap();
+
                 cfg.CreateMap<Pagina, PaginaModel>().ReverseMap();
 
                 cfg.CreateMap<Categoria, CategoriaModel>().ReverseMap();

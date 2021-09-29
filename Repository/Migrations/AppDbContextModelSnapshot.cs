@@ -219,15 +219,22 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Entity.PermissaoPagina", b =>
                 {
-                    b.Property<long>("permissao")
-                        .HasColumnType("bigint");
+                    b.Property<long>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long>("pagina")
                         .HasColumnType("bigint");
 
-                    b.HasKey("permissao", "pagina");
+                    b.Property<long>("permissao")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("id");
 
                     b.HasIndex("pagina");
+
+                    b.HasIndex("permissao");
 
                     b.ToTable("PermissaoPagina");
                 });
