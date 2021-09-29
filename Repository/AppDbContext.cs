@@ -19,7 +19,6 @@ namespace Repository
         public DbSet<PermissaoPagina> PermissaoPagina { get; set; }
         public DbSet<Produto> Produto { get; set; }
         public DbSet<Endereco> Endereco { get; set; }
-        public DbSet<PessoaEndereco> PessoaEndereco { get; set; }
         public DbSet<Categoria> Categoria { get; set; }
         public DbSet<Anuncio> Anuncio { get; set; }
         public DbSet<AnuncioSitucao> AnuncioSitucao { get; set; }
@@ -72,6 +71,9 @@ namespace Repository
             #endregion
 
             #region Endereco
+
+            modelBuilder.Entity<Endereco>().HasOne(x => x.pessoaObj).WithOne().HasForeignKey<Endereco>(x => x.pessoa).IsRequired(false);
+
             modelBuilder.Entity<Endereco>().Property(x => x.ativo).IsRequired();
             modelBuilder.Entity<Endereco>().Property(x => x.bairro).IsRequired();
             modelBuilder.Entity<Endereco>().Property(x => x.cidade).IsRequired();
@@ -92,7 +94,7 @@ namespace Repository
 
             #region Pagina
 
-            //modelBuilder.Entity<Pagina>().HasOne(x => x.PermissaoPaginaObj).WithMany().HasForeignKey(x => x.PermissaoPagina).IsRequired();
+            modelBuilder.Entity<Pagina>().HasMany(x => x.PermissaoPaginaObj).WithOne(x => x.paginaObj).HasForeignKey(x => x.pagina).IsRequired(false);
 
             modelBuilder.Entity<Pagina>().Property(x => x.ativo).IsRequired();
             modelBuilder.Entity<Pagina>().Property(x => x.caminho).IsRequired();
@@ -116,25 +118,14 @@ namespace Repository
 
             #endregion
 
-            #region PessoaEndereco
-            modelBuilder.Entity<PessoaEndereco>().HasKey(pe => new { pe.pessoa, pe.endereco }); ;
-            modelBuilder.Entity<PessoaEndereco>()
-                        .HasOne(pe => pe.pessoaObj)
-                        .WithMany(p => p.pessoaEnderecoObj)
-                        .HasForeignKey(pc => pc.pessoa);
-            modelBuilder.Entity<PessoaEndereco>()
-                        .HasOne(pe => pe.enderecoObj)
-                        .WithMany(e => e.pessoaEnderecoObj)
-                        .HasForeignKey(pe => pe.endereco);
-            #endregion
-
             #region Permissao
 
-            //modelBuilder.Entity<Permissao>().HasOne(x => x.PermissaoPaginaObj).WithMany().HasForeignKey(x => x.PermissaoPagina).IsRequired();
+            modelBuilder.Entity<Permissao>().HasMany(x => x.PermissaoPaginaObj).WithOne(x => x.permissaoObj).HasForeignKey(x => x.permissao).IsRequired(false);
 
             modelBuilder.Entity<Permissao>().Property(x => x.id).IsRequired();
             modelBuilder.Entity<Permissao>().Property(x => x.ativo).IsRequired();
             modelBuilder.Entity<Permissao>().Property(x => x.nome).IsRequired();
+            modelBuilder.Entity<Permissao>().Property(x => x.nome).HasMaxLength(50); 
             #endregion
 
             #region PermissaoPagina
