@@ -25,7 +25,7 @@ namespace Entity
         #region Navigation
 
         public Produto produtoObj { get; set; }
-        public AnuncioSitucao anuncioSituacaoObj { get; set; }
+        public AnuncioSituacao anuncioSituacaoObj { get; set; }
 
         #endregion
         #region Regra De Negócio

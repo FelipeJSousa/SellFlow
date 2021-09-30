@@ -2,9 +2,9 @@
 
 namespace Repository
 {
-    class AnuncioSituacaoRepository : BaseRepository<AnuncioSitucao>
+    public class AnuncioSituacaoRepository : BaseRepository<AnuncioSituacao>
     {
-        public new AnuncioSitucao Add(AnuncioSitucao anuncioSituacao)
+        public new AnuncioSituacao Add(AnuncioSituacao anuncioSituacao)
         {
             using (_context = new AppDbContext())
             {
