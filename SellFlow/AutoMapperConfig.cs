@@ -31,13 +31,11 @@ namespace SellFlow
                    .ReverseMap()
                    .ForMember(dest => dest.usuario, opt => opt.MapFrom(src => src.usuarioVendedor));
 
-                cfg.CreateMap<Anuncio, AnuncioModel>()
-                   .ForMember(dest => dest.AnuncioSituacao, opt => opt.MapFrom(src => src.anuncioSituacaoObj))
-                   .ReverseMap();
+                cfg.CreateMap<Anuncio, AnuncioModel>().ReverseMap();
 
                 cfg.CreateMap<Imagens, ImagensModel>().ReverseMap();
 
-                cfg.CreateMap<AnuncioSitucao, AnuncioSituacaoModel>().ReverseMap();
+                cfg.CreateMap<AnuncioSituacao, AnuncioSituacaoModel>().ReverseMap();
             });
 
             return config;

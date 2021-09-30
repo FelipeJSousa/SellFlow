@@ -21,7 +21,7 @@ namespace Repository
         public DbSet<Endereco> Endereco { get; set; }
         public DbSet<Categoria> Categoria { get; set; }
         public DbSet<Anuncio> Anuncio { get; set; }
-        public DbSet<AnuncioSitucao> AnuncioSitucao { get; set; }
+        public DbSet<AnuncioSituacao> AnuncioSitucao { get; set; }
         public DbSet<Imagens> Imagens { get; set; }
 
         public AppDbContext() { }
@@ -52,11 +52,11 @@ namespace Repository
 
             #region AnuncioSituacao
 
-            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.id).IsRequired();
-            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.nome).IsRequired();
-            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.nome).HasMaxLength(50);
-            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.descricao).HasMaxLength(250);
-            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.ativo).IsRequired();
+            modelBuilder.Entity<AnuncioSituacao>().Property(x => x.id).IsRequired();
+            modelBuilder.Entity<AnuncioSituacao>().Property(x => x.nome).IsRequired();
+            modelBuilder.Entity<AnuncioSituacao>().Property(x => x.nome).HasMaxLength(50);
+            modelBuilder.Entity<AnuncioSituacao>().Property(x => x.descricao).HasMaxLength(250);
+            modelBuilder.Entity<AnuncioSituacao>().Property(x => x.ativo).IsRequired();
 
             #endregion
 

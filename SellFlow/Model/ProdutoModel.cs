@@ -15,7 +15,7 @@ namespace SellFlow.Model
         private int _curtidas { get; set; } = 0;
         public int curtidas { get => _curtidas; }
 
-        public long Categoria { get; set; }
+        public long categoria { get; set; }
         public long usuarioVendedor { get; set; }
         public void Curtir() => _curtidas++;
     }
