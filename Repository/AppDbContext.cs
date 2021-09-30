@@ -19,10 +19,9 @@ namespace Repository
         public DbSet<PermissaoPagina> PermissaoPagina { get; set; }
         public DbSet<Produto> Produto { get; set; }
         public DbSet<Endereco> Endereco { get; set; }
-        public DbSet<PessoaEndereco> PessoaEndereco { get; set; }
         public DbSet<Categoria> Categoria { get; set; }
         public DbSet<Anuncio> Anuncio { get; set; }
-        public DbSet<AnuncioSitucao> AnuncioSitucao { get; set; }
+        public DbSet<AnuncioSituacao> AnuncioSitucao { get; set; }
         public DbSet<Imagens> Imagens { get; set; }
 
         public AppDbContext() { }
@@ -39,7 +38,7 @@ namespace Repository
 
             #region Anuncio
 
-            modelBuilder.Entity<Anuncio>().HasOne(x => x.anuncioSituacaoObj).WithOne().HasForeignKey<Anuncio>(x => x.anuncioSituacao).IsRequired();
+            modelBuilder.Entity<Anuncio>().HasOne(x => x.anuncioSituacaoObj).WithOne().HasForeignKey<Anuncio>(x => x.anuncioSituacao).IsRequired(false);
 
             modelBuilder.Entity<Anuncio>().Property(x => x.descricao).HasMaxLength(250);
             modelBuilder.Entity<Anuncio>().Property(x => x.nome).HasMaxLength(80);
@@ -53,11 +52,11 @@ namespace Repository
 
             #region AnuncioSituacao
 
-            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.id).IsRequired();
-            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.nome).IsRequired();
-            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.nome).HasMaxLength(50);
-            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.descricao).HasMaxLength(250);
-            modelBuilder.Entity<AnuncioSitucao>().Property(x => x.ativo).IsRequired();
+            modelBuilder.Entity<AnuncioSituacao>().Property(x => x.id).IsRequired();
+            modelBuilder.Entity<AnuncioSituacao>().Property(x => x.nome).IsRequired();
+            modelBuilder.Entity<AnuncioSituacao>().Property(x => x.nome).HasMaxLength(50);
+            modelBuilder.Entity<AnuncioSituacao>().Property(x => x.descricao).HasMaxLength(250);
+            modelBuilder.Entity<AnuncioSituacao>().Property(x => x.ativo).IsRequired();
 
             #endregion
 
@@ -72,6 +71,9 @@ namespace Repository
             #endregion
 
             #region Endereco
+
+            modelBuilder.Entity<Endereco>().HasOne(x => x.pessoaObj).WithOne().HasForeignKey<Endereco>(x => x.pessoa).IsRequired(false);
+
             modelBuilder.Entity<Endereco>().Property(x => x.ativo).IsRequired();
             modelBuilder.Entity<Endereco>().Property(x => x.bairro).IsRequired();
             modelBuilder.Entity<Endereco>().Property(x => x.cidade).IsRequired();
@@ -92,7 +94,7 @@ namespace Repository
 
             #region Pagina
 
-            //modelBuilder.Entity<Pagina>().HasOne(x => x.PermissaoPaginaObj).WithMany().HasForeignKey(x => x.PermissaoPagina).IsRequired();
+            modelBuilder.Entity<Pagina>().HasMany(x => x.PermissaoPaginaObj).WithOne(x => x.paginaObj).HasForeignKey(x => x.pagina).IsRequired(false);
 
             modelBuilder.Entity<Pagina>().Property(x => x.ativo).IsRequired();
             modelBuilder.Entity<Pagina>().Property(x => x.caminho).IsRequired();
@@ -116,29 +118,18 @@ namespace Repository
 
             #endregion
 
-            #region PessoaEndereco
-            modelBuilder.Entity<PessoaEndereco>().HasKey(pe => new { pe.pessoa, pe.endereco }); ;
-            modelBuilder.Entity<PessoaEndereco>()
-                        .HasOne(pe => pe.pessoaObj)
-                        .WithMany(p => p.pessoaEnderecoObj)
-                        .HasForeignKey(pc => pc.pessoa);
-            modelBuilder.Entity<PessoaEndereco>()
-                        .HasOne(pe => pe.enderecoObj)
-                        .WithMany(e => e.pessoaEnderecoObj)
-                        .HasForeignKey(pe => pe.endereco);
-            #endregion
-
             #region Permissao
 
-            //modelBuilder.Entity<Permissao>().HasOne(x => x.PermissaoPaginaObj).WithMany().HasForeignKey(x => x.PermissaoPagina).IsRequired();
+            modelBuilder.Entity<Permissao>().HasMany(x => x.PermissaoPaginaObj).WithOne(x => x.permissaoObj).HasForeignKey(x => x.permissao).IsRequired(false);
 
             modelBuilder.Entity<Permissao>().Property(x => x.id).IsRequired();
             modelBuilder.Entity<Permissao>().Property(x => x.ativo).IsRequired();
             modelBuilder.Entity<Permissao>().Property(x => x.nome).IsRequired();
+            modelBuilder.Entity<Permissao>().Property(x => x.nome).HasMaxLength(50); 
             #endregion
 
             #region PermissaoPagina
-            modelBuilder.Entity<PermissaoPagina>().HasKey(pp => new { pp.permissao, pp.pagina });
+            //modelBuilder.Entity<PermissaoPagina>().HasKey(pp => new { pp.permissao, pp.pagina });
             modelBuilder.Entity<PermissaoPagina>()
                         .HasOne(pc => pc.permissaoObj)
                         .WithMany(p => p.PermissaoPaginaObj)
@@ -153,7 +144,7 @@ namespace Repository
 
             modelBuilder.Entity<Produto>().HasOne(x => x.categoriaObj).WithMany().HasForeignKey(x => x.categoria).IsRequired().OnDelete(DeleteBehavior.ClientSetNull);
             modelBuilder.Entity<Produto>().HasOne(x => x.usuarioObj).WithMany().HasForeignKey(x => x.usuario).IsRequired().OnDelete(DeleteBehavior.ClientSetNull);
-            modelBuilder.Entity<Produto>().HasMany(x => x.anuncioList).WithOne().HasForeignKey(x => x.produto).IsRequired(false);
+            modelBuilder.Entity<Produto>().HasMany(x => x.anuncioList).WithOne(x => x.produtoObj).HasForeignKey(x => x.produto).IsRequired();
             modelBuilder.Entity<Produto>().HasMany(x => x.imagemList).WithOne(x => x.produtoObj).HasForeignKey(x => x.produto).IsRequired(false);
 
             modelBuilder.Entity<Produto>().Property(x => x.id).IsRequired();
@@ -166,6 +157,8 @@ namespace Repository
             #endregion
 
             #region Usuario
+
+            modelBuilder.Entity<Usuario>().HasOne(x => x.permissaoObj).WithOne().HasForeignKey<Usuario>(x => x.permissao).IsRequired().OnDelete(DeleteBehavior.ClientSetNull);
 
             modelBuilder.Entity<Usuario>().Property(x => x.ativo).IsRequired();
             modelBuilder.Entity<Usuario>().Property(x => x.senha).IsRequired();

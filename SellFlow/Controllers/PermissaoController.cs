@@ -60,7 +60,8 @@ namespace SellFlow.Controllers
             {
                 PermissaoRepository rep = new PermissaoRepository();
                 var mapper = new Mapper(AutoMapperConfig.RegisterMappings());
-                ret.dados = mapper.Map<PermissaoModel>(rep.Add(mapper.Map<Permissao>(Permissao)));
+                var _permissao = rep.Add(mapper.Map<Permissao>(Permissao));
+                ret.dados = mapper.Map<PermissaoModel>(_permissao);
                 if (ret.dados != null)
                 {
                     ret.status = true;

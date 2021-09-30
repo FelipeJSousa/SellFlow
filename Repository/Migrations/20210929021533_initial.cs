@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Repository.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,22 +39,6 @@ namespace Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Endereco",
-                columns: table => new
-                {
-                    id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    logradouro = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    bairro = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    cidade = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ativo = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Endereco", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Pagina",
                 columns: table => new
                 {
@@ -62,8 +46,7 @@ namespace Repository.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     caminho = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ativo = table.Column<bool>(type: "bit", nullable: false),
-                    PermissaoPagina = table.Column<long>(type: "bigint", nullable: true)
+                    ativo = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,9 +59,8 @@ namespace Repository.Migrations
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ativo = table.Column<bool>(type: "bit", nullable: false),
-                    PermissaoPagina = table.Column<long>(type: "bigint", nullable: true)
+                    nome = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ativo = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -89,24 +71,26 @@ namespace Repository.Migrations
                 name: "PermissaoPagina",
                 columns: table => new
                 {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     permissao = table.Column<long>(type: "bigint", nullable: false),
                     pagina = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PermissaoPagina", x => new { x.permissao, x.pagina });
+                    table.PrimaryKey("PK_PermissaoPagina", x => x.id);
                     table.ForeignKey(
                         name: "FK_PermissaoPagina_Pagina_pagina",
                         column: x => x.pagina,
                         principalTable: "Pagina",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PermissaoPagina_Permissao_permissao",
                         column: x => x.permissao,
                         principalTable: "Permissao",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -118,15 +102,14 @@ namespace Repository.Migrations
                     senha = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ativo = table.Column<bool>(type: "bit", nullable: false),
-                    permissao = table.Column<long>(type: "bigint", nullable: false),
-                    permissaoObjid = table.Column<long>(type: "bigint", nullable: true)
+                    permissao = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Usuario", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Usuario_Permissao_permissaoObjid",
-                        column: x => x.permissaoObjid,
+                        name: "FK_Usuario_Permissao_permissao",
+                        column: x => x.permissao,
                         principalTable: "Permissao",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
@@ -144,7 +127,6 @@ namespace Repository.Migrations
                     cpnj = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     dataNascimento = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ativo = table.Column<bool>(type: "bit", nullable: false),
-                    PessoaEndereco = table.Column<long>(type: "bigint", nullable: true),
                     Usuario = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -189,27 +171,26 @@ namespace Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PessoaEndereco",
+                name: "Endereco",
                 columns: table => new
                 {
-                    pessoa = table.Column<long>(type: "bigint", nullable: false),
-                    endereco = table.Column<long>(type: "bigint", nullable: false)
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    logradouro = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    bairro = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    cidade = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ativo = table.Column<bool>(type: "bit", nullable: false),
+                    pessoa = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PessoaEndereco", x => new { x.pessoa, x.endereco });
+                    table.PrimaryKey("PK_Endereco", x => x.id);
                     table.ForeignKey(
-                        name: "FK_PessoaEndereco_Endereco_endereco",
-                        column: x => x.endereco,
-                        principalTable: "Endereco",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PessoaEndereco_Pessoa_pessoa",
+                        name: "FK_Endereco_Pessoa_pessoa",
                         column: x => x.pessoa,
                         principalTable: "Pessoa",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -224,8 +205,8 @@ namespace Repository.Migrations
                     dataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     dataEncerramento = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ativo = table.Column<bool>(type: "bit", nullable: false),
-                    produto = table.Column<long>(type: "bigint", nullable: true),
-                    anuncioSituacao = table.Column<long>(type: "bigint", nullable: false)
+                    produto = table.Column<long>(type: "bigint", nullable: false),
+                    anuncioSituacao = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -235,13 +216,13 @@ namespace Repository.Migrations
                         column: x => x.anuncioSituacao,
                         principalTable: "AnuncioSitucao",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Anuncio_Produto_produto",
                         column: x => x.produto,
                         principalTable: "Produto",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -269,12 +250,20 @@ namespace Repository.Migrations
                 name: "IX_Anuncio_anuncioSituacao",
                 table: "Anuncio",
                 column: "anuncioSituacao",
-                unique: true);
+                unique: true,
+                filter: "[anuncioSituacao] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Anuncio_produto",
                 table: "Anuncio",
                 column: "produto");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Endereco_pessoa",
+                table: "Endereco",
+                column: "pessoa",
+                unique: true,
+                filter: "[pessoa] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Imagens_produto",
@@ -287,15 +276,15 @@ namespace Repository.Migrations
                 column: "pagina");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PermissaoPagina_permissao",
+                table: "PermissaoPagina",
+                column: "permissao");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pessoa_Usuario",
                 table: "Pessoa",
                 column: "Usuario",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PessoaEndereco_endereco",
-                table: "PessoaEndereco",
-                column: "endereco");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Produto_categoria",
@@ -308,9 +297,10 @@ namespace Repository.Migrations
                 column: "usuario");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuario_permissaoObjid",
+                name: "IX_Usuario_permissao",
                 table: "Usuario",
-                column: "permissaoObjid");
+                column: "permissao",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -319,28 +309,25 @@ namespace Repository.Migrations
                 name: "Anuncio");
 
             migrationBuilder.DropTable(
+                name: "Endereco");
+
+            migrationBuilder.DropTable(
                 name: "Imagens");
 
             migrationBuilder.DropTable(
                 name: "PermissaoPagina");
 
             migrationBuilder.DropTable(
-                name: "PessoaEndereco");
+                name: "AnuncioSitucao");
 
             migrationBuilder.DropTable(
-                name: "AnuncioSitucao");
+                name: "Pessoa");
 
             migrationBuilder.DropTable(
                 name: "Produto");
 
             migrationBuilder.DropTable(
                 name: "Pagina");
-
-            migrationBuilder.DropTable(
-                name: "Endereco");
-
-            migrationBuilder.DropTable(
-                name: "Pessoa");
 
             migrationBuilder.DropTable(
                 name: "Categoria");

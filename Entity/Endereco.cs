@@ -14,9 +14,15 @@ namespace Entity
         public string cidade { get; set; }
         public bool ativo { get; set; }
 
+        #region ForeignKeys
+
+        public long? pessoa { get; set; }  
+
+        #endregion
+
         #region Navigation
 
-        public ICollection<PessoaEndereco> pessoaEnderecoObj { get; set; } 
+        public Pessoa pessoaObj { get; set; } 
 
         #endregion
 

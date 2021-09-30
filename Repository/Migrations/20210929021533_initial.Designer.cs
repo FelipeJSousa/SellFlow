@@ -10,8 +10,8 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210928013259_Initial")]
-    partial class Initial
+    [Migration("20210929021533_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,7 +29,6 @@ namespace Repository.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long?>("anuncioSituacao")
-                        .IsRequired()
                         .HasColumnType("bigint");
 
                     b.Property<bool>("ativo")
@@ -51,6 +50,7 @@ namespace Repository.Migrations
                         .HasColumnType("nvarchar(80)");
 
                     b.Property<long?>("produto")
+                        .IsRequired()
                         .HasColumnType("bigint");
 
                     b.Property<int>("qtdeDisponivel")
@@ -59,7 +59,8 @@ namespace Repository.Migrations
                     b.HasKey("id");
 
                     b.HasIndex("anuncioSituacao")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[anuncioSituacao] IS NOT NULL");
 
                     b.HasIndex("produto");
 
@@ -139,7 +140,14 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("pessoa")
+                        .HasColumnType("bigint");
+
                     b.HasKey("id");
+
+                    b.HasIndex("pessoa")
+                        .IsUnique()
+                        .HasFilter("[pessoa] IS NOT NULL");
 
                     b.ToTable("Endereco");
                 });
@@ -175,9 +183,6 @@ namespace Repository.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long?>("PermissaoPagina")
-                        .HasColumnType("bigint");
-
                     b.Property<bool>("ativo")
                         .HasColumnType("bit");
 
@@ -201,15 +206,13 @@ namespace Repository.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long?>("PermissaoPagina")
-                        .HasColumnType("bigint");
-
                     b.Property<bool>("ativo")
                         .HasColumnType("bit");
 
                     b.Property<string>("nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("id");
 
@@ -218,15 +221,22 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Entity.PermissaoPagina", b =>
                 {
-                    b.Property<long>("permissao")
-                        .HasColumnType("bigint");
+                    b.Property<long>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<long>("pagina")
                         .HasColumnType("bigint");
 
-                    b.HasKey("permissao", "pagina");
+                    b.Property<long>("permissao")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("id");
 
                     b.HasIndex("pagina");
+
+                    b.HasIndex("permissao");
 
                     b.ToTable("PermissaoPagina");
                 });
@@ -237,9 +247,6 @@ namespace Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long?>("PessoaEndereco")
-                        .HasColumnType("bigint");
 
                     b.Property<long?>("Usuario")
                         .IsRequired()
@@ -274,21 +281,6 @@ namespace Repository.Migrations
                         .IsUnique();
 
                     b.ToTable("Pessoa");
-                });
-
-            modelBuilder.Entity("Entity.PessoaEndereco", b =>
-                {
-                    b.Property<long>("pessoa")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("endereco")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("pessoa", "endereco");
-
-                    b.HasIndex("endereco");
-
-                    b.ToTable("PessoaEndereco");
                 });
 
             modelBuilder.Entity("Entity.Produto", b =>
@@ -347,16 +339,14 @@ namespace Repository.Migrations
                     b.Property<long>("permissao")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("permissaoObjid")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("senha")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
 
-                    b.HasIndex("permissaoObjid");
+                    b.HasIndex("permissao")
+                        .IsUnique();
 
                     b.ToTable("Usuario");
                 });
@@ -365,15 +355,26 @@ namespace Repository.Migrations
                 {
                     b.HasOne("Entity.AnuncioSitucao", "anuncioSituacaoObj")
                         .WithOne()
-                        .HasForeignKey("Entity.Anuncio", "anuncioSituacao")
+                        .HasForeignKey("Entity.Anuncio", "anuncioSituacao");
+
+                    b.HasOne("Entity.Produto", "produtoObj")
+                        .WithMany("anuncioList")
+                        .HasForeignKey("produto")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entity.Produto", null)
-                        .WithMany("anuncioList")
-                        .HasForeignKey("produto");
-
                     b.Navigation("anuncioSituacaoObj");
+
+                    b.Navigation("produtoObj");
+                });
+
+            modelBuilder.Entity("Entity.Endereco", b =>
+                {
+                    b.HasOne("Entity.Pessoa", "pessoaObj")
+                        .WithOne()
+                        .HasForeignKey("Entity.Endereco", "pessoa");
+
+                    b.Navigation("pessoaObj");
                 });
 
             modelBuilder.Entity("Entity.Imagens", b =>
@@ -389,15 +390,11 @@ namespace Repository.Migrations
                 {
                     b.HasOne("Entity.Pagina", "paginaObj")
                         .WithMany("PermissaoPaginaObj")
-                        .HasForeignKey("pagina")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("pagina");
 
                     b.HasOne("Entity.Permissao", "permissaoObj")
                         .WithMany("PermissaoPaginaObj")
-                        .HasForeignKey("permissao")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("permissao");
 
                     b.Navigation("paginaObj");
 
@@ -413,25 +410,6 @@ namespace Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("usuarioObj");
-                });
-
-            modelBuilder.Entity("Entity.PessoaEndereco", b =>
-                {
-                    b.HasOne("Entity.Endereco", "enderecoObj")
-                        .WithMany("pessoaEnderecoObj")
-                        .HasForeignKey("endereco")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entity.Pessoa", "pessoaObj")
-                        .WithMany("pessoaEnderecoObj")
-                        .HasForeignKey("pessoa")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("enderecoObj");
-
-                    b.Navigation("pessoaObj");
                 });
 
             modelBuilder.Entity("Entity.Produto", b =>
@@ -454,15 +432,11 @@ namespace Repository.Migrations
             modelBuilder.Entity("Entity.Usuario", b =>
                 {
                     b.HasOne("Entity.Permissao", "permissaoObj")
-                        .WithMany()
-                        .HasForeignKey("permissaoObjid");
+                        .WithOne()
+                        .HasForeignKey("Entity.Usuario", "permissao")
+                        .IsRequired();
 
                     b.Navigation("permissaoObj");
-                });
-
-            modelBuilder.Entity("Entity.Endereco", b =>
-                {
-                    b.Navigation("pessoaEnderecoObj");
                 });
 
             modelBuilder.Entity("Entity.Pagina", b =>
@@ -473,11 +447,6 @@ namespace Repository.Migrations
             modelBuilder.Entity("Entity.Permissao", b =>
                 {
                     b.Navigation("PermissaoPaginaObj");
-                });
-
-            modelBuilder.Entity("Entity.Pessoa", b =>
-                {
-                    b.Navigation("pessoaEnderecoObj");
                 });
 
             modelBuilder.Entity("Entity.Produto", b =>

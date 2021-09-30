@@ -60,7 +60,8 @@ namespace SellFlow.Controllers
             {
                 ProdutoRepository rep = new ProdutoRepository();
                 var mapper = new Mapper(AutoMapperConfig.RegisterMappings());
-                ret.dados = mapper.Map<ProdutoModel>(rep.Add(mapper.Map<Produto>(Produto)));
+                var _produto = mapper.Map<Produto>(Produto);
+                ret.dados = mapper.Map<ProdutoModel>(rep.Add(_produto));
                 if (ret.dados != null)
                 {
                     ret.status = true;
