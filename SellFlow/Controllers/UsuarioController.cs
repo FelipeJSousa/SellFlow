@@ -163,5 +163,31 @@ namespace SellFlow.Controllers
             }
             return ret;
         }
+
+        [HttpPost("Validar")]
+        public RetornoModel<PessoaModel> ValidarUsuario(UsuarioModel UsuarioModel)
+        {
+            RetornoModel<PessoaModel> ret = new RetornoModel<PessoaModel>();
+            try
+            {
+                UsuarioRepository rep = new UsuarioRepository();
+                Pessoa usu = rep.Validar(UsuarioModel.email, UsuarioModel.senha);
+                ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<PessoaModel>(usu);
+                if (ret.dados != null)
+                {
+                    ret.status = true;
+                }
+                else
+                {
+                    ret.mensagem = "Não foi encontrado o Usuario!";
+                }
+            }
+            catch (Exception ex)
+            {
+                ret.status = false;
+                ret.erro = ex.Message;
+            }
+            return ret;
+        }
     }
 }
