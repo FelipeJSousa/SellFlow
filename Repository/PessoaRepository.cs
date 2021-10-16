@@ -26,14 +26,14 @@ namespace Repository
         {
             using (_context = new AppDbContext())
             {
-                return _context.Pessoa.Include("usuario").FirstOrDefault(x=> x.id.Equals(id));
+                return _context.Pessoa.Include("usuarioObj").FirstOrDefault(x=> x.id.Equals(id));
             }
         }
         public new List<Pessoa> GetAll()
         {
             using (_context = new AppDbContext())
             {
-                return _context.Pessoa.Include("usuario").ToList();
+                return _context.Pessoa.Include("usuarioObj").ToList();
             }
         }
     }

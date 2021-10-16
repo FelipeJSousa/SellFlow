@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
 using Entity;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SellFlow.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SellFlow.Controllers
 {
@@ -25,7 +22,7 @@ namespace SellFlow.Controllers
                 if (id.HasValue)
                 {
                     Usuario usu = rep.Get(id.Value);
-                    List<Usuario> lpes = new List<Usuario>();
+                    List<Usuario> lpes = new();
                     lpes.Add(usu);
                     ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<UsuarioModel>>(lpes);
                 }
@@ -35,6 +32,7 @@ namespace SellFlow.Controllers
                     usu = rep.GetAll();
                     ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<UsuarioModel>>(usu);
                 }
+
                 if (ret.dados != null)
                 {
                     ret.status = true;
@@ -49,6 +47,7 @@ namespace SellFlow.Controllers
                 ret.status = false;
                 ret.erro = ex.Message;
             }
+
             return ret;
         }
 
@@ -58,13 +57,17 @@ namespace SellFlow.Controllers
             RetornoModel<UsuarioModel> ret = new RetornoModel<UsuarioModel>();
             try
             {
+                if (usuario.permissao == 0)
+                {
+                    throw new Exception("Informe o nível de permissão do usuário!");
+                }
                 UsuarioRepository rep = new UsuarioRepository();
                 Usuario usu = rep.Get(x => x.email == usuario.email);
-                if(usu != null && usu.ativo)
+                if (usu != null && usu.ativo)
                 {
                     throw new Exception("E-mail já cadastrado!");
                 }
-                else if(usu != null && !usu.ativo)
+                else if (usu != null && !usu.ativo)
                 {
                     usuario.ativo = true;
                     usuario.id = usu.id;
@@ -98,6 +101,7 @@ namespace SellFlow.Controllers
                 ret.status = false;
                 ret.erro = ex.Message;
             }
+
             return ret;
         }
 
@@ -128,13 +132,13 @@ namespace SellFlow.Controllers
                     ret.status = false;
                     ret.erro = "Usuario não encontrada";
                 }
-
             }
             catch (Exception ex)
             {
                 ret.status = false;
                 ret.erro = ex.Message;
             }
+
             return ret;
         }
 
@@ -161,6 +165,7 @@ namespace SellFlow.Controllers
                 ret.status = false;
                 ret.erro = ex.Message;
             }
+
             return ret;
         }
 
@@ -187,6 +192,7 @@ namespace SellFlow.Controllers
                 ret.status = false;
                 ret.erro = ex.Message;
             }
+
             return ret;
         }
     }

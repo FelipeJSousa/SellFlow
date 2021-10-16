@@ -20,4 +20,9 @@
     <ProjectReference Include="..\Repository\Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="mintty.2021-10-08_22-14-28.png" />
+    <None Remove="sellflow.bat" />
+  </ItemGroup>
+
 </Project>
