@@ -59,15 +59,19 @@ namespace SellFlow.Controllers
             {
                 if (usuario.permissao == 0)
                 {
-                    throw new Exception("Informe o nível de permissão do usuário!");
+                    ret.mensagem = ("Informe o nível de permissão do usuário!");
+                    ret.status = false;
+                    return ret;
                 }
                 UsuarioRepository rep = new UsuarioRepository();
                 Usuario usu = rep.Get(x => x.email == usuario.email);
-                if (usu != null && usu.ativo)
+                if (usu is {ativo: true})
                 {
-                    throw new Exception("E-mail já cadastrado!");
+                    ret.mensagem = ("E-mail já cadastrado!");
+                    ret.status = false;
+                    return ret;
                 }
-                else if (usu != null && !usu.ativo)
+                else if (usu is {ativo: false})
                 {
                     usuario.ativo = true;
                     usuario.id = usu.id;
