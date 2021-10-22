@@ -60,9 +60,9 @@ namespace SellFlow.Controllers
             {
                 PessoaRepository rep = new PessoaRepository();
                 var mapper = new Mapper(AutoMapperConfig.RegisterMappings());
-                if(pessoa.usuario != null)
+                if(pessoa.usuarioObj != null)
                 {
-                    pessoa.usuario.ativo = true;
+                    pessoa.usuarioObj.ativo = true;
                 }
                 ret.dados = mapper.Map<PessoaModel>(rep.Add(mapper.Map<Pessoa>(pessoa)));
                 if (ret.dados != null)
@@ -96,7 +96,7 @@ namespace SellFlow.Controllers
                     if (rep.Delete(pes))
                     {
                         ret.status = true;
-                        ret.mensagem = $"PessoaModel {id} excluído com sucesso!";
+                        ret.mensagem = $"Pessoa {id} excluído com sucesso!";
                     }
                     else
                     {

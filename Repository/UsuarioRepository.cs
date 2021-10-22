@@ -33,12 +33,11 @@ namespace Repository
 
         public Pessoa Validar(string email, string senha)
         {
-            senha = Encrypt(senha, email);
             Pessoa _ret = new ();
-            using (_context = new AppDbContext())
-            {
-                _ret = _context.Pessoa.Where(x => x.usuarioObj.email == email && x.usuarioObj.senha == senha).Include(x => x.usuarioObj).FirstOrDefault();
-            }
+            PessoaRepository rep = new();
+
+            _ret = rep.Get(x => x.usuarioObj.email == email && x.usuarioObj.senha == Encrypt(senha, email));
+
             Dispose();
             return _ret;
         }

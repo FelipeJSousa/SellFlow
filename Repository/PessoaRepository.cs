@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace Repository
 {
@@ -22,13 +21,22 @@ namespace Repository
             return pes;
         }
         
-        public new Pessoa Get(int id)
+        public new Pessoa Get(long id)
         {
             using (_context = new AppDbContext())
             {
                 return _context.Pessoa.Include("usuarioObj").FirstOrDefault(x=> x.id.Equals(id));
             }
         }
+
+        public new Pessoa Get(Expression<Func<Pessoa, bool>> lambda)
+        {
+            using (_context = new AppDbContext())
+            {
+                return _context.Pessoa.Where(lambda).Include("usuarioObj").FirstOrDefault();
+            }
+        }
+
         public new List<Pessoa> GetAll()
         {
             using (_context = new AppDbContext())

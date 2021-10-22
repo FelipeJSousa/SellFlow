@@ -27,9 +27,9 @@ namespace SellFlow
                 cfg.CreateMap<Categoria, CategoriaModel>().ReverseMap();
 
                 cfg.CreateMap<Produto, ProdutoModel>()
-                   .ForMember(dest => dest.usuarioVendedor, opt => opt.MapFrom(src => src.usuario))
+                   .ForMember(dest => dest.usuario, opt => opt.MapFrom(src => src.usuario))
                    .ReverseMap()
-                   .ForMember(dest => dest.usuario, opt => opt.MapFrom(src => src.usuarioVendedor));
+                   .ForMember(dest => dest.usuario, opt => opt.MapFrom(src => src.usuario));
 
                 cfg.CreateMap<Anuncio, AnuncioModel>().ReverseMap();
 

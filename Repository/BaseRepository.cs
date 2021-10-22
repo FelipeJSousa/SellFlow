@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
 
 namespace Repository
 {
@@ -12,7 +11,7 @@ namespace Repository
     {
         protected AppDbContext _context;
 
-        public T Get(Func<T, bool> lambda)
+        public T Get(Expression<Func<T, bool>> lambda)
         {
             T item = null;
             using (_context = new AppDbContext())
@@ -23,7 +22,7 @@ namespace Repository
             return item;
         }
 
-        public List<T> GetAll(Func<T, bool> lambda)
+        public List<T> GetAll(Expression<Func<T, bool>> lambda)
         {
             List<T> list = new List<T>();
             using (_context = new AppDbContext())

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq.Expressions;
 
 namespace Repository
 {
@@ -11,7 +11,7 @@ namespace Repository
         T Add(T item);
         bool Delete(T item);
         T Edit(T item);
-        T Get(Func<T, bool> lambda);
-        List<T> GetAll(Func<T, bool> lambda);
+        T Get(Expression<Func<T, bool>> lambda);
+        List<T> GetAll(Expression<Func<T, bool>> lambda);
     }
 }
