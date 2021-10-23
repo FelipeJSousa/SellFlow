@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SellFlow.Model;
 using Entity;
+using SellFlow.Model.ApiRequest;
 
 namespace SellFlow
 {
@@ -15,6 +16,7 @@ namespace SellFlow
             var config = new MapperConfiguration(cfg => {
 
                 cfg.CreateMap<Pessoa, PessoaModel>().ReverseMap();
+                cfg.CreateMap<Pessoa, PessoaPostApiRequest>().ReverseMap();
 
                 cfg.CreateMap<Usuario, UsuarioModel>().ReverseMap();
 

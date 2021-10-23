@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
 using Entity;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SellFlow.Model;
+using SellFlow.Model.ApiRequest;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace SellFlow.Controllers
 {
@@ -53,18 +50,20 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
-        public RetornoModel<PessoaModel> PostPessoaModel(PessoaModel pessoa)
+        public RetornoModel<PessoaModel> PostPessoaModel(PessoaPostApiRequest obj)
         {
-            RetornoModel<PessoaModel> ret = new RetornoModel<PessoaModel>();
+            RetornoModel<PessoaModel> ret = new ();
             try
             {
                 PessoaRepository rep = new PessoaRepository();
                 var mapper = new Mapper(AutoMapperConfig.RegisterMappings());
-                if(pessoa.usuarioObj != null)
-                {
-                    pessoa.usuarioObj.ativo = true;
-                }
-                ret.dados = mapper.Map<PessoaModel>(rep.Add(mapper.Map<Pessoa>(pessoa)));
+
+                var pessoa = mapper.Map<Pessoa>(obj);
+                pessoa.ativo = true;
+
+                ret.dados = mapper.Map<PessoaModel>(rep.Add(pessoa));
+                ret.dados = mapper.Map<PessoaModel>(rep.Get(pessoa.id));
+
                 if (ret.dados != null)
                 {
                     ret.status = true;
