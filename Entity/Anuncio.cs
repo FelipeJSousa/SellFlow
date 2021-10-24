@@ -33,6 +33,7 @@ namespace Entity
         public void NovoAnuncio()
         {
             anuncioSituacao = 1;
+            dataCriacao = DateTime.Now;
         }
 
         #endregion

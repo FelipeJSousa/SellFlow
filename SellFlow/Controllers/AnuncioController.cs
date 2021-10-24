@@ -15,7 +15,7 @@ namespace SellFlow.Controllers
     public class AnuncioController : ControllerBase
     {
         [HttpGet]
-        public RetornoModel<List<AnuncioModel>> GetAnuncio(int? id = null)
+        public RetornoModel<List<AnuncioModel>> GetAnuncio(int? id = null, int? idUsuario = null)
         {
             RetornoModel<List<AnuncioModel>> ret = new RetornoModel<List<AnuncioModel>>();
             try
@@ -23,7 +23,7 @@ namespace SellFlow.Controllers
                 AnuncioRepository rep = new AnuncioRepository();
                 if (id.HasValue)
                 {
-                    Anuncio anun = rep.Get(x => x.id.Equals(id.Value));
+                    Anuncio anun = rep.Get(id.Value, idUsuario);
                     List<Anuncio> lanun = new List<Anuncio>();
                     lanun.Add(anun);
                     ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<AnuncioModel>>(lanun);
@@ -31,7 +31,7 @@ namespace SellFlow.Controllers
                 else
                 {
                     List<Anuncio> anun = new List<Anuncio>();
-                    anun = rep.GetAll();
+                    anun = rep.GetAll(idUsuario);
                     ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<AnuncioModel>>(anun);
                 }
                 if (ret.dados != null)

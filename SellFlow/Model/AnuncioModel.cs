@@ -18,5 +18,7 @@ namespace SellFlow.Model
         public long? produto { get; set; }
         public long? anuncioSituacao { get; set; }
 
+        public ProdutoModel produtoObj { get; set; }
+        public AnuncioSituacaoModel anuncioSituacaoObj { get; set; }
     }
 }
