@@ -15,8 +15,46 @@ namespace SellFlow.Controllers
     [ApiController]
     public class ProdutoController : ControllerBase
     {
+        //[HttpGet]
+        //public RetornoModel<List<ProdutoModel>> GetProduto(int? id = null)
+        //{
+        //    RetornoModel<List<ProdutoModel>> ret = new RetornoModel<List<ProdutoModel>>();
+        //    try
+        //    {
+        //        ProdutoRepository rep = new ProdutoRepository();
+        //        if (id.HasValue)
+        //        {
+        //            Produto pro = rep.Get(id.Value);
+        //            List<Produto> lpro = new List<Produto>();
+        //            lpro.Add(pro);
+        //            ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<ProdutoModel>>(lpro);
+        //        }
+        //        else
+        //        {
+        //            List<Produto> pro = new List<Produto>();
+        //            pro = rep.GetAll();
+        //            ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<ProdutoModel>>(pro);
+        //        }
+        //        if (ret.dados != null)
+        //        {
+        //            ret.status = true;
+        //        }
+        //        else
+        //        {
+        //            ret.mensagem = "Não foi encontrado a Produto!";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ret.status = false;
+        //        ret.erro = ex.Message;
+        //    }
+        //    return ret;
+        //}
+
+
         [HttpGet]
-        public RetornoModel<List<ProdutoModel>> GetProduto(int? id = null)
+        public RetornoModel<List<ProdutoModel>> GetProdutoPorEmpresa(int? id = null, int? idUsuario = null)
         {
             RetornoModel<List<ProdutoModel>> ret = new RetornoModel<List<ProdutoModel>>();
             try
@@ -24,7 +62,7 @@ namespace SellFlow.Controllers
                 ProdutoRepository rep = new ProdutoRepository();
                 if (id.HasValue)
                 {
-                    Produto pro = rep.Get(id.Value);
+                    Produto pro = rep.Get(id.Value, idUsuario);
                     List<Produto> lpro = new List<Produto>();
                     lpro.Add(pro);
                     ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<ProdutoModel>>(lpro);
@@ -32,7 +70,7 @@ namespace SellFlow.Controllers
                 else
                 {
                     List<Produto> pro = new List<Produto>();
-                    pro = rep.GetAll();
+                    pro = rep.GetAll(idUsuario);
                     ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<ProdutoModel>>(pro);
                 }
                 if (ret.dados != null)

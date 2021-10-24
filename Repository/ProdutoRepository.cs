@@ -1,4 +1,5 @@
 ﻿using Entity;
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,12 +24,19 @@ namespace Repository
             return pro;
         }
 
-        public new Produto Get(long id)
+        public Produto Get(long id, long? idUsuario = null)
         {
             var pro = new Produto();
             using (_context = new AppDbContext())
             {
-               pro = _context.Produto.Where(x => x.id == id && x.ativo).Include(x => x.categoriaObj).Include(x => x.usuarioObj).FirstOrDefault();
+                Expression<Func<Produto, bool>> predicate = PredicateBuilder.New<Produto>(true);
+                if (idUsuario.HasValue)
+                {
+                    predicate = predicate.And(x => x.usuario == idUsuario);
+                }
+                predicate = predicate.And(x => x.id == id && x.ativo);
+
+                pro = _context.Produto.Where(predicate).Include(x => x.categoriaObj).Include(x => x.usuarioObj).FirstOrDefault();
             }
             Dispose();
             return pro;
@@ -45,15 +53,23 @@ namespace Repository
             return pro;
         }
 
-        public new List<Produto> GetAll()
+        public List<Produto> GetAll(int? idUsuario = null)
         {
             var pro = new List<Produto>();
             using (_context = new AppDbContext())
             {
-               pro = _context.Produto.Where(x => x.ativo).Include(x => x.categoriaObj).Include(x => x.usuarioObj).ToList();
+                Expression<Func<Produto, bool>> predicate = PredicateBuilder.New<Produto>(true);
+                if (idUsuario.HasValue)
+                {
+                    predicate = predicate.And(x => x.usuario == idUsuario);
+                }
+                predicate = predicate.And(x => x.ativo);
+
+                pro = _context.Produto.Where(predicate).Include(x => x.categoriaObj).Include(x => x.usuarioObj).ToList();
             }
             Dispose();
             return pro;
         }
+
     }
 }
