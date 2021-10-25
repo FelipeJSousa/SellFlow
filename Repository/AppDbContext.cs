@@ -47,6 +47,7 @@ namespace Repository
             modelBuilder.Entity<Anuncio>().Property(x => x.nome).IsRequired();
             modelBuilder.Entity<Anuncio>().Property(x => x.qtdeDisponivel).IsRequired();
             modelBuilder.Entity<Anuncio>().Property(x => x.dataCriacao).IsRequired();
+            modelBuilder.Entity<Anuncio>().Property(x => x.valor).IsRequired();
 
             #endregion
 
@@ -79,6 +80,8 @@ namespace Repository
             modelBuilder.Entity<Endereco>().Property(x => x.cidade).IsRequired();
             modelBuilder.Entity<Endereco>().Property(x => x.logradouro).IsRequired();
             modelBuilder.Entity<Endereco>().Property(x => x.id).IsRequired();
+            modelBuilder.Entity<Endereco>().Property(x => x.cep).IsRequired();
+            modelBuilder.Entity<Endereco>().Property(x => x.municipio).IsRequired();
 
             #endregion
 
@@ -106,6 +109,7 @@ namespace Repository
             #region Pessoa
 
             modelBuilder.Entity<Pessoa>().HasOne(x => x.usuarioObj).WithOne().HasForeignKey<Pessoa>(x => x.Usuario).IsRequired().OnDelete(DeleteBehavior.ClientSetNull);
+            modelBuilder.Entity<Pessoa>().HasMany(x => x.enderecoList).WithOne(x => x.pessoaObj).HasForeignKey(x => x.pessoa).IsRequired().OnDelete(DeleteBehavior.ClientSetNull);
 
             modelBuilder.Entity<Pessoa>().Property(x => x.nome).HasMaxLength(50);
             modelBuilder.Entity<Pessoa>().Property(x => x.sobrenome).HasMaxLength(100);
@@ -153,6 +157,7 @@ namespace Repository
             modelBuilder.Entity<Produto>().Property(x => x.descricao).IsRequired();
             modelBuilder.Entity<Produto>().Property(x => x.descricao).HasMaxLength(250);
             modelBuilder.Entity<Produto>().Property(x => x.ativo).IsRequired();
+            modelBuilder.Entity<Produto>().Property(x => x.valor).IsRequired();
 
             #endregion
 

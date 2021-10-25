@@ -15,6 +15,7 @@ namespace Entity
         public DateTime dataCriacao { get; set; } = DateTime.Now;
         public DateTime dataEncerramento { get; set; }
         public bool ativo { get; set; }
+        public double valor { get; set; }
 
         #region Foreign
 
@@ -29,6 +30,8 @@ namespace Entity
 
         #endregion
         #region Regra De Negócio
+
+        public string percentPromocao =>  $"{(valor / produtoObj.valor) * 100}%";
 
         public void NovoAnuncio()
         {

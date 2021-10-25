@@ -15,6 +15,7 @@ namespace Entity
         public bool ativo { get; set; }
         private int _curtidas { get; set; } = 0;
         public int curtidas { get => _curtidas; }
+        public double valor { get; set; }
 
         #region ForeignKeys
 

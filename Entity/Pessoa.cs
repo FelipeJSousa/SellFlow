@@ -1,11 +1,10 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Entity
 {
     public class Pessoa
     {
-
         public long id { get; set; }
         public string nome { get; set; }
         public string sobrenome { get; set; }
@@ -22,6 +21,8 @@ namespace Entity
         #region Navigation
 
         public Usuario usuarioObj { get; set; }
+
+        public ICollection<Endereco> enderecoList { get; set; }
 
         #endregion
     }
