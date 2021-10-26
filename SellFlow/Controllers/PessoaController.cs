@@ -22,9 +22,12 @@ namespace SellFlow.Controllers
                 if (id.HasValue)
                 {  
                     Pessoa pes = rep.Get(id.Value);
-                    List<Pessoa> lpes = new List<Pessoa>();
-                    lpes.Add(pes);
-                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<PessoaModel>>(lpes);
+                    if(pes is not null)
+                    {
+                        List<Pessoa> lpes = new List<Pessoa>();
+                        lpes.Add(pes);
+                        ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<PessoaModel>>(lpes);
+                    }
                 }
                 else
                 {
@@ -33,6 +36,40 @@ namespace SellFlow.Controllers
                     ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<PessoaModel>>(pes);
                 }
                 if(ret.dados != null)
+                {
+                    ret.status = true;
+                }
+                else
+                {
+                    ret.mensagem = "Não foi encontrado a PessoaModel!";
+                }
+            }
+            catch (Exception ex)
+            {
+                ret.status = false;
+                ret.erro = ex.Message;
+            }
+            return ret;
+        }
+
+        [HttpGet("ObterPorUsuario"]
+        public RetornoModel<List<PessoaModel>> GetPessoaPorUsuario(int idUsuario)
+        {
+            RetornoModel<List<PessoaModel>> ret = new RetornoModel<List<PessoaModel>>();
+            try
+            {
+                PessoaRepository rep = new PessoaRepository();
+                if (idUsuario > 0)
+                {
+                    Pessoa pes = rep.GetPorUsuario(idUsuario);
+                    if (pes is not null)
+                    {
+                        List<Pessoa> lpes = new List<Pessoa>();
+                        lpes.Add(pes);
+                        ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<PessoaModel>>(lpes);
+                    }
+                }
+                if (ret.dados != null)
                 {
                     ret.status = true;
                 }

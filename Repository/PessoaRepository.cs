@@ -20,7 +20,16 @@ namespace Repository
             Dispose();
             return pes;
         }
-        
+
+        public Pessoa GetPorUsuario(long idUsuario)
+        {
+            using (_context = new AppDbContext())
+            {
+                return _context.Pessoa.Include("usuarioObj").FirstOrDefault(x => x.Usuario.Equals(idUsuario));
+            }
+        }
+
+
         public new Pessoa Get(long id)
         {
             using (_context = new AppDbContext())
@@ -44,5 +53,6 @@ namespace Repository
                 return _context.Pessoa.Include("usuarioObj").ToList();
             }
         }
+
     }
 }
