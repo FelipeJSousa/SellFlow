@@ -52,7 +52,7 @@ namespace SellFlow.Controllers
             return ret;
         }
 
-        [HttpGet("ObterPorUsuario"]
+        [HttpGet("ObterPorUsuario")]
         public RetornoModel<List<PessoaModel>> GetPessoaPorUsuario(int idUsuario)
         {
             RetornoModel<List<PessoaModel>> ret = new RetornoModel<List<PessoaModel>>();
