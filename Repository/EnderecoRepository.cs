@@ -20,5 +20,15 @@ namespace Repository
             Dispose();
             return end;
         }
+
+        public List<Endereco> GetPorPessoa(long idPessoa)
+        {
+            List<Endereco> lista = new List<Endereco>();
+            using (_context = new AppDbContext())
+            {
+                lista = _context.Endereco.Where(x => x.pessoa.Equals(idPessoa)).ToList();
+            }
+            return lista;
+        }
     }
 }

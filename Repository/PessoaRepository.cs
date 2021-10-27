@@ -25,7 +25,7 @@ namespace Repository
         {
             using (_context = new AppDbContext())
             {
-                return _context.Pessoa.Include("usuarioObj").FirstOrDefault(x => x.Usuario.Equals(idUsuario));
+                return _context.Pessoa.Include(x => x.usuarioObj).Include(x => x.enderecoList).FirstOrDefault(x => x.Usuario.Equals(idUsuario));
             }
         }
 
@@ -34,7 +34,7 @@ namespace Repository
         {
             using (_context = new AppDbContext())
             {
-                return _context.Pessoa.Include("usuarioObj").FirstOrDefault(x=> x.id.Equals(id));
+                return _context.Pessoa.Include(x => x.usuarioObj).Include(x => x.enderecoList).FirstOrDefault(x=> x.id.Equals(id));
             }
         }
 
@@ -42,7 +42,7 @@ namespace Repository
         {
             using (_context = new AppDbContext())
             {
-                return _context.Pessoa.Where(lambda).Include("usuarioObj").FirstOrDefault();
+                return _context.Pessoa.Where(lambda).Include(x => x.usuarioObj).Include(x => x.enderecoList).FirstOrDefault();
             }
         }
 
@@ -50,7 +50,7 @@ namespace Repository
         {
             using (_context = new AppDbContext())
             {
-                return _context.Pessoa.Include("usuarioObj").ToList();
+                return _context.Pessoa.Include(x => x.usuarioObj).Include(x => x.enderecoList).ToList();
             }
         }
 

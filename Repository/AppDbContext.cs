@@ -81,7 +81,6 @@ namespace Repository
             modelBuilder.Entity<Endereco>().Property(x => x.logradouro).IsRequired();
             modelBuilder.Entity<Endereco>().Property(x => x.id).IsRequired();
             modelBuilder.Entity<Endereco>().Property(x => x.cep).IsRequired();
-            modelBuilder.Entity<Endereco>().Property(x => x.municipio).IsRequired();
 
             #endregion
 
