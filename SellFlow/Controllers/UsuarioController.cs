@@ -157,11 +157,36 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
+        public RetornoModel<UsuarioModel> PutUsuario(UsuarioModel obj)
         {
             RetornoModel<UsuarioModel> ret = new RetornoModel<UsuarioModel>();
             try
             {
+                if (obj.id > 0)
                 {
+                    UsuarioRepository rep = new UsuarioRepository();
+
+                    var _ret = rep.Get(obj.id.Value);
+
+                    Usuario update = new()
+                    {
+                        id = obj.id.Value,
+                        ativo = obj.ativo == null ? _ret.ativo : obj.ativo.Value,
+                        email = string.IsNullOrWhiteSpace(obj.email) ? _ret.email : obj.email,
+                        permissao = obj.permissao == null ? _ret.permissao : obj.permissao.Value,
+                        senha = obj.senha
+                    };
+
+                    Usuario usu = rep.Edit(update);
+                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<UsuarioModel>(usu);
+                    if (ret.dados != null)
+                    {
+                        ret.status = true;
+                    }
+                    else
+                    {
+                        ret.mensagem = "Não foi encontrado o Usuario!";
+                    } 
                 }
             }
             catch (Exception ex)

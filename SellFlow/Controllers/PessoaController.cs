@@ -161,16 +161,32 @@ namespace SellFlow.Controllers
             RetornoModel<PessoaModel> ret = new RetornoModel<PessoaModel>();
             try
             {
-                PessoaRepository rep = new PessoaRepository();
-                Pessoa pes = rep.Edit(new Mapper(AutoMapperConfig.RegisterMappings()).Map<Pessoa>(PessoaModel));
-                ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<PessoaModel>(pes);
-                if (ret.dados != null)
+                if (PessoaModel.id>0)
                 {
-                    ret.status = true;
-                }
-                else
-                {
-                    ret.mensagem = "Não foi encontrado o PessoaModel!";
+                    PessoaRepository rep = new PessoaRepository();
+                    var obj = rep.Get(PessoaModel.id);
+
+                    Pessoa update = new()
+                    {
+                        id = PessoaModel.id,
+                        ativo = PessoaModel.ativo == null ? obj.ativo : PessoaModel.ativo.Value,
+                        usuario = PessoaModel.usuario == null ? obj.usuario : PessoaModel.usuario.Value,
+                        dataNascimento = PessoaModel.dataNascimento == null ? obj.dataNascimento : PessoaModel.dataNascimento.Value,
+                        cpf = string.IsNullOrWhiteSpace(PessoaModel.cpf) ? obj.cpf : PessoaModel.cpf,
+                        nome = string.IsNullOrWhiteSpace(PessoaModel.nome) ? obj.cpf : PessoaModel.nome,
+                        sobrenome = string.IsNullOrWhiteSpace(PessoaModel.sobrenome) ? obj.cpf : PessoaModel.sobrenome
+                    };
+
+                    Pessoa pes = rep.Edit(update);
+                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<PessoaModel>(pes);
+                    if (ret.dados != null)
+                    {
+                        ret.status = true;
+                    }
+                    else
+                    {
+                        ret.mensagem = "Não foi encontrado o PessoaModel!";
+                    } 
                 }
             }
             catch (Exception ex)
