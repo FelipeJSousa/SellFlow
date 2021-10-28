@@ -23,7 +23,15 @@ namespace Repository
         {
             using (_context = new AppDbContext())
             {
-                usuario.senha = Encrypt(usuario.senha, usuario.email);
+                if (!string.IsNullOrWhiteSpace(usuario.senha))
+                {
+                    usuario.senha = Encrypt(usuario.senha, usuario.email);
+                }
+                else
+                {
+                    usuario.senha = _context.Usuario.AsNoTracking().FirstOrDefault(x => x.id == usuario.id).senha;
+                }
+
                 _context.Entry(usuario).State = EntityState.Modified;
                 _context.SaveChanges();
             }

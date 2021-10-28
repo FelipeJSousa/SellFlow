@@ -25,7 +25,7 @@ namespace Repository
         {
             using (_context = new AppDbContext())
             {
-                return _context.Pessoa.Include(x => x.usuarioObj).Include(x => x.enderecoList).FirstOrDefault(x => x.Usuario.Equals(idUsuario));
+                return _context.Pessoa.Include(x => x.usuarioObj).Include(x => x.enderecoList).FirstOrDefault(x => x.usuario.Equals(idUsuario));
             }
         }
 

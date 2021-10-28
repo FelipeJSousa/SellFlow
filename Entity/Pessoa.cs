@@ -15,7 +15,7 @@ namespace Entity
 
         #region ForeignKey
 
-        public long? Usuario { get; set; }
+        public long? usuario { get; set; }
 
         #endregion
         #region Navigation

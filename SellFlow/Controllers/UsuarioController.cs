@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Entity;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SellFlow.Model;
 using System;
 using System.Collections.Generic;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace SellFlow.Controllers
 {
@@ -12,6 +16,12 @@ namespace SellFlow.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
+        private IConfiguration _config;
+        public UsuarioController(IConfiguration Configuration)
+        {
+            _config = Configuration;
+        }
+
         [HttpGet]
         public RetornoModel<List<UsuarioModel>> GetUsuario(int? id = null)
         {
@@ -109,7 +119,7 @@ namespace SellFlow.Controllers
             return ret;
         }
 
-        [HttpDelete]
+        [HttpDelete]    
         public RetornoModel<UsuarioModel> DeleteUsuario(long id)
         {
             RetornoModel<UsuarioModel> ret = new RetornoModel<UsuarioModel>();
@@ -147,21 +157,11 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
-        public RetornoModel<UsuarioModel> PutUsuario(UsuarioModel UsuarioModel)
         {
             RetornoModel<UsuarioModel> ret = new RetornoModel<UsuarioModel>();
             try
             {
-                UsuarioRepository rep = new UsuarioRepository();
-                Usuario usu = rep.Edit(new Mapper(AutoMapperConfig.RegisterMappings()).Map<Usuario>(UsuarioModel));
-                ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<UsuarioModel>(usu);
-                if (ret.dados != null)
                 {
-                    ret.status = true;
-                }
-                else
-                {
-                    ret.mensagem = "Não foi encontrado o Usuario!";
                 }
             }
             catch (Exception ex)
@@ -185,6 +185,7 @@ namespace SellFlow.Controllers
                 if (ret.dados != null)
                 {
                     ret.status = true;
+                    ret.dados.token = GerarTokenJWT();
                 }
                 else
                 {
@@ -199,5 +200,21 @@ namespace SellFlow.Controllers
 
             return ret;
         }
+        private string GerarTokenJWT()
+        {
+            var issuer = _config["Jwt:Issuer"];
+            var audience = _config["Jwt:Audience"];
+            var expiry = DateTime.Now.AddMinutes(120);
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(issuer: issuer, audience: audience,
+                                             expires: expiry, 
+                                             signingCredentials: credentials);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var stringToken = tokenHandler.WriteToken(token);
+            return stringToken;
+        }
+
+
     }
 }

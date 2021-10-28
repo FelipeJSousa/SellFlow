@@ -12,6 +12,6 @@ namespace SellFlow.Model
         public string senha { get => _senha; set => _senha = value; }
         public string email { get; set; }
         public bool? ativo { get; set; }
-        public long permissao { get; set; }
+        public long? permissao { get; set; }
     }
 }

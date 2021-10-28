@@ -107,7 +107,7 @@ namespace Repository
 
             #region Pessoa
 
-            modelBuilder.Entity<Pessoa>().HasOne(x => x.usuarioObj).WithOne().HasForeignKey<Pessoa>(x => x.Usuario).IsRequired().OnDelete(DeleteBehavior.ClientSetNull);
+            modelBuilder.Entity<Pessoa>().HasOne(x => x.usuarioObj).WithOne().HasForeignKey<Pessoa>(x => x.usuario).IsRequired().OnDelete(DeleteBehavior.ClientSetNull);
             modelBuilder.Entity<Pessoa>().HasMany(x => x.enderecoList).WithOne(x => x.pessoaObj).HasForeignKey(x => x.pessoa).IsRequired().OnDelete(DeleteBehavior.ClientSetNull);
 
             modelBuilder.Entity<Pessoa>().Property(x => x.nome).HasMaxLength(50);

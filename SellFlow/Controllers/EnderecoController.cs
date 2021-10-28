@@ -64,7 +64,7 @@ namespace SellFlow.Controllers
                     List<Endereco> lpes = rep.GetPorPessoa(idPessoa);
                     ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<EnderecoModel>>(lpes);
                 }
-                ret.status = ret.dados is null;
+                ret.status = ret.dados is not null;
             }
             catch (Exception ex)
             {
