@@ -9,6 +9,7 @@
         public bool? ativo { get; set; }
         private int _curtidas { get; set; } = 0;
         public int? curtidas { get => _curtidas; }
+        public double valor { get; set; }
 
         public long categoria { get; set; }
         public long usuario { get; set; }

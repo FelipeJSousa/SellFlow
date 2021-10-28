@@ -17,8 +17,11 @@ namespace SellFlow.Model
         public bool ativo { get; set; }
         public long? produto { get; set; }
         public long? anuncioSituacao { get; set; }
+        public double valor { get; set; }
 
         public ProdutoModel produtoObj { get; set; }
         public AnuncioSituacaoModel anuncioSituacaoObj { get; set; }
+
+        public string percentPromocao => $"{(valor / produtoObj.valor) * 100}%";
     }
 }
