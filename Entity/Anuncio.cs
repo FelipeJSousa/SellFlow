@@ -31,8 +31,6 @@ namespace Entity
         #endregion
         #region Regra De Negócio
 
-        public string percentPromocao =>  $"{(valor / produtoObj.valor) * 100}%";
-
         public void NovoAnuncio()
         {
             anuncioSituacao = 1;

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace SellFlow.Model
+namespace SellFlow.Model.ApiResponse
 {
-    public class AnuncioModel
+    public class AnuncioApiResponse
     {
         public long id { get; set; }
         public string nome { get; set; }
@@ -18,7 +18,8 @@ namespace SellFlow.Model
         public ProdutoModel produtoObj { get; set; }
         public AnuncioSituacaoModel anuncioSituacaoObj { get; set; }
 
-        public string percentPromocao { get; set; }
-        public string CalculaPercentPromocao() => $"{((produtoObj.valor - valor) / produtoObj.valor * 100).ToString("N1")}%";
+        public string vendedor { get; set; }
+
+        public string percentPromocao => $"{((produtoObj.valor - valor) / produtoObj.valor * 100).ToString("N1")}%";
     }
 }

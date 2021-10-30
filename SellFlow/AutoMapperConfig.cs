@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SellFlow.Model;
 using Entity;
 using SellFlow.Model.ApiRequest;
+using SellFlow.Model.ApiResponse;
 
 namespace SellFlow
 {
@@ -35,11 +36,19 @@ namespace SellFlow
                    .ReverseMap()
                    .ForMember(dest => dest.usuario, opt => opt.MapFrom(src => src.usuario));
 
-                cfg.CreateMap<Anuncio, AnuncioModel>().ReverseMap();
+                cfg.CreateMap<Anuncio, AnuncioModel>()
+                    .ForMember(dest => dest.valor, opt => opt.MapFrom(src => src.valor))
+                    .AfterMap((src, dest) => dest.percentPromocao = dest.CalculaPercentPromocao())
+                    .ReverseMap();
+
+                cfg.CreateMap<Anuncio, AnuncioApiResponse>().ReverseMap();
 
                 cfg.CreateMap<Imagens, ImagensModel>().ReverseMap();
 
                 cfg.CreateMap<AnuncioSituacao, AnuncioSituacaoModel>().ReverseMap();
+
+                cfg.CreateMap<Anuncio, AnuncioApiResponse>().ReverseMap();
+
             });
 
             return config;

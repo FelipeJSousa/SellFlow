@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SellFlow.Model;
+using SellFlow.Model.ApiResponse;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -34,6 +35,41 @@ namespace SellFlow.Controllers
                     anun = rep.GetAll(idUsuario);
                     ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<AnuncioModel>>(anun);
                 }
+                if (ret.dados != null)
+                {
+                    ret.status = true;
+                }
+                else
+                {
+                    ret.mensagem = "Não foi encontrado o Anuncio!";
+                }
+            }
+            catch (Exception ex)
+            {
+                ret.status = false;
+                ret.erro = ex.Message;
+            }
+            return ret;
+        }
+
+
+        [HttpGet("Situacao")]
+        public RetornoModel<List<AnuncioApiResponse>> GetAnuncioPorSituacao(int idSituacao)
+        {
+            RetornoModel<List<AnuncioApiResponse>> ret = new ();
+            try
+            {
+                AnuncioRepository rep = new AnuncioRepository();
+                List<Anuncio> lanun = rep.GetPorSituacao(idSituacao);
+                PessoaRepository reppessoa = new PessoaRepository();
+                var retobj = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<AnuncioApiResponse>>(lanun);
+                foreach (var item in retobj)
+                {
+                    var pes = reppessoa.GetPorUsuario(item.produtoObj.usuario);
+                    item.vendedor = pes.nome + " " + pes.sobrenome;
+                }
+                ret.dados = retobj;
+
                 if (ret.dados != null)
                 {
                     ret.status = true;
@@ -127,6 +163,7 @@ namespace SellFlow.Controllers
             {
                 AnuncioRepository rep = new AnuncioRepository();
                 Anuncio anun = rep.Edit(new Mapper(AutoMapperConfig.RegisterMappings()).Map<Anuncio>(AnuncioModel));
+                anun = rep.Get(anun.id);
                 ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<AnuncioModel>(anun);
                 if (ret.dados != null)
                 {
