@@ -25,7 +25,7 @@ namespace SellFlow.Controllers
                 if (id.HasValue)
                 {
                     Anuncio anun = rep.Get(id.Value, idUsuario);
-                    List<Anuncio> lanun = new List<Anuncio>();
+                    List<Anuncio> lanun = new ();
                     lanun.Add(anun);
                     ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<AnuncioModel>>(lanun);
                 }

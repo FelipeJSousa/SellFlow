@@ -22,6 +22,9 @@ namespace SellFlow
                 cfg.CreateMap<Endereco, EnderecoModel>().ReverseMap();
 
                 cfg.CreateMap<Usuario, UsuarioModel>().ReverseMap();
+                cfg.CreateMap<Usuario, ApiResponseAcesso>().ReverseMap();
+                cfg.CreateMap<Usuario, ApiResponseUsuario>().ReverseMap();
+                cfg.CreateMap<UsuarioModel, ApiResponseUsuario>().ReverseMap();
 
                 cfg.CreateMap<Permissao, PermissaoModel>().ReverseMap();
 

@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
+using SellFlow.Model.ApiResponse;
 
 namespace SellFlow.Controllers
 {
@@ -16,16 +18,12 @@ namespace SellFlow.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        private IConfiguration _config;
-        public UsuarioController(IConfiguration Configuration)
-        {
-            _config = Configuration;
-        }
 
+        [Authorize]
         [HttpGet]
-        public RetornoModel<List<UsuarioModel>> GetUsuario(int? id = null)
+        public RetornoModel<List<ApiResponseUsuario>> GetUsuario(int? id = null)
         {
-            RetornoModel<List<UsuarioModel>> ret = new RetornoModel<List<UsuarioModel>>();
+            RetornoModel<List<ApiResponseUsuario>> ret = new RetornoModel<List<ApiResponseUsuario>>();
             try
             {
                 UsuarioRepository rep = new UsuarioRepository();
@@ -34,13 +32,13 @@ namespace SellFlow.Controllers
                     Usuario usu = rep.Get(id.Value);
                     List<Usuario> lpes = new();
                     lpes.Add(usu);
-                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<UsuarioModel>>(lpes);
+                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<ApiResponseUsuario>>(lpes);
                 }
                 else
                 {
                     List<Usuario> usu = new List<Usuario>();
                     usu = rep.GetAll();
-                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<UsuarioModel>>(usu);
+                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<ApiResponseUsuario>>(usu);
                 }
 
                 if (ret.dados != null)
@@ -61,10 +59,11 @@ namespace SellFlow.Controllers
             return ret;
         }
 
+        [Authorize]
         [HttpPost]
-        public RetornoModel<UsuarioModel> PostUsuario(UsuarioModel usuario)
+        public RetornoModel<ApiResponseUsuario> PostUsuario(UsuarioModel usuario)
         {
-            RetornoModel<UsuarioModel> ret = new RetornoModel<UsuarioModel>();
+            RetornoModel<ApiResponseUsuario> ret = new RetornoModel<ApiResponseUsuario>();
             try
             {
                 if (usuario.permissao == 0)
@@ -86,7 +85,7 @@ namespace SellFlow.Controllers
                     usuario.ativo = true;
                     usuario.id = usu.id;
                     usu = rep.Edit(new Mapper(AutoMapperConfig.RegisterMappings()).Map<Usuario>(usuario));
-                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<UsuarioModel>(usu);
+                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<ApiResponseUsuario>(usu);
                     if (ret.dados != null)
                     {
                         ret.status = true;
@@ -99,7 +98,7 @@ namespace SellFlow.Controllers
                 else
                 {
                     var mapper = new Mapper(AutoMapperConfig.RegisterMappings());
-                    ret.dados = mapper.Map<UsuarioModel>(rep.Add(mapper.Map<Usuario>(usuario)));
+                    ret.dados = mapper.Map<ApiResponseUsuario>(rep.Add(mapper.Map<Usuario>(usuario)));
                     if (ret.dados != null)
                     {
                         ret.status = true;
@@ -119,10 +118,11 @@ namespace SellFlow.Controllers
             return ret;
         }
 
+        [Authorize]
         [HttpDelete]    
-        public RetornoModel<UsuarioModel> DeleteUsuario(long id)
+        public RetornoModel<ApiResponseUsuario> DeleteUsuario(long id)
         {
-            RetornoModel<UsuarioModel> ret = new RetornoModel<UsuarioModel>();
+            RetornoModel<ApiResponseUsuario> ret = new RetornoModel<ApiResponseUsuario>();
             try
             {
                 UsuarioRepository rep = new UsuarioRepository();
@@ -156,10 +156,11 @@ namespace SellFlow.Controllers
             return ret;
         }
 
+        [Authorize]
         [HttpPut]
-        public RetornoModel<UsuarioModel> PutUsuario(UsuarioModel obj)
+        public RetornoModel<ApiResponseUsuario> PutUsuario(UsuarioModel obj)
         {
-            RetornoModel<UsuarioModel> ret = new RetornoModel<UsuarioModel>();
+            RetornoModel<ApiResponseUsuario> ret = new RetornoModel<ApiResponseUsuario>();
             try
             {
                 if (obj.id > 0)
@@ -178,7 +179,7 @@ namespace SellFlow.Controllers
                     };
 
                     Usuario usu = rep.Edit(update);
-                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<UsuarioModel>(usu);
+                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<ApiResponseUsuario>(usu);
                     if (ret.dados != null)
                     {
                         ret.status = true;
@@ -197,49 +198,6 @@ namespace SellFlow.Controllers
 
             return ret;
         }
-
-        [HttpPost("Validar")]
-        public RetornoModel<PessoaModel> ValidarUsuario(UsuarioModel UsuarioModel)
-        {
-            RetornoModel<PessoaModel> ret = new RetornoModel<PessoaModel>();
-            try
-            {
-                UsuarioRepository rep = new UsuarioRepository();
-                Pessoa usu = rep.Validar(UsuarioModel.email, UsuarioModel.senha);
-                ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<PessoaModel>(usu);
-                if (ret.dados != null)
-                {
-                    ret.status = true;
-                    ret.dados.token = GerarTokenJWT();
-                }
-                else
-                {
-                    ret.mensagem = "Não foi encontrado o Usuario!";
-                }
-            }
-            catch (Exception ex)
-            {
-                ret.status = false;
-                ret.erro = ex.Message;
-            }
-
-            return ret;
-        }
-        private string GerarTokenJWT()
-        {
-            var issuer = _config["Jwt:Issuer"];
-            var audience = _config["Jwt:Audience"];
-            var expiry = DateTime.Now.AddMinutes(120);
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(issuer: issuer, audience: audience,
-                                             expires: expiry, 
-                                             signingCredentials: credentials);
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var stringToken = tokenHandler.WriteToken(token);
-            return stringToken;
-        }
-
 
     }
 }

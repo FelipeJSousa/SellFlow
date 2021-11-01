@@ -39,12 +39,12 @@ namespace Repository
             return usuario;
         }
 
-        public Pessoa Validar(string email, string senha)
+        public Usuario Validar(string email, string senha)
         {
-            Pessoa _ret = new ();
-            PessoaRepository rep = new();
+            Usuario _ret = new ();
+            UsuarioRepository rep = new();
 
-            _ret = rep.Get(x => x.usuarioObj.email == email && x.usuarioObj.senha == Encrypt(senha, email));
+            _ret = rep.Get(x => x.email == email && x.senha == Encrypt(senha, email));
 
             Dispose();
             return _ret;
