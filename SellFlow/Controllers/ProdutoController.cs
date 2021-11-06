@@ -17,7 +17,7 @@ namespace SellFlow.Controllers
     public class ProdutoController : ControllerBase
     {
         [HttpGet]
-        public RetornoModel<List<ProdutoModel>> GetProduto(int? id = null)
+        public RetornoModel<List<ProdutoModel>> GetProdutoPorEmpresa(int? id = null, int? idUsuario = null)
         {
             RetornoModel<List<ProdutoModel>> ret = new RetornoModel<List<ProdutoModel>>();
             try
@@ -25,7 +25,7 @@ namespace SellFlow.Controllers
                 ProdutoRepository rep = new ProdutoRepository();
                 if (id.HasValue)
                 {
-                    Produto pro = rep.Get(id.Value);
+                    Produto pro = rep.Get(id.Value, idUsuario);
                     List<Produto> lpro = new List<Produto>();
                     lpro.Add(pro);
                     ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<ProdutoModel>>(lpro);
@@ -33,7 +33,7 @@ namespace SellFlow.Controllers
                 else
                 {
                     List<Produto> pro = new List<Produto>();
-                    pro = rep.GetAll();
+                    pro = rep.GetAll(idUsuario);
                     ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<ProdutoModel>>(pro);
                 }
                 if (ret.dados != null)
@@ -62,33 +62,35 @@ namespace SellFlow.Controllers
                 ProdutoRepository rep = new();
                 var mapper = new Mapper(AutoMapperConfig.RegisterMappings());
                 var _obj = JsonConvert.DeserializeObject<Produto>(json);
-                var _produto = mapper.Map<Produto>(_obj);
-                ret.dados = mapper.Map<ProdutoModel>(rep.Add(_produto));
+                var _produto = rep.Add(mapper.Map<Produto>(_obj));
+                
+                if (_produto?.id > 0 && imagem.Length > 0)
+                {
+                    var currDir = Directory.GetCurrentDirectory() + "\\imagens\\produtos\\" + _produto.id;
+                    if (!Directory.Exists(currDir))
+                    {
+                        Directory.CreateDirectory(currDir);
+                    }
+                    using (FileStream fileStream = System.IO.File.Create(currDir + "\\" + imagem.FileName))
+                    {
+                        await imagem.CopyToAsync(fileStream);
+                        fileStream.Flush();
+                        var repImagem = new ImagensRepository();
+                        var objImagem = new Imagens()
+                        {
+                            ativo = true,
+                            diretorio = currDir + "\\" + imagem.FileName,
+                            produto = _produto.id
+                        };
+                        repImagem.Add(objImagem);
+                    }
+                    _produto.imagemDestaque = "http://felipejsousa-001-site1.itempurl.com/api/Imagens/Produto/" + _produto.id;
+                    _produto = rep.Edit(_produto);
+                }
+                ret.dados = mapper.Map<ProdutoModel>(_produto);
                 if (ret.dados != null)
                 {
                     ret.status = true;
-
-                    if(imagem.Length > 0)
-                    {
-                        var currDir = Directory.GetCurrentDirectory() + "\\imagens\\produtos\\" + _produto.id;
-                        if (!Directory.Exists(currDir))
-                        {
-                            Directory.CreateDirectory(currDir);
-                        }
-                        using (FileStream fileStream = System.IO.File.Create(currDir + "\\" + imagem.FileName))
-                        {
-                            await imagem.CopyToAsync(fileStream);
-                            fileStream.Flush();
-                            var repImagem = new ImagensRepository();
-                            var objImagem = new Imagens()
-                            {
-                                ativo = true,
-                                diretorio = currDir + "\\" + imagem.FileName,
-                                produto = _produto.id
-                            };
-                            repImagem.Add(objImagem);
-                        }
-                    }
                 }
                 else
                 {
@@ -149,31 +151,45 @@ namespace SellFlow.Controllers
                 ProdutoRepository rep = new ProdutoRepository();
                 var _obj = JsonConvert.DeserializeObject<Produto>(json);
                 Produto pro = rep.Edit(new Mapper(AutoMapperConfig.RegisterMappings()).Map<Produto>(_obj));
+                    
+                if (pro?.id > 0 && imagem?.Length > 0)
+                {
+                    var currDir = Directory.GetCurrentDirectory() + "\\imagens\\produtos\\" + pro.id;
+                    if (!Directory.Exists(currDir))
+                    {
+                        Directory.CreateDirectory(currDir);
+                    }
+                    using (FileStream fileStream = System.IO.File.Create(currDir + "\\" + imagem.FileName))
+                    {
+                        var repImagem = new ImagensRepository();
+                        var imagemExistente = repImagem.Get(x => x.produto == pro.id);
+                        await imagem.CopyToAsync(fileStream);
+                        fileStream.Flush();
+                        var objImagem = new Imagens()
+                        {
+                            id = imagemExistente?.id > 0 ? imagemExistente.id : default,
+                            ativo = true,
+                            diretorio = currDir + "\\" + imagem.FileName,
+                            produto = pro.id
+                        };
+                        if(objImagem.id > 0)
+                        {
+                            repImagem.Edit(objImagem);
+                        }
+                        else
+                        {
+                            repImagem.Add(objImagem);
+                        }
+                    }
+
+                    pro.imagemDestaque = "http://felipejsousa-001-site1.itempurl.com/api/Imagens/Produto/" + pro.id;
+                    pro = rep.Edit(pro);
+                }
+
                 ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<ProdutoModel>(pro);
                 if (ret.dados != null)
                 {
                     ret.status = true;
-                    if (imagem?.Length > 0)
-                    {
-                        var currDir = Directory.GetCurrentDirectory() + "\\imagens\\produtos\\" + pro.id;
-                        if (!Directory.Exists(currDir))
-                        {
-                            Directory.CreateDirectory(currDir);
-                        }
-                        using (FileStream fileStream = System.IO.File.Create(currDir + "\\" + imagem.FileName))
-                        {
-                            await imagem.CopyToAsync(fileStream);
-                            fileStream.Flush();
-                            var repImagem = new ImagensRepository();
-                            var objImagem = new Imagens()
-                            {
-                                ativo = true,
-                                diretorio = currDir + "\\" + imagem.FileName,
-                                produto = pro.id
-                            };
-                            repImagem.Add(objImagem);
-                        }
-                    }
                 }
                 else
                 {
