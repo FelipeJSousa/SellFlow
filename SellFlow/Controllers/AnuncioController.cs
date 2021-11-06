@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
@@ -52,7 +53,7 @@ namespace SellFlow.Controllers
             return ret;
         }
 
-
+        [Authorize]
         [HttpGet("Situacao")]
         public RetornoModel<List<AnuncioApiResponse>> GetAnuncioPorSituacao(int idSituacao)
         {

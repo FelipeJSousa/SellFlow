@@ -11,7 +11,9 @@ namespace Repository
 {
     public class AppDbContext : DbContext
     {
-        protected readonly String _conn = @"Server=DESKTOP-4QBF915;Database=SellFlow;Trusted_Connection=True;MultipleActiveResultSets=true";
+        //protected readonly String _conn = @"Server=DESKTOP-4QBF915;Database=SellFlow;Trusted_Connection=True;MultipleActiveResultSets=true";
+        protected readonly String _conn = @"Data Source=SQL5063.site4now.net;Initial Catalog=db_a7c12b_sellflow;User Id=db_a7c12b_sellflow_admin;Password=13579Fe2468";
+        
         public DbSet<Pessoa> Pessoa { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Permissao> Permissao { get; set; }
