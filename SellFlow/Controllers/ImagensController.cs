@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using Entity;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SellFlow.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace SellFlow.Controllers
 {
@@ -50,6 +48,16 @@ namespace SellFlow.Controllers
                 ret.erro = ex.Message;
             }
             return ret;
+        }
+
+        [HttpGet("Produto")]
+        public IActionResult GetImagens(int idProduto)
+        {
+            ImagensRepository rep = new ImagensRepository();
+
+            var imagem = rep.Get(x => x.produto == idProduto);
+            Byte[] b = System.IO.File.ReadAllBytes(@Directory.GetCurrentDirectory()+imagem.diretorio);
+            return File(b, "image/jpeg");
         }
 
         [HttpPost]
