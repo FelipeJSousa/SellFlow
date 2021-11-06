@@ -50,14 +50,15 @@ namespace SellFlow.Controllers
             return ret;
         }
 
-        [HttpGet("Produto")]
+        [HttpGet("Produto/{idProduto}")]
         public IActionResult GetImagens(int idProduto)
         {
             ImagensRepository rep = new ImagensRepository();
 
             var imagem = rep.Get(x => x.produto == idProduto);
-            Byte[] b = System.IO.File.ReadAllBytes(@Directory.GetCurrentDirectory()+imagem.diretorio);
-            return File(b, "image/jpeg");
+            Byte[] b = System.IO.File.ReadAllBytes(imagem.diretorio);
+
+            return File(b, "image/jpg");
         }
 
         [HttpPost]
