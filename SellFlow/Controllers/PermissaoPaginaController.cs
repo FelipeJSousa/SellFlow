@@ -62,9 +62,9 @@ namespace SellFlow.Controllers
 
 
         [HttpPost]
-        public RetornoModel<PermissaoPaginaModel> PostPermissaoPagina(List<PermissaoPaginaModel> list)
+        public RetornoModel<List<PermissaoPaginaModel>> PostPermissaoPagina(List<PermissaoPaginaModel> list)
         {
-            RetornoModel<PermissaoPaginaModel> ret = new RetornoModel<PermissaoPaginaModel>();
+            RetornoModel<List<PermissaoPaginaModel>> ret = new RetornoModel<List<PermissaoPaginaModel>>();
             try
             {
                 PermissaoPaginaRepository rep = new PermissaoPaginaRepository();
@@ -82,7 +82,7 @@ namespace SellFlow.Controllers
                         rep.Add(item);
                     }
                 }
-                ret.dados = mapper.Map<PermissaoPaginaModel>(_permissaoPaginaList);
+                ret.dados = mapper.Map<List<PermissaoPaginaModel>>(_permissaoPaginaList);
             }
             catch (Exception ex)
             {
