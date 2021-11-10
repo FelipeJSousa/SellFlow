@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Entity
 {
@@ -34,7 +30,7 @@ namespace Entity
         public void NovoAnuncio()
         {
             anuncioSituacao = 1;
-            dataCriacao = DateTime.Now;
+            dataCriacao = TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
         }
 
         #endregion

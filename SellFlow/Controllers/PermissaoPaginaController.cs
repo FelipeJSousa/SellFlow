@@ -15,24 +15,74 @@ namespace SellFlow.Controllers
     [ApiController]
     public class PermissaoPaginaController : ControllerBase
     {
+
+        [HttpGet("Permissao/{idPermissao}")]
+        public RetornoModel<IEnumerable<long>> GetPaginaPorPermissao(int idPermissao)
+        {
+            RetornoModel<IEnumerable<long>> ret = new ();
+
+            PermissaoPaginaRepository rep = new PermissaoPaginaRepository();
+
+            var paginas = rep.GetAll(x => x.permissao == idPermissao);
+
+            if (paginas.Any())
+            {
+                ret.status = true;
+                ret.dados = paginas.Select(x => x.pagina);
+            }
+            else
+            {
+                ret.status = false;
+                ret.erro = "Não foi encontrado nenhuma pagina.";
+            }
+
+            return ret;
+        }
+
+        [HttpGet("Pagina/{idPagina}")]
+        public RetornoModel<IEnumerable<long>> GetPermissaoPorPagina(int idPagina)
+        {
+            RetornoModel<IEnumerable<long>> ret = new ();
+
+            PermissaoPaginaRepository rep = new PermissaoPaginaRepository();
+
+            var paginas = rep.GetAll(x => x.pagina == idPagina);
+
+            if (paginas.Any())
+            {
+                ret.dados = paginas.Select(x => x.permissao);
+            }
+            else
+            {
+                ret.erro = "Não foi encontrado nenhuma permissão.";
+            }
+
+            return ret;
+        }
+
+
         [HttpPost]
-        public RetornoModel<PermissaoPaginaModel> PostPermissaoPagina(PermissaoPaginaModel obj)
+        public RetornoModel<PermissaoPaginaModel> PostPermissaoPagina(List<PermissaoPaginaModel> list)
         {
             RetornoModel<PermissaoPaginaModel> ret = new RetornoModel<PermissaoPaginaModel>();
             try
             {
                 PermissaoPaginaRepository rep = new PermissaoPaginaRepository();
                 var mapper = new Mapper(AutoMapperConfig.RegisterMappings());
-                var _PermissaoPagina = mapper.Map<PermissaoPagina>(obj);
-                if (Validar(_PermissaoPagina))
+                var _permissaoPaginaList = mapper.Map<List<PermissaoPagina>>(list);
+                foreach (var item in _permissaoPaginaList)
                 {
-                    ret.status = false;
-                    ret.erro = "Não é possível inserir permissoes duplicadas.";
-                    return ret;
+                    if (Validar(item))
+                    {
+                        ret.erro += $"Permissão {item.permissao} já possui a página {item.pagina} vinculada." + Environment.NewLine;
+                    }
+                    else
+                    {
+                        ret.status = true;
+                        rep.Add(item);
+                    }
                 }
-                rep.Add(_PermissaoPagina);
-                ret.status = true;
-                ret.dados = mapper.Map<PermissaoPaginaModel>(_PermissaoPagina);
+                ret.dados = mapper.Map<PermissaoPaginaModel>(_permissaoPaginaList);
             }
             catch (Exception ex)
             {

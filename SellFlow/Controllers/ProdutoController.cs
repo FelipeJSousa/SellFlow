@@ -66,7 +66,7 @@ namespace SellFlow.Controllers
                 
                 if (_produto?.id > 0 && imagem.Length > 0)
                 {
-                    var currDir = Directory.GetCurrentDirectory() + "\\imagens\\produtos\\" + _produto.id;
+                    var currDir = Directory.GetCurrentDirectory() + "\\imagens\\produtos\\" + _produto.id; ;
                     if (!Directory.Exists(currDir))
                     {
                         Directory.CreateDirectory(currDir);
@@ -82,9 +82,10 @@ namespace SellFlow.Controllers
                             diretorio = currDir + "\\" + imagem.FileName,
                             produto = _produto.id
                         };
+
                         repImagem.Add(objImagem);
                     }
-                    _produto.imagemDestaque = "http://felipejsousa-001-site1.itempurl.com/api/Imagens/Produto/" + _produto.id;
+                    _produto.imagemDestaque = "http://" + Request.Host.Value.ToString() + "/api/Imagens/Produto/" + _produto.id;
                     _produto = rep.Edit(_produto);
                 }
                 ret.dados = mapper.Map<ProdutoModel>(_produto);
@@ -182,7 +183,7 @@ namespace SellFlow.Controllers
                         }
                     }
 
-                    pro.imagemDestaque = "http://felipejsousa-001-site1.itempurl.com/api/Imagens/Produto/" + pro.id;
+                    pro.imagemDestaque = "http://" + Request.Host.Value.ToString() + "/api/Imagens/Produto/" + pro.id;
                     pro = rep.Edit(pro);
                 }
 
