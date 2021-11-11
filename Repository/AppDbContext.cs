@@ -98,7 +98,7 @@ namespace Repository
 
             #region Pagina
 
-            modelBuilder.Entity<Pagina>().HasMany(x => x.PermissaoPaginaObj).WithOne(x => x.paginaObj).HasForeignKey(x => x.pagina).IsRequired(false);
+            modelBuilder.Entity<Pagina>().HasMany(x => x.PermissaoPaginaObj).WithOne(x => x.paginaObj).HasForeignKey(x => x.pagina).IsRequired(false).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Pagina>().Property(x => x.ativo).IsRequired();
             modelBuilder.Entity<Pagina>().Property(x => x.caminho).IsRequired();
@@ -125,7 +125,7 @@ namespace Repository
 
             #region Permissao
 
-            modelBuilder.Entity<Permissao>().HasMany(x => x.PermissaoPaginaObj).WithOne(x => x.permissaoObj).HasForeignKey(x => x.permissao).IsRequired(false);
+            modelBuilder.Entity<Permissao>().HasMany(x => x.PermissaoPaginaObj).WithOne(x => x.permissaoObj).HasForeignKey(x => x.permissao).IsRequired(false).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Permissao>().Property(x => x.id).IsRequired();
             modelBuilder.Entity<Permissao>().Property(x => x.ativo).IsRequired();
@@ -138,11 +138,14 @@ namespace Repository
             modelBuilder.Entity<PermissaoPagina>()
                         .HasOne(pc => pc.permissaoObj)
                         .WithMany(p => p.PermissaoPaginaObj)
-                        .HasForeignKey(pc => pc.permissao);
+                        .HasForeignKey(pc => pc.permissao)
+                        .IsRequired().OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<PermissaoPagina>()
                         .HasOne(pc => pc.paginaObj)
                         .WithMany(p => p.PermissaoPaginaObj)
-                        .HasForeignKey(pc => pc.pagina);
+                        .HasForeignKey(pc => pc.pagina)
+                        .IsRequired().OnDelete(DeleteBehavior.Cascade);
             #endregion
 
             #region Produto

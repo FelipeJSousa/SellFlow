@@ -62,25 +62,30 @@ namespace SellFlow.Controllers
 
 
         [HttpPost]
-        public RetornoModel<List<PermissaoPaginaModel>> PostPermissaoPagina(List<PermissaoPaginaModel> list)
+        public IActionResult PostPermissaoPagina(List<PermissaoPaginaModel> list)
         {
             RetornoModel<List<PermissaoPaginaModel>> ret = new RetornoModel<List<PermissaoPaginaModel>>();
             try
             {
+                if (!list.Any())
+                {
+                    ret.erro = "Informe os elementos.";
+                    ret.status = false;
+                    return BadRequest(ret);
+                }
                 PermissaoPaginaRepository rep = new PermissaoPaginaRepository();
                 var mapper = new Mapper(AutoMapperConfig.RegisterMappings());
                 var _permissaoPaginaList = mapper.Map<List<PermissaoPagina>>(list);
+                var resp = list.Select(x => x.permissao).Distinct().Count() == 1 ? rep.GetAll(x => x.permissao == list.FirstOrDefault().permissao) : rep.GetAll(x => x.pagina == list.FirstOrDefault().pagina);
+                foreach (var item in resp)
+                {
+                    rep.Delete(item);
+                }
+
                 foreach (var item in _permissaoPaginaList)
                 {
-                    if (Validar(item))
-                    {
-                        ret.erro += $"Permissão {item.permissao} já possui a página {item.pagina} vinculada." + Environment.NewLine;
-                    }
-                    else
-                    {
-                        ret.status = true;
-                        rep.Add(item);
-                    }
+                    ret.status = true;
+                    rep.Add(item);
                 }
                 ret.dados = mapper.Map<List<PermissaoPaginaModel>>(_permissaoPaginaList);
             }
@@ -88,8 +93,9 @@ namespace SellFlow.Controllers
             {
                 ret.status = false;
                 ret.erro = ex.Message;
+                return BadRequest(ret);
             }
-            return ret;
+            return Ok(ret);
         }
 
         [HttpPost("/PermissaoPagina/Validar")]
