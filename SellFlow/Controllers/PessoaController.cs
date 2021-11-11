@@ -10,12 +10,13 @@ using System.Collections.Generic;
 
 namespace SellFlow.Controllers
 {
-    [Authorize]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class PessoaController : ControllerBase
     {
         [HttpGet]
+        [Authorize]
         public RetornoModel<List<PessoaModel>> GetPessoa(int? id = null) {
             RetornoModel<List<PessoaModel>> ret = new RetornoModel<List<PessoaModel>>();
             try
@@ -89,6 +90,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public RetornoModel<PessoaModel> PostPessoaModel(PessoaPostApiRequest obj)
         {
             RetornoModel<PessoaModel> ret = new ();
@@ -121,6 +123,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public RetornoModel<PessoaModel> DeletePessoaModel(long id)
         {
             RetornoModel<PessoaModel> ret = new RetornoModel<PessoaModel>();
@@ -158,6 +161,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public RetornoModel<PessoaModel> PutPessoaModel(PessoaModel PessoaModel)
         {
             RetornoModel<PessoaModel> ret = new RetornoModel<PessoaModel>();
