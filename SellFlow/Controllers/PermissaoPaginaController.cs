@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SellFlow.Model;
+using SellFlow.Model.ApiRequest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,12 +63,12 @@ namespace SellFlow.Controllers
 
 
         [HttpPost]
-        public IActionResult PostPermissaoPagina(List<PermissaoPaginaModel> list)
+        public IActionResult PostPermissaoPagina(ApiRequestPermissaoPagina list)
         {
             RetornoModel<List<PermissaoPaginaModel>> ret = new RetornoModel<List<PermissaoPaginaModel>>();
             try
             {
-                if (!list.Any())
+                if (list.permissao?.Any() != true && list.pagina?.Any() != true)
                 {
                     ret.erro = "Informe os elementos.";
                     ret.status = false;
@@ -75,18 +76,33 @@ namespace SellFlow.Controllers
                 }
                 PermissaoPaginaRepository rep = new PermissaoPaginaRepository();
                 var mapper = new Mapper(AutoMapperConfig.RegisterMappings());
-                var _permissaoPaginaList = mapper.Map<List<PermissaoPagina>>(list);
-                var resp = list.Select(x => x.permissao).Distinct().Count() == 1 ? rep.GetAll(x => x.permissao == list.FirstOrDefault().permissao) : rep.GetAll(x => x.pagina == list.FirstOrDefault().pagina);
-                foreach (var item in resp)
+                List<PermissaoPagina> _permissaoPaginaList = new();
+                if (list.pagina?.Any() == true)
                 {
-                    rep.Delete(item);
+                    _permissaoPaginaList = mapper.Map<List<PermissaoPagina>>(list.pagina);
+                    var resp = rep.GetAll(x => x.pagina == list.pagina.FirstOrDefault().pagina);
+                    foreach (var pag in resp)
+                    {
+                        rep.Delete(pag);
+                    }
                 }
+                else
+                {
+                    _permissaoPaginaList = mapper.Map<List<PermissaoPagina>>(list.permissao);
+                    var resp = rep.GetAll(x => x.permissao == list.permissao.FirstOrDefault().permissao);
+                    foreach (var per in resp)
+                    {
+                        rep.Delete(per);
+                    }
+                }
+
 
                 foreach (var item in _permissaoPaginaList)
                 {
                     ret.status = true;
                     rep.Add(item);
                 }
+
                 ret.dados = mapper.Map<List<PermissaoPaginaModel>>(_permissaoPaginaList);
             }
             catch (Exception ex)

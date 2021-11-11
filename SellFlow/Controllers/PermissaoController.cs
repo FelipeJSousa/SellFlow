@@ -80,7 +80,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public RetornoModel<PermissaoModel> DeletePermissaoModel(long id)
+        public IActionResult DeletePermissaoModel(long id)
         {
             RetornoModel<PermissaoModel> ret = new RetornoModel<PermissaoModel>();
             try
@@ -88,6 +88,12 @@ namespace SellFlow.Controllers
                 PermissaoRepository rep = new PermissaoRepository();
 
                 Permissao pag = rep.Get(id);
+                if (pag.id == 1)
+                {
+                    ret.erro = "Não é possível excluir a Permissão de Administrador.";
+                    ret.status = false;
+                    return BadRequest(ret);
+                }
                 if (pag != null)
                 {
                     if (rep.Delete(pag))
@@ -106,14 +112,13 @@ namespace SellFlow.Controllers
                     ret.status = false;
                     ret.erro = "Permissao não encontrada";
                 }
-
             }
             catch (Exception ex)
             {
                 ret.status = false;
                 ret.erro = ex.Message;
             }
-            return ret;
+            return Ok(ret);
         }
 
         [HttpPut]
