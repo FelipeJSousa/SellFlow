@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SellFlow.Model;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 
 namespace SellFlow.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PessoaController : ControllerBase

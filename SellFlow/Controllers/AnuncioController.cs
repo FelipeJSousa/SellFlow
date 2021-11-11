@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
 using Entity;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SellFlow.Model;
 using SellFlow.Model.ApiResponse;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 
 namespace SellFlow.Controllers
 {
@@ -17,6 +15,7 @@ namespace SellFlow.Controllers
     public class AnuncioController : ControllerBase
     {
         [HttpGet]
+        [Authorize]
         public RetornoModel<List<AnuncioModel>> GetAnuncio(int? id = null, int? idUsuario = null)
         {
             RetornoModel<List<AnuncioModel>> ret = new RetornoModel<List<AnuncioModel>>();
@@ -53,7 +52,7 @@ namespace SellFlow.Controllers
             return ret;
         }
 
-        [Authorize]
+        
         [HttpGet("Situacao")]
         public RetornoModel<List<AnuncioApiResponse>> GetAnuncioPorSituacao(int idSituacao)
         {
@@ -89,6 +88,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public RetornoModel<AnuncioModel> PostAnuncio(AnuncioModel anun)
         {
             RetornoModel<AnuncioModel> ret = new RetornoModel<AnuncioModel>();
@@ -120,6 +120,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public RetornoModel<AnuncioModel> DeleteAnuncio(long id)
         {
             RetornoModel<AnuncioModel> ret = new RetornoModel<AnuncioModel>();
@@ -157,6 +158,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public RetornoModel<AnuncioModel> PutAnuncio(AnuncioModel AnuncioModel)
         {
             RetornoModel<AnuncioModel> ret = new RetornoModel<AnuncioModel>();

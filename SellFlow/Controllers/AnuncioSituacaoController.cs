@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SellFlow.Model;
@@ -13,6 +14,7 @@ namespace SellFlow.Controllers
     public class AnuncioSituacaoController : ControllerBase
     {
         [HttpGet]
+        [Authorize]
         public RetornoModel<List<AnuncioSituacaoModel>> GetAnuncioSituacao(int? id = null)
         {
             RetornoModel<List<AnuncioSituacaoModel>> ret = new RetornoModel<List<AnuncioSituacaoModel>>();
@@ -50,6 +52,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public RetornoModel<AnuncioSituacaoModel> PostAnuncioSituacao(AnuncioSituacaoModel asit)
         {
             RetornoModel<AnuncioSituacaoModel> ret = new RetornoModel<AnuncioSituacaoModel>();
@@ -80,6 +83,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public RetornoModel<AnuncioSituacaoModel> DeleteAnuncioSituacao(long id)
         {
             RetornoModel<AnuncioSituacaoModel> ret = new RetornoModel<AnuncioSituacaoModel>();
@@ -117,6 +121,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public RetornoModel<AnuncioSituacaoModel> PutAnuncioSituacao(AnuncioSituacaoModel AnuncioSituacaoModel)
         {
             RetornoModel<AnuncioSituacaoModel> ret = new RetornoModel<AnuncioSituacaoModel>();
