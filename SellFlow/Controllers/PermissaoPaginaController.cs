@@ -114,7 +114,30 @@ namespace SellFlow.Controllers
             return Ok(ret);
         }
 
-        [HttpPost("/PermissaoPagina/Validar")]
+        [HttpPost("Pagina/Validar")]
+        public IActionResult ValidaPermissaoPagina(string caminhoPagina, long idPermissao)
+        {
+            RetornoModel<PermissaoPaginaModel> ret = new RetornoModel<PermissaoPaginaModel>();
+            try
+            {
+                PermissaoPaginaRepository rep = new PermissaoPaginaRepository();
+                var obj = rep.Get(x => x.paginaObj.caminho == caminhoPagina && x.permissao == idPermissao);
+                if(obj is null)
+                {
+                    return Forbid();
+                }
+                ret.status = true;
+            }
+            catch (Exception ex)
+            {
+                ret.status = false;
+                ret.erro = ex.Message;
+            }
+            return Ok(ret);
+        }
+
+
+        [HttpPost("/Validar")]
         public RetornoModel<PermissaoPaginaModel> ValidaPermissaoPagina(PermissaoPaginaModel obj)
         {
             RetornoModel<PermissaoPaginaModel> ret = new RetornoModel<PermissaoPaginaModel>();
