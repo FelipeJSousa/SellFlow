@@ -94,6 +94,12 @@ namespace SellFlow.Controllers
                     ret.status = false;
                     return BadRequest(ret);
                 }
+                if (pag.id == 2)
+                {
+                    ret.erro = "Não é possível excluir a Permissão de Usuario Comum.";
+                    ret.status = false;
+                    return BadRequest(ret);
+                }
                 if (pag != null)
                 {
                     if (rep.Delete(pag))
