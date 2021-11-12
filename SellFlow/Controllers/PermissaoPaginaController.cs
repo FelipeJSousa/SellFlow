@@ -11,13 +11,13 @@ using System.Linq;
 
 namespace SellFlow.Controllers
 {
-    [Authorize]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class PermissaoPaginaController : ControllerBase
     {
-
         [HttpGet("Permissao/{idPermissao}")]
+        [Authorize]
         public RetornoModel<IEnumerable<long>> GetPaginaPorPermissao(int idPermissao)
         {
             RetornoModel<IEnumerable<long>> ret = new ();
@@ -41,6 +41,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpGet("Pagina/{idPagina}")]
+        [Authorize]
         public RetornoModel<IEnumerable<long>> GetPermissaoPorPagina(int idPagina)
         {
             RetornoModel<IEnumerable<long>> ret = new ();
@@ -63,6 +64,7 @@ namespace SellFlow.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public IActionResult PostPermissaoPagina(ApiRequestPermissaoPagina list)
         {
             RetornoModel<List<PermissaoPaginaModel>> ret = new RetornoModel<List<PermissaoPaginaModel>>();
@@ -114,7 +116,7 @@ namespace SellFlow.Controllers
             return Ok(ret);
         }
 
-        [HttpPost("Pagina/Validar")]
+        [HttpGet("Pagina/Validar")]
         public IActionResult ValidaPermissaoPagina(string caminhoPagina, long idPermissao)
         {
             RetornoModel<PermissaoPaginaModel> ret = new RetornoModel<PermissaoPaginaModel>();
@@ -154,6 +156,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public RetornoModel<PermissaoPaginaModel> DeletePermissaoPaginaModel(PermissaoPaginaModel obj)
         {
             RetornoModel<PermissaoPaginaModel> ret = new RetornoModel<PermissaoPaginaModel>();
