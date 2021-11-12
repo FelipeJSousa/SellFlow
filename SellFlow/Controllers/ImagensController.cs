@@ -9,12 +9,13 @@ using System.Collections.Generic;
 
 namespace SellFlow.Controllers
 {
-    [Authorize]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class ImagensController : ControllerBase
     {
         [HttpGet]
+        [Authorize]
         public RetornoModel<List<ImagensModel>> GetImagens(int? id = null)
         {
             RetornoModel<List<ImagensModel>> ret = new RetornoModel<List<ImagensModel>>();
@@ -63,6 +64,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public RetornoModel<ImagensModel> PostImagens(ImagensModel img)
         {
             RetornoModel<ImagensModel> ret = new RetornoModel<ImagensModel>();
@@ -89,6 +91,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public RetornoModel<ImagensModel> DeleteImagens(long id)
         {
             RetornoModel<ImagensModel> ret = new RetornoModel<ImagensModel>();
@@ -126,6 +129,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public RetornoModel<ImagensModel> PutImagens(ImagensModel ImagensModel)
         {
             RetornoModel<ImagensModel> ret = new RetornoModel<ImagensModel>();
