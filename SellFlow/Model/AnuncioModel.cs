@@ -19,6 +19,6 @@ namespace SellFlow.Model
         public AnuncioSituacaoModel anuncioSituacaoObj { get; set; }
 
         public string percentPromocao { get; set; }
-        public string CalculaPercentPromocao() => $"{((produtoObj.valor - valor) / produtoObj.valor * 100).ToString("N1")}%";
+        public string CalculaPercentPromocao() => $"{((produtoObj?.valor - valor) / produtoObj?.valor * 100)?.ToString("N1")}%";
     }
 }

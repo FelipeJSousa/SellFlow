@@ -87,6 +87,20 @@ namespace Repository
             return item;
         }
 
+        public new List<Anuncio> GetAll(Expression<Func<Anuncio, bool>> lambda)
+        {
+            List<Anuncio> item = new ();
+            using (_context = new AppDbContext())
+            {
+                item = _context.Anuncio
+                               .Include(x => x.anuncioSituacaoObj)
+                               .Include(x => x.produtoObj)
+                               .Where(lambda.Compile()).ToList();
+            }
+            Dispose();
+            return item;
+        }
+
         public new List<Anuncio> GetAll()
         {
             List<Anuncio> list = new List<Anuncio>();

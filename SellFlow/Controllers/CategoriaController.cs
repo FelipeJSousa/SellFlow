@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SellFlow.Controllers
 {
-    [Authorize]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriaController : ControllerBase
@@ -52,6 +52,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public RetornoModel<CategoriaModel> PostCategoria(CategoriaModel cat)
         {
             RetornoModel<CategoriaModel> ret = new RetornoModel<CategoriaModel>();
@@ -78,6 +79,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public RetornoModel<CategoriaModel> DeleteCategoria(long id)
         {
             RetornoModel<CategoriaModel> ret = new RetornoModel<CategoriaModel>();
@@ -115,6 +117,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public RetornoModel<CategoriaModel> PutCategoria(CategoriaModel CategoriaModel)
         {
             RetornoModel<CategoriaModel> ret = new RetornoModel<CategoriaModel>();

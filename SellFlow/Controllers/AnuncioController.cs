@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Entity;
+using LinqKit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
@@ -7,6 +8,7 @@ using SellFlow.Model;
 using SellFlow.Model.ApiResponse;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace SellFlow.Controllers
 {
@@ -15,25 +17,55 @@ namespace SellFlow.Controllers
     public class AnuncioController : ControllerBase
     {
         [HttpGet]
-        [Authorize]
-        public RetornoModel<List<AnuncioModel>> GetAnuncio(int? id = null, int? idUsuario = null)
+        public RetornoModel<List<AnuncioApiResponse>> GetAnuncio(int? id = null, int? idUsuario = null, string busca = null, int? categoria = null)
         {
-            RetornoModel<List<AnuncioModel>> ret = new RetornoModel<List<AnuncioModel>>();
+            RetornoModel<List<AnuncioApiResponse>> ret = new RetornoModel<List<AnuncioApiResponse>>();
             try
             {
                 AnuncioRepository rep = new AnuncioRepository();
+                Expression<Func<Anuncio, bool>> _predicate = PredicateBuilder.New<Anuncio>(true);
+                _predicate = _predicate.And(x => x.anuncioSituacao == 2);
+
+                if(id is not null)
+                {
+                    _predicate = _predicate.And(x => x.id == id);
+                }
+
+                if (idUsuario is not null)
+                {
+                    _predicate = _predicate.And(x => x.produtoObj.usuario == idUsuario);
+                }
+
+                if (!string.IsNullOrWhiteSpace(busca))
+                {
+                    _predicate = _predicate.And(x => x.nome.ToLower().Contains(busca.ToLower()) ||
+                                                     x.descricao.ToLower().Contains(busca.ToLower()) ||
+                                                     x.produtoObj.nome.ToLower().Contains(busca.ToLower()) ||
+                                                     x.produtoObj.descricao.ToLower().Contains(busca.ToLower()));
+                }
+
+                if (categoria is not null)
+                {
+                    _predicate = _predicate.And(x => x.produtoObj.categoria == categoria);
+                }
+
+
                 if (id.HasValue)
                 {
-                    Anuncio anun = rep.Get(id.Value, idUsuario);
-                    List<Anuncio> lanun = new ();
+                    var anun = new Mapper(AutoMapperConfig.RegisterMappings()).Map<AnuncioApiResponse>(rep.Get(_predicate));
+                    anun.vendedor = getVendedor(anun.produtoObj.usuario);
+                    List<AnuncioApiResponse> lanun = new ();
                     lanun.Add(anun);
-                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<AnuncioModel>>(lanun);
+                    ret.dados = lanun;
                 }
                 else
                 {
-                    List<Anuncio> anun = new List<Anuncio>();
-                    anun = rep.GetAll(idUsuario);
-                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<AnuncioModel>>(anun);
+                    var anun = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<AnuncioApiResponse>>(rep.GetAll(_predicate));
+                    foreach (var item in anun)
+                    {
+                        item.vendedor = getVendedor(item.produtoObj.usuario);
+                    }
+                    ret.dados = anun;
                 }
                 if (ret.dados != null)
                 {
@@ -41,6 +73,7 @@ namespace SellFlow.Controllers
                 }
                 else
                 {
+                    ret.status = false;
                     ret.mensagem = "Não foi encontrado o Anuncio!";
                 }
             }
@@ -65,8 +98,7 @@ namespace SellFlow.Controllers
                 var retobj = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<AnuncioApiResponse>>(lanun);
                 foreach (var item in retobj)
                 {
-                    var pes = reppessoa.GetPorUsuario(item.produtoObj.usuario);
-                    item.vendedor = pes.nome + " " + pes.sobrenome;
+                    item.vendedor = getVendedor(item.produtoObj.usuario);
                 }
                 ret.dados = retobj;
 
@@ -184,5 +216,7 @@ namespace SellFlow.Controllers
             }
             return ret;
         }
+
+        private string getVendedor(long usuario) => new PessoaRepository().GetPorUsuario(usuario).nome;
     }
 }
