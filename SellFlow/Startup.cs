@@ -84,7 +84,7 @@ namespace SellFlow
                 .SetIsOriginAllowed(origin => true)
                 .AllowCredentials());
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
