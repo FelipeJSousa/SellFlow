@@ -24,7 +24,10 @@ namespace SellFlow.Controllers
             {
                 AnuncioRepository rep = new AnuncioRepository();
                 Expression<Func<Anuncio, bool>> _predicate = PredicateBuilder.New<Anuncio>(true);
-                _predicate = _predicate.And(x => x.anuncioSituacao == 2);
+                if(idUsuario is null && id is null)
+                {
+                    _predicate = _predicate.And(x => x.anuncioSituacao == 2);
+                }
 
                 if(id is not null)
                 {
