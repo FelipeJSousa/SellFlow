@@ -90,7 +90,6 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public RetornoModel<PessoaModel> PostPessoaModel(PessoaPostApiRequest obj)
         {
             RetornoModel<PessoaModel> ret = new ();

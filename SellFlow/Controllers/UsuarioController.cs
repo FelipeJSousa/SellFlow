@@ -55,7 +55,6 @@ namespace SellFlow.Controllers
             return ret;
         }
 
-        [Authorize]
         [HttpPost]
         public RetornoModel<ApiResponseUsuario> PostUsuario(UsuarioModel usuario)
         {
