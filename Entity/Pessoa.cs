@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Entity
 {
     public class Pessoa
     {
-        [Key]
         public long id { get; set; }
         public string nome { get; set; }
         public string sobrenome { get; set; }
@@ -20,12 +15,14 @@ namespace Entity
 
         #region ForeignKey
 
-        public long? Usuario { get; set; }
+        public long? usuario { get; set; }
 
         #endregion
         #region Navigation
 
         public Usuario usuarioObj { get; set; }
+
+        public ICollection<Endereco> enderecoList { get; set; }
 
         #endregion
     }

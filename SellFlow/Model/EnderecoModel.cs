@@ -13,6 +13,9 @@ namespace SellFlow.Model
         public string logradouro { get; set; }
         public string bairro { get; set; }
         public string cidade { get; set; }
+        public string cep { get; set; }
+        public string estado { get; set; }
         public bool ativo { get; set; }
+        public long? pessoa { get; set; }
     }
 }

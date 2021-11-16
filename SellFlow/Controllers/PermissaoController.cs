@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using Entity;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SellFlow.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SellFlow.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PermissaoController : ControllerBase
@@ -80,7 +79,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
-        public RetornoModel<PermissaoModel> DeletePermissaoModel(long id)
+        public IActionResult DeletePermissaoModel(long id)
         {
             RetornoModel<PermissaoModel> ret = new RetornoModel<PermissaoModel>();
             try
@@ -88,6 +87,18 @@ namespace SellFlow.Controllers
                 PermissaoRepository rep = new PermissaoRepository();
 
                 Permissao pag = rep.Get(id);
+                if (pag.id == 1)
+                {
+                    ret.erro = "Não é possível excluir a Permissão de Administrador.";
+                    ret.status = false;
+                    return BadRequest(ret);
+                }
+                if (pag.id == 2)
+                {
+                    ret.erro = "Não é possível excluir a Permissão de Usuario Comum.";
+                    ret.status = false;
+                    return BadRequest(ret);
+                }
                 if (pag != null)
                 {
                     if (rep.Delete(pag))
@@ -106,14 +117,13 @@ namespace SellFlow.Controllers
                     ret.status = false;
                     ret.erro = "Permissao não encontrada";
                 }
-
             }
             catch (Exception ex)
             {
                 ret.status = false;
                 ret.erro = ex.Message;
             }
-            return ret;
+            return Ok(ret);
         }
 
         [HttpPut]

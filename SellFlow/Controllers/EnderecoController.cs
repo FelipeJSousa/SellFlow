@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using Entity;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SellFlow.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SellFlow.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EnderecoController : ControllerBase
@@ -51,6 +50,29 @@ namespace SellFlow.Controllers
             }
             return ret;
         }
+
+        [HttpGet("ObterPorPessoa")]
+        public RetornoModel<List<EnderecoModel>> GetPorPessoa(long idPessoa)
+        {
+            RetornoModel<List<EnderecoModel>> ret = new RetornoModel<List<EnderecoModel>>();
+            try
+            {
+                EnderecoRepository rep = new EnderecoRepository();
+                if (idPessoa > 0)
+                {
+                    List<Endereco> lpes = rep.GetPorPessoa(idPessoa);
+                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<EnderecoModel>>(lpes);
+                }
+                ret.status = ret.dados is not null;
+            }
+            catch (Exception ex)
+            {
+                ret.status = false;
+                ret.erro = ex.Message;
+            }
+            return ret;
+        }
+
 
         [HttpPost]
         public RetornoModel<EnderecoModel> PostEndereco(EnderecoModel end)

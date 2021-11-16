@@ -10,8 +10,8 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210929021533_initial")]
-    partial class initial
+    [Migration("20211016044443_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -58,16 +58,14 @@ namespace Repository.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("anuncioSituacao")
-                        .IsUnique()
-                        .HasFilter("[anuncioSituacao] IS NOT NULL");
+                    b.HasIndex("anuncioSituacao");
 
                     b.HasIndex("produto");
 
                     b.ToTable("Anuncio");
                 });
 
-            modelBuilder.Entity("Entity.AnuncioSitucao", b =>
+            modelBuilder.Entity("Entity.AnuncioSituacao", b =>
                 {
                     b.Property<long>("id")
                         .ValueGeneratedOnAdd()
@@ -345,22 +343,20 @@ namespace Repository.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("permissao")
-                        .IsUnique();
+                    b.HasIndex("permissao");
 
                     b.ToTable("Usuario");
                 });
 
             modelBuilder.Entity("Entity.Anuncio", b =>
                 {
-                    b.HasOne("Entity.AnuncioSitucao", "anuncioSituacaoObj")
-                        .WithOne()
-                        .HasForeignKey("Entity.Anuncio", "anuncioSituacao");
+                    b.HasOne("Entity.AnuncioSituacao", "anuncioSituacaoObj")
+                        .WithMany()
+                        .HasForeignKey("anuncioSituacao");
 
                     b.HasOne("Entity.Produto", "produtoObj")
                         .WithMany("anuncioList")
                         .HasForeignKey("produto")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("anuncioSituacaoObj");
@@ -406,7 +402,6 @@ namespace Repository.Migrations
                     b.HasOne("Entity.Usuario", "usuarioObj")
                         .WithOne()
                         .HasForeignKey("Entity.Pessoa", "Usuario")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("usuarioObj");
@@ -432,8 +427,8 @@ namespace Repository.Migrations
             modelBuilder.Entity("Entity.Usuario", b =>
                 {
                     b.HasOne("Entity.Permissao", "permissaoObj")
-                        .WithOne()
-                        .HasForeignKey("Entity.Usuario", "permissao")
+                        .WithMany()
+                        .HasForeignKey("permissao")
                         .IsRequired();
 
                     b.Navigation("permissaoObj");

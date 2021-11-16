@@ -11,7 +11,9 @@ namespace Repository
 {
     public class AppDbContext : DbContext
     {
-        protected readonly String _conn = @"Server=DESKTOP-4QBF915;Database=SellFlow;Trusted_Connection=True;MultipleActiveResultSets=true";
+        //protected readonly String _conn = @"Server=DESKTOP-4QBF915;Database=SellFlow;Trusted_Connection=True;MultipleActiveResultSets=true";
+        protected readonly String _conn = @"Data Source=SQL5063.site4now.net;Initial Catalog=db_a7c12b_sellflow;User Id=db_a7c12b_sellflow_admin;Password=13579Fe2468";
+        
         public DbSet<Pessoa> Pessoa { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
         public DbSet<Permissao> Permissao { get; set; }
@@ -38,7 +40,7 @@ namespace Repository
 
             #region Anuncio
 
-            modelBuilder.Entity<Anuncio>().HasOne(x => x.anuncioSituacaoObj).WithOne().HasForeignKey<Anuncio>(x => x.anuncioSituacao).IsRequired(false);
+            modelBuilder.Entity<Anuncio>().HasOne(x => x.anuncioSituacaoObj).WithMany().HasForeignKey(x => x.anuncioSituacao).IsRequired(false);
 
             modelBuilder.Entity<Anuncio>().Property(x => x.descricao).HasMaxLength(250);
             modelBuilder.Entity<Anuncio>().Property(x => x.nome).HasMaxLength(80);
@@ -47,6 +49,7 @@ namespace Repository
             modelBuilder.Entity<Anuncio>().Property(x => x.nome).IsRequired();
             modelBuilder.Entity<Anuncio>().Property(x => x.qtdeDisponivel).IsRequired();
             modelBuilder.Entity<Anuncio>().Property(x => x.dataCriacao).IsRequired();
+            modelBuilder.Entity<Anuncio>().Property(x => x.valor).IsRequired();
 
             #endregion
 
@@ -79,12 +82,13 @@ namespace Repository
             modelBuilder.Entity<Endereco>().Property(x => x.cidade).IsRequired();
             modelBuilder.Entity<Endereco>().Property(x => x.logradouro).IsRequired();
             modelBuilder.Entity<Endereco>().Property(x => x.id).IsRequired();
+            modelBuilder.Entity<Endereco>().Property(x => x.cep).IsRequired();
 
             #endregion
 
             #region Imagens
 
-            modelBuilder.Entity<Imagens>().HasOne(x => x.produtoObj).WithOne().HasForeignKey<Imagens>(x => x.produto).IsRequired();
+            modelBuilder.Entity<Imagens>().HasOne(x => x.produtoObj).WithOne().HasForeignKey<Imagens>(x => x.produto).IsRequired().OnDelete(DeleteBehavior.ClientSetNull);
 
             modelBuilder.Entity<Imagens>().Property(x => x.id).IsRequired();
             modelBuilder.Entity<Imagens>().Property(x => x.diretorio).IsRequired();
@@ -94,7 +98,7 @@ namespace Repository
 
             #region Pagina
 
-            modelBuilder.Entity<Pagina>().HasMany(x => x.PermissaoPaginaObj).WithOne(x => x.paginaObj).HasForeignKey(x => x.pagina).IsRequired(false);
+            modelBuilder.Entity<Pagina>().HasMany(x => x.PermissaoPaginaObj).WithOne(x => x.paginaObj).HasForeignKey(x => x.pagina).IsRequired(false).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Pagina>().Property(x => x.ativo).IsRequired();
             modelBuilder.Entity<Pagina>().Property(x => x.caminho).IsRequired();
@@ -105,7 +109,8 @@ namespace Repository
 
             #region Pessoa
 
-            modelBuilder.Entity<Pessoa>().HasOne(x => x.usuarioObj).WithOne().HasForeignKey<Pessoa>(x => x.Usuario).IsRequired();
+            modelBuilder.Entity<Pessoa>().HasOne(x => x.usuarioObj).WithOne().HasForeignKey<Pessoa>(x => x.usuario).IsRequired().OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Pessoa>().HasMany(x => x.enderecoList).WithOne(x => x.pessoaObj).HasForeignKey(x => x.pessoa).IsRequired().OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Pessoa>().Property(x => x.nome).HasMaxLength(50);
             modelBuilder.Entity<Pessoa>().Property(x => x.sobrenome).HasMaxLength(100);
@@ -120,7 +125,7 @@ namespace Repository
 
             #region Permissao
 
-            modelBuilder.Entity<Permissao>().HasMany(x => x.PermissaoPaginaObj).WithOne(x => x.permissaoObj).HasForeignKey(x => x.permissao).IsRequired(false);
+            modelBuilder.Entity<Permissao>().HasMany(x => x.PermissaoPaginaObj).WithOne(x => x.permissaoObj).HasForeignKey(x => x.permissao).IsRequired(false).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Permissao>().Property(x => x.id).IsRequired();
             modelBuilder.Entity<Permissao>().Property(x => x.ativo).IsRequired();
@@ -133,19 +138,22 @@ namespace Repository
             modelBuilder.Entity<PermissaoPagina>()
                         .HasOne(pc => pc.permissaoObj)
                         .WithMany(p => p.PermissaoPaginaObj)
-                        .HasForeignKey(pc => pc.permissao);
+                        .HasForeignKey(pc => pc.permissao)
+                        .IsRequired().OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<PermissaoPagina>()
                         .HasOne(pc => pc.paginaObj)
                         .WithMany(p => p.PermissaoPaginaObj)
-                        .HasForeignKey(pc => pc.pagina);
+                        .HasForeignKey(pc => pc.pagina)
+                        .IsRequired().OnDelete(DeleteBehavior.Cascade);
             #endregion
 
             #region Produto
 
             modelBuilder.Entity<Produto>().HasOne(x => x.categoriaObj).WithMany().HasForeignKey(x => x.categoria).IsRequired().OnDelete(DeleteBehavior.ClientSetNull);
             modelBuilder.Entity<Produto>().HasOne(x => x.usuarioObj).WithMany().HasForeignKey(x => x.usuario).IsRequired().OnDelete(DeleteBehavior.ClientSetNull);
-            modelBuilder.Entity<Produto>().HasMany(x => x.anuncioList).WithOne(x => x.produtoObj).HasForeignKey(x => x.produto).IsRequired();
-            modelBuilder.Entity<Produto>().HasMany(x => x.imagemList).WithOne(x => x.produtoObj).HasForeignKey(x => x.produto).IsRequired(false);
+            modelBuilder.Entity<Produto>().HasMany(x => x.anuncioList).WithOne(x => x.produtoObj).HasForeignKey(x => x.produto).IsRequired().OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Produto>().HasMany(x => x.imagemList).WithOne(x => x.produtoObj).HasForeignKey(x => x.produto).IsRequired(false).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Produto>().Property(x => x.id).IsRequired();
             modelBuilder.Entity<Produto>().Property(x => x.nome).IsRequired();
@@ -153,12 +161,13 @@ namespace Repository
             modelBuilder.Entity<Produto>().Property(x => x.descricao).IsRequired();
             modelBuilder.Entity<Produto>().Property(x => x.descricao).HasMaxLength(250);
             modelBuilder.Entity<Produto>().Property(x => x.ativo).IsRequired();
+            modelBuilder.Entity<Produto>().Property(x => x.valor).IsRequired();
 
             #endregion
 
             #region Usuario
 
-            modelBuilder.Entity<Usuario>().HasOne(x => x.permissaoObj).WithOne().HasForeignKey<Usuario>(x => x.permissao).IsRequired().OnDelete(DeleteBehavior.ClientSetNull);
+            modelBuilder.Entity<Usuario>().HasOne(x => x.permissaoObj).WithMany().HasForeignKey(x => x.permissao).IsRequired().OnDelete(DeleteBehavior.ClientSetNull);
 
             modelBuilder.Entity<Usuario>().Property(x => x.ativo).IsRequired();
             modelBuilder.Entity<Usuario>().Property(x => x.senha).IsRequired();

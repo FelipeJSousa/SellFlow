@@ -1,21 +1,21 @@
 ﻿using AutoMapper;
 using Entity;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SellFlow.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SellFlow.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class ImagensController : ControllerBase
     {
         [HttpGet]
+        [Authorize]
         public RetornoModel<List<ImagensModel>> GetImagens(int? id = null)
         {
             RetornoModel<List<ImagensModel>> ret = new RetornoModel<List<ImagensModel>>();
@@ -52,7 +52,19 @@ namespace SellFlow.Controllers
             return ret;
         }
 
+        [HttpGet("Produto/{idProduto}")]
+        public IActionResult GetImagens(int idProduto)
+        {
+            ImagensRepository rep = new ImagensRepository();
+
+            var imagem = rep.Get(x => x.produto == idProduto);
+            Byte[] b = System.IO.File.ReadAllBytes(imagem.diretorio);
+
+            return File(b, "image/jpg");
+        }
+
         [HttpPost]
+        [Authorize]
         public RetornoModel<ImagensModel> PostImagens(ImagensModel img)
         {
             RetornoModel<ImagensModel> ret = new RetornoModel<ImagensModel>();
@@ -79,6 +91,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public RetornoModel<ImagensModel> DeleteImagens(long id)
         {
             RetornoModel<ImagensModel> ret = new RetornoModel<ImagensModel>();
@@ -116,6 +129,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public RetornoModel<ImagensModel> PutImagens(ImagensModel ImagensModel)
         {
             RetornoModel<ImagensModel> ret = new RetornoModel<ImagensModel>();

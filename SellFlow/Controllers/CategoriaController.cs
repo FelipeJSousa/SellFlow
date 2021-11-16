@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using Entity;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SellFlow.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SellFlow.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriaController : ControllerBase
@@ -53,6 +52,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public RetornoModel<CategoriaModel> PostCategoria(CategoriaModel cat)
         {
             RetornoModel<CategoriaModel> ret = new RetornoModel<CategoriaModel>();
@@ -79,6 +79,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public RetornoModel<CategoriaModel> DeleteCategoria(long id)
         {
             RetornoModel<CategoriaModel> ret = new RetornoModel<CategoriaModel>();
@@ -116,6 +117,7 @@ namespace SellFlow.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public RetornoModel<CategoriaModel> PutCategoria(CategoriaModel CategoriaModel)
         {
             RetornoModel<CategoriaModel> ret = new RetornoModel<CategoriaModel>();

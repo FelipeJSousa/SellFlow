@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace Repository
 {
@@ -21,20 +20,39 @@ namespace Repository
             Dispose();
             return pes;
         }
-        
-        public new Pessoa Get(int id)
+
+        public Pessoa GetPorUsuario(long idUsuario)
         {
             using (_context = new AppDbContext())
             {
-                return _context.Pessoa.Include("usuario").FirstOrDefault(x=> x.id.Equals(id));
+                return _context.Pessoa.Include(x => x.usuarioObj).Include(x => x.enderecoList).FirstOrDefault(x => x.usuario.Equals(idUsuario));
             }
         }
+
+
+        public new Pessoa Get(long id)
+        {
+            using (_context = new AppDbContext())
+            {
+                return _context.Pessoa.Include(x => x.usuarioObj).Include(x => x.enderecoList).FirstOrDefault(x=> x.id.Equals(id));
+            }
+        }
+
+        public new Pessoa Get(Expression<Func<Pessoa, bool>> lambda)
+        {
+            using (_context = new AppDbContext())
+            {
+                return _context.Pessoa.Where(lambda).Include(x => x.usuarioObj).Include(x => x.enderecoList).FirstOrDefault();
+            }
+        }
+
         public new List<Pessoa> GetAll()
         {
             using (_context = new AppDbContext())
             {
-                return _context.Pessoa.Include("usuario").ToList();
+                return _context.Pessoa.Include(x => x.usuarioObj).Include(x => x.enderecoList).ToList();
             }
         }
+
     }
 }

@@ -1,0 +1,75 @@
+﻿using Entity;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+
+namespace Repository
+{
+    public class PessoaRepository : BaseRepository<Pessoa>
+    {
+        public new Pessoa Add(Pessoa pes)
+        {
+            using (_context = new AppDbContext())
+            {
+                pes.ativo = true;
+                _context.Pessoa.Add(pes);
+                _context.SaveChanges();
+            }
+            Dispose();
+            return pes;
+        }
+<<<<<<< HEAD
+
+        public Pessoa GetPorUsuario(long idUsuario)
+        {
+            using (_context = new AppDbContext())
+            {
+                return _context.Pessoa.Include(x => x.usuarioObj).Include(x => x.enderecoList).FirstOrDefault(x => x.usuario.Equals(idUsuario));
+            }
+        }
+
+
+        public new Pessoa Get(long id)
+        {
+            using (_context = new AppDbContext())
+            {
+                return _context.Pessoa.Include(x => x.usuarioObj).Include(x => x.enderecoList).FirstOrDefault(x=> x.id.Equals(id));
+            }
+        }
+
+        public new Pessoa Get(Expression<Func<Pessoa, bool>> lambda)
+        {
+            using (_context = new AppDbContext())
+            {
+                return _context.Pessoa.Where(lambda).Include(x => x.usuarioObj).Include(x => x.enderecoList).FirstOrDefault();
+            }
+        }
+
+=======
+        
+        public new Pessoa Get(int id)
+        {
+            using (_context = new AppDbContext())
+            {
+                return _context.Pessoa.Include("usuario").FirstOrDefault(x=> x.id.Equals(id));
+            }
+        }
+>>>>>>> master
+        public new List<Pessoa> GetAll()
+        {
+            using (_context = new AppDbContext())
+            {
+<<<<<<< HEAD
+                return _context.Pessoa.Include(x => x.usuarioObj).Include(x => x.enderecoList).ToList();
+            }
+        }
+
+=======
+                return _context.Pessoa.Include("usuario").ToList();
+            }
+        }
+>>>>>>> master
+    }
+}

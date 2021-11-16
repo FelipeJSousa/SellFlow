@@ -1,10 +1,5 @@
 ﻿using Entity;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repository
@@ -15,7 +10,7 @@ namespace Repository
         {
             using (_context = new AppDbContext())
             {
-                usuario.senha = Encrypt(usuario.senha);
+                usuario.senha = Encrypt(usuario.senha, usuario.email);
                 usuario.ativo = true;
                 _context.Usuario.Add(usuario);
                 _context.SaveChanges();
@@ -28,7 +23,15 @@ namespace Repository
         {
             using (_context = new AppDbContext())
             {
-                usuario.senha = Encrypt(usuario.senha);
+                if (!string.IsNullOrWhiteSpace(usuario.senha))
+                {
+                    usuario.senha = Encrypt(usuario.senha, usuario.email);
+                }
+                else
+                {
+                    usuario.senha = _context.Usuario.AsNoTracking().FirstOrDefault(x => x.id == usuario.id).senha;
+                }
+
                 _context.Entry(usuario).State = EntityState.Modified;
                 _context.SaveChanges();
             }
@@ -36,7 +39,18 @@ namespace Repository
             return usuario;
         }
 
+        public Usuario Validar(string email, string senha)
+        {
+            Usuario _ret = new ();
+            UsuarioRepository rep = new();
 
-        private string Encrypt(string str) => Cipher.Encrypt(str,"user");
+            _ret = rep.Get(x => x.email == email && x.senha == Encrypt(senha, email));
+
+            Dispose();
+            return _ret;
+        }
+
+
+        private string Encrypt(string str, string encode) => Cipher.Encrypt(str,"user"+encode);
     }
 }

@@ -16,7 +16,7 @@ namespace Repository.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.9")
+                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Entity.Anuncio", b =>
@@ -54,18 +54,19 @@ namespace Repository.Migrations
                     b.Property<int>("qtdeDisponivel")
                         .HasColumnType("int");
 
+                    b.Property<double>("valor")
+                        .HasColumnType("float");
+
                     b.HasKey("id");
 
-                    b.HasIndex("anuncioSituacao")
-                        .IsUnique()
-                        .HasFilter("[anuncioSituacao] IS NOT NULL");
+                    b.HasIndex("anuncioSituacao");
 
                     b.HasIndex("produto");
 
                     b.ToTable("Anuncio");
                 });
 
-            modelBuilder.Entity("Entity.AnuncioSitucao", b =>
+            modelBuilder.Entity("Entity.AnuncioSituacao", b =>
                 {
                     b.Property<long>("id")
                         .ValueGeneratedOnAdd()
@@ -130,8 +131,15 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("cep")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("cidade")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("estado")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("logradouro")
@@ -139,13 +147,12 @@ namespace Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("pessoa")
+                        .IsRequired()
                         .HasColumnType("bigint");
 
                     b.HasKey("id");
 
-                    b.HasIndex("pessoa")
-                        .IsUnique()
-                        .HasFilter("[pessoa] IS NOT NULL");
+                    b.HasIndex("pessoa");
 
                     b.ToTable("Endereco");
                 });
@@ -232,6 +239,8 @@ namespace Repository.Migrations
 
                     b.HasKey("id");
 
+                    b.HasKey("id");
+
                     b.HasIndex("pagina");
 
                     b.HasIndex("permissao");
@@ -245,10 +254,6 @@ namespace Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long?>("Usuario")
-                        .IsRequired()
-                        .HasColumnType("bigint");
 
                     b.Property<bool>("ativo")
                         .HasColumnType("bit");
@@ -273,9 +278,13 @@ namespace Repository.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<long?>("usuario")
+                        .IsRequired()
+                        .HasColumnType("bigint");
+
                     b.HasKey("id");
 
-                    b.HasIndex("Usuario")
+                    b.HasIndex("usuario")
                         .IsUnique();
 
                     b.ToTable("Pessoa");
@@ -312,6 +321,9 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("bigint");
 
+                    b.Property<double>("valor")
+                        .HasColumnType("float");
+
                     b.HasKey("id");
 
                     b.HasIndex("categoria");
@@ -343,17 +355,16 @@ namespace Repository.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("permissao")
-                        .IsUnique();
+                    b.HasIndex("permissao");
 
                     b.ToTable("Usuario");
                 });
 
             modelBuilder.Entity("Entity.Anuncio", b =>
                 {
-                    b.HasOne("Entity.AnuncioSitucao", "anuncioSituacaoObj")
-                        .WithOne()
-                        .HasForeignKey("Entity.Anuncio", "anuncioSituacao");
+                    b.HasOne("Entity.AnuncioSituacao", "anuncioSituacaoObj")
+                        .WithMany()
+                        .HasForeignKey("anuncioSituacao");
 
                     b.HasOne("Entity.Produto", "produtoObj")
                         .WithMany("anuncioList")
@@ -369,8 +380,10 @@ namespace Repository.Migrations
             modelBuilder.Entity("Entity.Endereco", b =>
                 {
                     b.HasOne("Entity.Pessoa", "pessoaObj")
-                        .WithOne()
-                        .HasForeignKey("Entity.Endereco", "pessoa");
+                        .WithMany("enderecoList")
+                        .HasForeignKey("pessoa")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("pessoaObj");
                 });
@@ -379,7 +392,8 @@ namespace Repository.Migrations
                 {
                     b.HasOne("Entity.Produto", "produtoObj")
                         .WithMany("imagemList")
-                        .HasForeignKey("produto");
+                        .HasForeignKey("produto")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("produtoObj");
                 });
@@ -403,7 +417,7 @@ namespace Repository.Migrations
                 {
                     b.HasOne("Entity.Usuario", "usuarioObj")
                         .WithOne()
-                        .HasForeignKey("Entity.Pessoa", "Usuario")
+                        .HasForeignKey("Entity.Pessoa", "usuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -430,8 +444,8 @@ namespace Repository.Migrations
             modelBuilder.Entity("Entity.Usuario", b =>
                 {
                     b.HasOne("Entity.Permissao", "permissaoObj")
-                        .WithOne()
-                        .HasForeignKey("Entity.Usuario", "permissao")
+                        .WithMany()
+                        .HasForeignKey("permissao")
                         .IsRequired();
 
                     b.Navigation("permissaoObj");
@@ -445,6 +459,11 @@ namespace Repository.Migrations
             modelBuilder.Entity("Entity.Permissao", b =>
                 {
                     b.Navigation("PermissaoPaginaObj");
+                });
+
+            modelBuilder.Entity("Entity.Pessoa", b =>
+                {
+                    b.Navigation("enderecoList");
                 });
 
             modelBuilder.Entity("Entity.Produto", b =>

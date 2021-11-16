@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SellFlow.Model
 {
@@ -17,6 +13,12 @@ namespace SellFlow.Model
         public bool ativo { get; set; }
         public long? produto { get; set; }
         public long? anuncioSituacao { get; set; }
+        public double valor { get; set; }
 
+        public ProdutoModel produtoObj { get; set; }
+        public AnuncioSituacaoModel anuncioSituacaoObj { get; set; }
+
+        public string percentPromocao { get; set; }
+        public string CalculaPercentPromocao() => $"{((produtoObj?.valor - valor) / produtoObj?.valor * 100)?.ToString("N1")}%";
     }
 }

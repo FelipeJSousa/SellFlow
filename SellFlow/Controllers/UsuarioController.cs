@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using Entity;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
 using SellFlow.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using SellFlow.Model.ApiResponse;
 
 namespace SellFlow.Controllers
 {
@@ -15,26 +14,29 @@ namespace SellFlow.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
+
+        [Authorize]
         [HttpGet]
-        public RetornoModel<List<UsuarioModel>> GetUsuario(int? id = null)
+        public RetornoModel<List<ApiResponseUsuario>> GetUsuario(int? id = null)
         {
-            RetornoModel<List<UsuarioModel>> ret = new RetornoModel<List<UsuarioModel>>();
+            RetornoModel<List<ApiResponseUsuario>> ret = new RetornoModel<List<ApiResponseUsuario>>();
             try
             {
                 UsuarioRepository rep = new UsuarioRepository();
                 if (id.HasValue)
                 {
                     Usuario usu = rep.Get(id.Value);
-                    List<Usuario> lpes = new List<Usuario>();
+                    List<Usuario> lpes = new();
                     lpes.Add(usu);
-                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<UsuarioModel>>(lpes);
+                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<ApiResponseUsuario>>(lpes);
                 }
                 else
                 {
                     List<Usuario> usu = new List<Usuario>();
                     usu = rep.GetAll();
-                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<UsuarioModel>>(usu);
+                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<List<ApiResponseUsuario>>(usu);
                 }
+
                 if (ret.dados != null)
                 {
                     ret.status = true;
@@ -49,27 +51,36 @@ namespace SellFlow.Controllers
                 ret.status = false;
                 ret.erro = ex.Message;
             }
+
             return ret;
         }
 
         [HttpPost]
-        public RetornoModel<UsuarioModel> PostUsuario(UsuarioModel usuario)
+        public RetornoModel<ApiResponseUsuario> PostUsuario(UsuarioModel usuario)
         {
-            RetornoModel<UsuarioModel> ret = new RetornoModel<UsuarioModel>();
+            RetornoModel<ApiResponseUsuario> ret = new RetornoModel<ApiResponseUsuario>();
             try
             {
+                if (usuario.permissao == 0)
+                {
+                    ret.mensagem = ("Informe o nível de permissão do usuário!");
+                    ret.status = false;
+                    return ret;
+                }
                 UsuarioRepository rep = new UsuarioRepository();
                 Usuario usu = rep.Get(x => x.email == usuario.email);
-                if(usu != null && usu.ativo)
+                if (usu is {ativo: true})
                 {
-                    throw new Exception("E-mail já cadastrado!");
+                    ret.mensagem = ("E-mail já cadastrado!");
+                    ret.status = false;
+                    return ret;
                 }
-                else if(usu != null && !usu.ativo)
+                else if (usu is {ativo: false})
                 {
                     usuario.ativo = true;
                     usuario.id = usu.id;
                     usu = rep.Edit(new Mapper(AutoMapperConfig.RegisterMappings()).Map<Usuario>(usuario));
-                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<UsuarioModel>(usu);
+                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<ApiResponseUsuario>(usu);
                     if (ret.dados != null)
                     {
                         ret.status = true;
@@ -82,7 +93,7 @@ namespace SellFlow.Controllers
                 else
                 {
                     var mapper = new Mapper(AutoMapperConfig.RegisterMappings());
-                    ret.dados = mapper.Map<UsuarioModel>(rep.Add(mapper.Map<Usuario>(usuario)));
+                    ret.dados = mapper.Map<ApiResponseUsuario>(rep.Add(mapper.Map<Usuario>(usuario)));
                     if (ret.dados != null)
                     {
                         ret.status = true;
@@ -98,13 +109,15 @@ namespace SellFlow.Controllers
                 ret.status = false;
                 ret.erro = ex.Message;
             }
+
             return ret;
         }
 
-        [HttpDelete]
-        public RetornoModel<UsuarioModel> DeleteUsuario(long id)
+        [Authorize]
+        [HttpDelete]    
+        public RetornoModel<ApiResponseUsuario> DeleteUsuario(long id)
         {
-            RetornoModel<UsuarioModel> ret = new RetornoModel<UsuarioModel>();
+            RetornoModel<ApiResponseUsuario> ret = new RetornoModel<ApiResponseUsuario>();
             try
             {
                 UsuarioRepository rep = new UsuarioRepository();
@@ -128,32 +141,48 @@ namespace SellFlow.Controllers
                     ret.status = false;
                     ret.erro = "Usuario não encontrada";
                 }
-
             }
             catch (Exception ex)
             {
                 ret.status = false;
                 ret.erro = ex.Message;
             }
+
             return ret;
         }
 
+        [Authorize]
         [HttpPut]
-        public RetornoModel<UsuarioModel> PutUsuario(UsuarioModel UsuarioModel)
+        public RetornoModel<ApiResponseUsuario> PutUsuario(UsuarioModel obj)
         {
-            RetornoModel<UsuarioModel> ret = new RetornoModel<UsuarioModel>();
+            RetornoModel<ApiResponseUsuario> ret = new RetornoModel<ApiResponseUsuario>();
             try
             {
-                UsuarioRepository rep = new UsuarioRepository();
-                Usuario usu = rep.Edit(new Mapper(AutoMapperConfig.RegisterMappings()).Map<Usuario>(UsuarioModel));
-                ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<UsuarioModel>(usu);
-                if (ret.dados != null)
+                if (obj.id > 0)
                 {
-                    ret.status = true;
-                }
-                else
-                {
-                    ret.mensagem = "Não foi encontrado o Usuario!";
+                    UsuarioRepository rep = new UsuarioRepository();
+
+                    var _ret = rep.Get(obj.id.Value);
+
+                    Usuario update = new()
+                    {
+                        id = obj.id.Value,
+                        ativo = obj.ativo == null ? _ret.ativo : obj.ativo.Value,
+                        email = string.IsNullOrWhiteSpace(obj.email) ? _ret.email : obj.email,
+                        permissao = obj.permissao == null ? _ret.permissao : obj.permissao.Value,
+                        senha = obj.senha
+                    };
+
+                    Usuario usu = rep.Edit(update);
+                    ret.dados = new Mapper(AutoMapperConfig.RegisterMappings()).Map<ApiResponseUsuario>(usu);
+                    if (ret.dados != null)
+                    {
+                        ret.status = true;
+                    }
+                    else
+                    {
+                        ret.mensagem = "Não foi encontrado o Usuario!";
+                    } 
                 }
             }
             catch (Exception ex)
@@ -161,7 +190,9 @@ namespace SellFlow.Controllers
                 ret.status = false;
                 ret.erro = ex.Message;
             }
+
             return ret;
         }
+
     }
 }
