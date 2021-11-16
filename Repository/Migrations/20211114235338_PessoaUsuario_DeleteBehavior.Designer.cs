@@ -10,8 +10,13 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
+<<<<<<< HEAD:Repository/Migrations/20211114235338_PessoaUsuario_DeleteBehavior.Designer.cs
     [Migration("20211114235338_PessoaUsuario_DeleteBehavior")]
     partial class PessoaUsuario_DeleteBehavior
+=======
+    [Migration("20210929021533_initial")]
+    partial class initial
+>>>>>>> master:Repository/Migrations/20210929021533_initial.Designer.cs
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -61,7 +66,13 @@ namespace Repository.Migrations
 
                     b.HasKey("id");
 
+<<<<<<< HEAD:Repository/Migrations/20211114235338_PessoaUsuario_DeleteBehavior.Designer.cs
                     b.HasIndex("anuncioSituacao");
+=======
+                    b.HasIndex("anuncioSituacao")
+                        .IsUnique()
+                        .HasFilter("[anuncioSituacao] IS NOT NULL");
+>>>>>>> master:Repository/Migrations/20210929021533_initial.Designer.cs
 
                     b.HasIndex("produto");
 
@@ -149,12 +160,21 @@ namespace Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("pessoa")
+<<<<<<< HEAD:Repository/Migrations/20211114235338_PessoaUsuario_DeleteBehavior.Designer.cs
                         .IsRequired()
+=======
+>>>>>>> master:Repository/Migrations/20210929021533_initial.Designer.cs
                         .HasColumnType("bigint");
 
                     b.HasKey("id");
 
+<<<<<<< HEAD:Repository/Migrations/20211114235338_PessoaUsuario_DeleteBehavior.Designer.cs
                     b.HasIndex("pessoa");
+=======
+                    b.HasIndex("pessoa")
+                        .IsUnique()
+                        .HasFilter("[pessoa] IS NOT NULL");
+>>>>>>> master:Repository/Migrations/20210929021533_initial.Designer.cs
 
                     b.ToTable("Endereco");
                 });
@@ -255,6 +275,13 @@ namespace Repository.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+<<<<<<< HEAD:Repository/Migrations/20211114235338_PessoaUsuario_DeleteBehavior.Designer.cs
+=======
+                    b.Property<long?>("Usuario")
+                        .IsRequired()
+                        .HasColumnType("bigint");
+
+>>>>>>> master:Repository/Migrations/20210929021533_initial.Designer.cs
                     b.Property<bool>("ativo")
                         .HasColumnType("bit");
 
@@ -355,16 +382,27 @@ namespace Repository.Migrations
 
                     b.HasKey("id");
 
+<<<<<<< HEAD:Repository/Migrations/20211114235338_PessoaUsuario_DeleteBehavior.Designer.cs
                     b.HasIndex("permissao");
+=======
+                    b.HasIndex("permissao")
+                        .IsUnique();
+>>>>>>> master:Repository/Migrations/20210929021533_initial.Designer.cs
 
                     b.ToTable("Usuario");
                 });
 
             modelBuilder.Entity("Entity.Anuncio", b =>
                 {
+<<<<<<< HEAD:Repository/Migrations/20211114235338_PessoaUsuario_DeleteBehavior.Designer.cs
                     b.HasOne("Entity.AnuncioSituacao", "anuncioSituacaoObj")
                         .WithMany()
                         .HasForeignKey("anuncioSituacao");
+=======
+                    b.HasOne("Entity.AnuncioSitucao", "anuncioSituacaoObj")
+                        .WithOne()
+                        .HasForeignKey("Entity.Anuncio", "anuncioSituacao");
+>>>>>>> master:Repository/Migrations/20210929021533_initial.Designer.cs
 
                     b.HasOne("Entity.Produto", "produtoObj")
                         .WithMany("anuncioList")
@@ -380,10 +418,15 @@ namespace Repository.Migrations
             modelBuilder.Entity("Entity.Endereco", b =>
                 {
                     b.HasOne("Entity.Pessoa", "pessoaObj")
+<<<<<<< HEAD:Repository/Migrations/20211114235338_PessoaUsuario_DeleteBehavior.Designer.cs
                         .WithMany("enderecoList")
                         .HasForeignKey("pessoa")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+=======
+                        .WithOne()
+                        .HasForeignKey("Entity.Endereco", "pessoa");
+>>>>>>> master:Repository/Migrations/20210929021533_initial.Designer.cs
 
                     b.Navigation("pessoaObj");
                 });
@@ -402,15 +445,11 @@ namespace Repository.Migrations
                 {
                     b.HasOne("Entity.Pagina", "paginaObj")
                         .WithMany("PermissaoPaginaObj")
-                        .HasForeignKey("pagina")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("pagina");
 
                     b.HasOne("Entity.Permissao", "permissaoObj")
                         .WithMany("PermissaoPaginaObj")
-                        .HasForeignKey("permissao")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("permissao");
 
                     b.Navigation("paginaObj");
 
@@ -448,8 +487,13 @@ namespace Repository.Migrations
             modelBuilder.Entity("Entity.Usuario", b =>
                 {
                     b.HasOne("Entity.Permissao", "permissaoObj")
+<<<<<<< HEAD:Repository/Migrations/20211114235338_PessoaUsuario_DeleteBehavior.Designer.cs
                         .WithMany()
                         .HasForeignKey("permissao")
+=======
+                        .WithOne()
+                        .HasForeignKey("Entity.Usuario", "permissao")
+>>>>>>> master:Repository/Migrations/20210929021533_initial.Designer.cs
                         .IsRequired();
 
                     b.Navigation("permissaoObj");
@@ -465,11 +509,14 @@ namespace Repository.Migrations
                     b.Navigation("PermissaoPaginaObj");
                 });
 
+<<<<<<< HEAD:Repository/Migrations/20211114235338_PessoaUsuario_DeleteBehavior.Designer.cs
             modelBuilder.Entity("Entity.Pessoa", b =>
                 {
                     b.Navigation("enderecoList");
                 });
 
+=======
+>>>>>>> master:Repository/Migrations/20210929021533_initial.Designer.cs
             modelBuilder.Entity("Entity.Produto", b =>
                 {
                     b.Navigation("anuncioList");

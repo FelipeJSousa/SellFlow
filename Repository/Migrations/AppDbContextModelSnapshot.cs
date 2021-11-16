@@ -239,6 +239,8 @@ namespace Repository.Migrations
 
                     b.HasKey("id");
 
+                    b.HasKey("id");
+
                     b.HasIndex("pagina");
 
                     b.HasIndex("permissao");
@@ -400,15 +402,11 @@ namespace Repository.Migrations
                 {
                     b.HasOne("Entity.Pagina", "paginaObj")
                         .WithMany("PermissaoPaginaObj")
-                        .HasForeignKey("pagina")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("pagina");
 
                     b.HasOne("Entity.Permissao", "permissaoObj")
                         .WithMany("PermissaoPaginaObj")
-                        .HasForeignKey("permissao")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("permissao");
 
                     b.Navigation("paginaObj");
 

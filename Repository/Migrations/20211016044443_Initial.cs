@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Repository.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -222,7 +222,7 @@ namespace Repository.Migrations
                         column: x => x.produto,
                         principalTable: "Produto",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -249,7 +249,13 @@ namespace Repository.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Anuncio_anuncioSituacao",
                 table: "Anuncio",
+<<<<<<< HEAD:Repository/Migrations/20211016044443_Initial.cs
                 column: "anuncioSituacao");
+=======
+                column: "anuncioSituacao",
+                unique: true,
+                filter: "[anuncioSituacao] IS NOT NULL");
+>>>>>>> master:Repository/Migrations/20210929021533_initial.cs
 
             migrationBuilder.CreateIndex(
                 name: "IX_Anuncio_produto",
@@ -297,7 +303,12 @@ namespace Repository.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Usuario_permissao",
                 table: "Usuario",
+<<<<<<< HEAD:Repository/Migrations/20211016044443_Initial.cs
                 column: "permissao");
+=======
+                column: "permissao",
+                unique: true);
+>>>>>>> master:Repository/Migrations/20210929021533_initial.cs
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
